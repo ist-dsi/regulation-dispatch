@@ -1,0 +1,31 @@
+package module.regulation.dispatch.domain;
+
+class RegulationDispatchWorkflowMetaProcess extends .module.metaWorkflow.domain.WorkflowMetaProcess {
+}
+
+class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile {
+}
+
+relation RegulationDispatchQueueRegulationDispatchSystem {
+	RegulationDispatchSystem playsRole regulationDispatchSystem;
+	
+	.module.workflow.domain.WorkflowUserGroupQueue playsRole queues {
+		multiplicity *;
+	}
+}
+
+relation RegulationDispatchWorkflowMetaProcessRegulationDispatchSystem {
+	RegulationDispatchSystem playsRole regulationDispatchSystem;
+	
+	RegulationDispatchWorkflowMetaProcess playsRole processes {
+		multiplicity *;
+	}
+}
+
+relation RegulationDispatchProcessFileRegulationDispatchSystem {
+	RegulationDispatchSystem playsRole regulationDispatchSystem;
+	
+	RegulationDispatchProcessFile playsRole files {
+		multiplicity *;
+	}
+}

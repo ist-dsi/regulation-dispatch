@@ -1,0 +1,38 @@
+package module.regulation.dispatch.domain;
+
+
+class RegulationDispatchSystem {
+}
+
+class RegulationDispatchModuleInitializer implements .myorg.domain.ModuleInitializer {
+}
+
+relation RegulationDispatchModuleInitializerMyOrg {
+	RegulationDispatchModuleInitializer playsRole regulationDispatchModuleInitializer {
+		multiplicity 0..1;
+	}
+	
+	.myorg.domain.MyOrg playsRole myOrg {
+		multiplicity 1;
+	}
+}
+
+relation RegulationDispatchSystemMyOrg {
+	RegulationDispatchSystem playsRole regulationDispatchSystem {
+		multiplicity 0..1;
+	}
+	
+	.myorg.domain.MyOrg playsRole myOrg {
+		multiplicity 1;
+	}
+} 
+
+relation RegulationDispatchSystemWorkflowMetaType {
+	RegulationDispatchSystem playsRole regulationDispatchSystem {
+		multiplicity 1;
+	}
+	
+	.module.metaWorkflow.domain.WorkflowMetaType playsRole metaType {
+		multiplicity 0..1;
+	}
+}
