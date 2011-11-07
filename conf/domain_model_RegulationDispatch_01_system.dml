@@ -13,7 +13,7 @@ relation RegulationDispatchModuleInitializerMyOrg {
 	}
 	
 	.myorg.domain.MyOrg playsRole myOrg {
-		multiplicity 1;
+		multiplicity 1..1;
 	}
 }
 
@@ -23,16 +23,36 @@ relation RegulationDispatchSystemMyOrg {
 	}
 	
 	.myorg.domain.MyOrg playsRole myOrg {
-		multiplicity 1;
+		multiplicity 1..1;
 	}
 } 
 
 relation RegulationDispatchSystemWorkflowMetaType {
 	RegulationDispatchSystem playsRole regulationDispatchSystem {
-		multiplicity 1;
+		multiplicity 1..1;
 	}
 	
 	.module.metaWorkflow.domain.WorkflowMetaType playsRole metaType {
+		multiplicity 0..1;
+	}
+}
+
+relation RegulationDispatchSystemEmissionDateMetaField {
+	RegulationDispatchSystem playsRole regulationDispatchSystemForEmissionDate {
+		multiplicity 1..1;
+	}
+	
+	.module.metaWorkflow.domain.MetaField playsRole emissionDateMetaField {
+		multiplicity 0..1;
+	}
+}
+
+relation RegulationDispatchSystemRegulationReferenceMetaField {
+	RegulationDispatchSystem playsRole regulationDispatchSystemForRegulationReference {
+		multiplicity 1..1;
+	}
+	
+	.module.metaWorkflow.domain.MetaField playsRole regulationReferenceMetaField {
 		multiplicity 0..1;
 	}
 }

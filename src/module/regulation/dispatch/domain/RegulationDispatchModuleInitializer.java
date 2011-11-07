@@ -23,21 +23,21 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
 
     @Service
     public synchronized static void initialize() {
-//	if (!isInitialized) {
-//	    try {
-//		final MyOrg myOrg = MyOrg.getInstance();
-//		// final RegulationDispatchModuleInitializer initializer = myOrg.get
-//		if (initializer == null) {
-//		    new RegulationDispatchModuleInitializer();
-//		}
-//		init = new ThreadLocal<RegulationDispatchModuleInitializer>();
-//		init.set(myOrg.getRegulationDispatchModuleInitializer());
-//
-//		isInitialized = true;
-//	    } finally {
-//		init = null;
-//	    }
-//	}
+	if (!isInitialized) {
+	    try {
+		final MyOrg myOrg = MyOrg.getInstance();
+		final RegulationDispatchModuleInitializer initializer = myOrg.getRegulationDispatchModuleInitializer();
+		if (initializer == null) {
+		    new RegulationDispatchModuleInitializer();
+		}
+		init = new ThreadLocal<RegulationDispatchModuleInitializer>();
+		init.set(myOrg.getRegulationDispatchModuleInitializer());
+
+		isInitialized = true;
+	    } finally {
+		init = null;
+	    }
+	}
     }
     
     private RegulationDispatchModuleInitializer() {
@@ -47,7 +47,7 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
 
     @Override
     public void init(MyOrg root) {
-
+	// MetaTypeFactory.createMetaType();
     }
     
 }

@@ -1,5 +1,8 @@
 package module.regulation.dispatch.domain;
 
+class RegulationDispatchQueue extends .module.workflow.domain.WorkflowUserGroupQueue {
+}
+
 class RegulationDispatchWorkflowMetaProcess extends .module.metaWorkflow.domain.WorkflowMetaProcess {
 }
 
@@ -9,7 +12,7 @@ class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile 
 relation RegulationDispatchQueueRegulationDispatchSystem {
 	RegulationDispatchSystem playsRole regulationDispatchSystem;
 	
-	.module.workflow.domain.WorkflowUserGroupQueue playsRole queues {
+	RegulationDispatchQueue playsRole queues {
 		multiplicity *;
 	}
 }
