@@ -42,7 +42,17 @@ relation RegulationDispatchSystemEmissionDateMetaField {
 		multiplicity 1..1;
 	}
 	
-	.module.metaWorkflow.domain.MetaField playsRole emissionDateMetaField {
+	.module.metaWorkflow.domain.LocalDateMetaField playsRole emissionDateMetaField {
+		multiplicity 0..1;
+	}
+}
+
+relation RegulationDispatchSystemRegulationMetaFieldSet {
+	RegulationDispatchSystem playsRole regulationDispatchSystemForRegulation {
+		multiplicity 1..1;
+	}
+
+	.module.metaWorkflow.domain.MetaFieldSet playsRole regulationMetaFieldSet {
 		multiplicity 0..1;
 	}
 }
@@ -52,7 +62,7 @@ relation RegulationDispatchSystemRegulationReferenceMetaField {
 		multiplicity 1..1;
 	}
 	
-	.module.metaWorkflow.domain.MetaField playsRole regulationReferenceMetaField {
+	.module.metaWorkflow.domain.StringMetaField playsRole regulationReferenceMetaField {
 		multiplicity 0..1;
 	}
 }

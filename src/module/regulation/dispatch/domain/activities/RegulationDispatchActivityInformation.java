@@ -18,6 +18,10 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private String regulationReference;
     private RegulationDispatchQueue queue;
 
+    protected RegulationDispatchActivityInformation() {
+	super(null, null);
+    }
+
     public RegulationDispatchActivityInformation(RegulationDispatchWorkflowMetaProcess process, AbstractWorkflowActivity activity) {
 	super(process, activity);
 
@@ -75,5 +79,4 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     public void setQueue(RegulationDispatchQueue queue) {
 	this.queue = queue;
     }
-
 }

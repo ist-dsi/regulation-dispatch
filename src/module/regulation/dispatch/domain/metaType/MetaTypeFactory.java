@@ -52,6 +52,7 @@ public class MetaTypeFactory {
 	String regulationName = BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources",
 		"label.workflow.meta.type.field.regulation");
 	MetaFieldSet regulationMetaField = new MetaFieldSet(new MultiLanguageString(regulationName), 2, rootFieldSet);
+	system.setRegulationMetaFieldSet(regulationMetaField);
 	
 	String regulationReferenceName = BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources",
 		"label.workflow.meta.type.field.regulation.reference");
