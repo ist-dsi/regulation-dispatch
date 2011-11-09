@@ -7,8 +7,11 @@ import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.regulation.dispatch.domain.activities.CreateRegulationDispatchActivityInformation;
 import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
+import module.workflow.presentationTier.WorkflowLayoutContext;
 import myorg.applicationTier.Authenticate.UserView;
 import myorg.domain.User;
+import myorg.presentationTier.Context;
+import myorg.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,7 +20,17 @@ import org.apache.struts.action.ActionMapping;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/createRegulationDispatch")
-public class CreateRegulationDispatchAction extends RegulationDispatchAction {
+public class CreateRegulationDispatchAction extends ContextBaseAction {
+
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	    throws Exception {
+
+	RegulationDispatchQueue queue = readQueue(request);
+	request.setAttribute("queue", queue);
+	
+	return super.execute(mapping, form, request, response);
+    }
 
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -51,6 +64,19 @@ public class CreateRegulationDispatchAction extends RegulationDispatchAction {
 	    addMessage(request, "error", e.getMessage(), e.getArgs());
 	    return createInvalid(mapping, form, request, response);
 	}
+    }
+
+    private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
+	return getDomainObject(request, "queueId");
+    }
+
+    @Override
+    public Context createContext(String contextPathString, HttpServletRequest request) {
+	WorkflowLayoutContext context = WorkflowLayoutContext
+		.getDefaultWorkflowLayoutContext(RegulationDispatchWorkflowMetaProcess.class);
+	context.setElements(contextPathString);
+
+	return context;
     }
 
 }

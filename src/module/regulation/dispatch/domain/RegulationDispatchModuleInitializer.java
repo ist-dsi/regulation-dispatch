@@ -1,5 +1,6 @@
 package module.regulation.dispatch.domain;
 
+import module.regulation.dispatch.domain.metaType.MetaTypeFactory;
 import myorg.domain.MyOrg;
 import pt.ist.fenixWebFramework.services.Service;
 
@@ -47,7 +48,11 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
 
     @Override
     public void init(MyOrg root) {
-	// MetaTypeFactory.createMetaType();
+	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+
+	if (!system.hasMetaType()) {
+	    MetaTypeFactory.createMetaType();
+	}
     }
     
 }

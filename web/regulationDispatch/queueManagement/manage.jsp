@@ -4,26 +4,41 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
-<h1>Gestão dos despachos</h1>
+<p>
+	<html:link action="/regulationDispatch.do?method=prepare">
+		Voltar
+	</html:link>
+</p>
+
+<h1>Gestão de filas</h1>
+
 
 <logic:empty name="queues">
-	<em>Não tem permissão para aceder a nenhuma fila</em>
+	Não foram criadas filas para a gestão dos despachos
 </logic:empty>
 
+	<p>
+		<html:link action="/manageRegulationDispatchQueues.do?method=prepareCreateQueue">
+			Criar fila
+		</html:link>
+	</p>
+
 <logic:notEmpty name="queues">
+	
+		
 	<fr:view name="queues">
 		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchQueue" bundle="REGULATION_DISPATCH_RESOURCES">
 			<fr:slot name="name" />
+			<fr:slot name="processesCount" />
 		</fr:schema>
 		
 		<fr:layout name="tabular">
-			<fr:link name="view" link="/regulationDispatch.do?method=viewQueue&amp;queueId=${externalId}" 
+			<fr:property name="classes" value="tstyle1" />
+			
+			<fr:link name="view" link="/manageRegulationDispatchQueues.do?method=viewQueue&amp;queueId=${externalId}"
 				label="link.view,REGULATION_DISPATCH_RESOURCES" />
 		</fr:layout>
 	</fr:view>
+	
 </logic:notEmpty>
 
-
-<p>
-	<html:link action="/manageRegulationDispatchQueues.do?method=manageQueues">Gerir filas</html:link>
-</p>

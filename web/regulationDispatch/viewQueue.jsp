@@ -10,7 +10,6 @@
 
 <p><html:link action="<%= "/createRegulationDispatch?method=prepare&amp;queueId=" + queueId %>"> Inserir processo </html:link></p>
 
-
 <script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/dataTables/media/js/jquery.dataTables.js"%>"></script>
 
 <style type="text/css" title="currentStyle">
@@ -44,6 +43,7 @@
 
 <logic:notEmpty name="searchEntries">
 
+<%--
 	<fr:view name="searchEntries" schema="<%= CorrespondenceType.SENT.name().equals(correspondenceType) ? "module.mailtracking.correspondence.sent.entries.view" : "module.mailtracking.correspondence.received.entries.view" %>" >
 		<fr:layout name="ajax-tabular">
 			<fr:property name="classes" value="tstyle3 mtop05 mbottom05"/>
@@ -52,7 +52,7 @@
 			<fr:property name="headerClasses" value="<%= CorrespondenceType.SENT.name().equals(correspondenceType) ? ",,,,," : ",,,,,," %>" />
 			<fr:property name="columnClasses" value="<%= CorrespondenceType.SENT.name().equals(correspondenceType) ? "width30px,width50px,,,,nowrap" : "width30px,width50px,,width20px,,,nowrap" %>" />
 			
-			<fr:property name="ajaxSourceUrl" value="/mailtracking.do" />
+			<fr:property name="ajaxSourceUrl" value="/regulationDispatch.do" />
 	
 			<fr:property name="linkFormat(view)" value="<%= mailTrackingUrl + "&amp;method=viewEntry&amp;entryId=${externalId}" %>" />
 			<fr:property name="bundle(view)" value="MAIL_TRACKING_RESOURCES"/>
@@ -89,12 +89,11 @@
 			<fr:property name="visibleIf(copyEntry)" value="userAbleToCopyEntry" />
 			<fr:property name="icon(copyEntry)" value="copyEntry" />
 					
-			<fr:property name="extraParameter(method)" value="ajaxFilterCorrespondence" />
-			<fr:property name="extraParameter(correspondenceType)" value="<%= (String) correspondenceType %>" />
-			<fr:property name="extraParameter(mailTrackingId)" value="<%= (String) mailTrackingId %>" />
-			<fr:property name="extraParameter(yearId)" value="<%= yearId %>" />
-			<fr:property name="extraParameter(filterDeletedEntries)" value="<%= String.valueOf(filterDeletedEntries) %>" />
+			<fr:property name="extraParameter(method)" value="processesForAjaxDataTable" />
+			<fr:property name="extraParameter(queueId)" value="<%= (String) queueId %>" />
 		</fr:layout>
 	</fr:view>
+	
+--%>
 
 </logic:notEmpty>

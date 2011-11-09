@@ -33,7 +33,7 @@ relation RegulationDispatchSystemWorkflowMetaType {
 	}
 	
 	.module.metaWorkflow.domain.WorkflowMetaType playsRole metaType {
-		multiplicity 0..1;
+		multiplicity 1..1;
 	}
 }
 
@@ -49,7 +49,7 @@ relation RegulationDispatchSystemEmissionDateMetaField {
 
 relation RegulationDispatchSystemRegulationMetaFieldSet {
 	RegulationDispatchSystem playsRole regulationDispatchSystemForRegulation {
-		multiplicity 1..1;
+		multiplicity 0..1;
 	}
 
 	.module.metaWorkflow.domain.MetaFieldSet playsRole regulationMetaFieldSet {

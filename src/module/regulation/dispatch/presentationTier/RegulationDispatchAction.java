@@ -37,15 +37,14 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	return super.execute(mapping, form, request, response);
     }
 
-    @CreateNodeAction(bundle = "REGULATION_DISPATCH_RESOURCES", key = "label.regulation.dispatch.interface", groupKey = "title.module.regulationDispatch")
+    @CreateNodeAction(bundle = "REGULATION_DISPATCH_RESOURCES", key = "link.node.configuration.regulation.dispatch.interface", groupKey = "title.node.configuration.module.regulation.dispatch")
     public ActionForward prepareCreateNewPage(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) {
 	final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
 	final Node node = getDomainObject(request, "parentOfNodesToManageId");
 
-	ActionNode.createActionNode(virtualHost, node, "/regulationDispatch", "prepare",
-		"resources.RegulationDispatchResources", "link.sideBar.regulationDispatch.manageRegulationDispatch",
-		UserGroup.getInstance());
+	ActionNode.createActionNode(virtualHost, node, "/regulationDispatch", "prepare", "resources.RegulationDispatchResources",
+		"label.sideBar.regulation.dispatch.manage", UserGroup.getInstance());
 
 	return forwardToMuneConfiguration(request, virtualHost, node);
     }
@@ -53,16 +52,12 @@ public class RegulationDispatchAction extends ContextBaseAction {
     public ActionForward prepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 	User user = UserView.getCurrentUser();
 	List<RegulationDispatchQueue> queues = RegulationDispatchQueue.getRegulationDispatchQueuesForUser(user);
-	
-	if (queues.isEmpty()) {
-	    return forward(request, "/regulationDispatch/permissionDenied.jsp");
-	}
 
 	request.setAttribute("queues", queues);
-	
+
 	return forward(request, "/regulationDispatch/chooseQueue.jsp");
     }
-    
+
     public ActionForward viewQueue(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) {
 
@@ -73,10 +68,16 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	return forward(request, "/regulationDispatch/viewQueue.jsp");
     }
 
-    protected RegulationDispatchQueue readQueue(final HttpServletRequest request) {
+    public ActionForward processesForAjaxDataTable(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) {
+
+	return null;
+    }
+
+    private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
 	return getDomainObject(request, "queueId");
     }
-    
+
     protected RegulationDispatchWorkflowMetaProcess getProcess(final HttpServletRequest request) {
 	return getDomainObject(request, "processId");
     }
