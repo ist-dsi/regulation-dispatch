@@ -37,4 +37,6 @@ public interface IRegulationDispatchEntry {
     public DateTime getUpdateDate();
 
     public String getExternalId();
+
+    public RegulationDispatchProcessFile getMainDocument();
 }

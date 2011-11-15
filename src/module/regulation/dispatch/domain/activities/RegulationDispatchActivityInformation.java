@@ -1,6 +1,10 @@
 package module.regulation.dispatch.domain.activities;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import module.organization.domain.Person;
+import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.workflow.activities.ActivityInformation;
@@ -18,18 +22,31 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private String regulationReference;
     private RegulationDispatchQueue queue;
 
+    private InputStream file;
+    private String fileName;
+    private Long fileSize;
+    private String mimeType;
+
+    private RegulationDispatchProcessFile regulationDispatchProcessFile;
+
     protected RegulationDispatchActivityInformation() {
 	super(null, null);
     }
 
-    public RegulationDispatchActivityInformation(RegulationDispatchWorkflowMetaProcess process, AbstractWorkflowActivity activity) {
+    public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process, final AbstractWorkflowActivity activity) {
 	super(process, activity);
 
 	setReference(process.getReference());
 	setEmissionDate(process.getEmissionDate());
-	setDispatchDescription(process.getDescription());
+	setDispatchDescription(process.getDispatchDescription());
 	setEmissor(process.getEmissor());
 	setRegulationReference(process.getRegulationReference());
+    }
+    
+    public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process,
+	    final RegulationDispatchProcessFile file, final AbstractWorkflowActivity activity) {
+	this(process, activity);
+	setRegulationDispatchProcessFile(file);
     }
 
     public String getReference() {
@@ -78,5 +95,52 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
 
     public void setQueue(RegulationDispatchQueue queue) {
 	this.queue = queue;
+    }
+
+    public InputStream getFile() {
+	return file;
+    }
+
+    public void setFile(InputStream file) {
+	this.file = file;
+    }
+
+    public String getFileName() {
+	return fileName;
+    }
+
+    public void setFileName(String fileName) {
+	this.fileName = fileName;
+    }
+
+    public Long getFileSize() {
+	return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+	this.fileSize = fileSize;
+    }
+
+    public String getMimeType() {
+	return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+	this.mimeType = mimeType;
+    }
+
+    public RegulationDispatchProcessFile getRegulationDispatchProcessFile() {
+	return regulationDispatchProcessFile;
+    }
+
+    public void setRegulationDispatchProcessFile(RegulationDispatchProcessFile regulationDispatchProcessFile) {
+	this.regulationDispatchProcessFile = regulationDispatchProcessFile;
+    }
+
+    public byte[] getFileContent() throws IOException {
+	byte[] contents = new byte[(int) this.getFileSize().longValue()];
+	getFile().read(contents);
+
+	return contents;
     }
 }

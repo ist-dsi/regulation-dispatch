@@ -22,8 +22,12 @@ import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
 import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean;
 import module.regulation.dispatch.domain.activities.EditDispatch;
 import module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation;
+import module.regulation.dispatch.domain.activities.RemoveFile;
+import module.regulation.dispatch.domain.activities.SetFileAsMainDocument;
+import module.regulation.dispatch.domain.activities.UploadFile;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowQueue;
 import myorg.domain.User;
@@ -40,6 +44,10 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     static {
 	activityMap.put("EditDispatch", new EditDispatch());
+	activityMap.put("UploadFile", new UploadFile());
+	activityMap.put("SetFileAsMainDocument", new SetFileAsMainDocument());
+	activityMap.put("RemoveFile", new RemoveFile());
+
     }
 
     protected RegulationDispatchWorkflowMetaProcess() {
@@ -234,5 +242,34 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	setDispatchDescription(activityInformation.getDispatchDescription());
 	setEmissor(activityInformation.getEmissor());
 	setRegulationReference(activityInformation.getRegulationReference());
+    }
+
+    public RegulationDispatchProcessFile getMainDocument() {
+	List<ProcessFile> files = getFiles();
+
+	for (ProcessFile processFile : files) {
+	    RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
+
+	    if (file.getMainDocument()) {
+		return file;
+	    }
+	}
+
+	return null;
+    }
+
+    public List<RegulationDispatchProcessFile> getActiveFiles() {
+	List<RegulationDispatchProcessFile> result = new ArrayList<RegulationDispatchProcessFile>();
+	List<ProcessFile> files = getFiles();
+	
+	for (ProcessFile processFile : files) {
+	    RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
+
+	    if (file.getActive()) {
+		result.add(file);
+	    }
+	}
+
+	return result;
     }
 }

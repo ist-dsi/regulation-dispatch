@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.IRegulationDispatchEntry;
+import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.regulation.dispatch.utils.NaturalOrderComparator;
@@ -177,7 +178,8 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	RegulationDispatchQueue queue = readQueue(request);
 	String contextPath = request.getContextPath();
 	String realLink = contextPath
-		+ String.format("/regulationDispatch.do?dispatchId=%s&amp;method=view&amp;queueId=%s", entry.getExternalId(),
+		+ String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch&amp;queueId=%s",
+			entry.getExternalId(),
 			queue.getExternalId());
 	realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
 		GenericChecksumRewriter.calculateChecksum(realLink));
@@ -213,7 +215,7 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	RegulationDispatchQueue queue = readQueue(request);
 	String contextPath = request.getContextPath();
 	String realLink = contextPath
-		+ String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDocument&amp;queueId=%s",
+		+ String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument&amp;queueId=%s",
 			entry.getExternalId(), queue.getExternalId());
 	realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
 		GenericChecksumRewriter.calculateChecksum(realLink));
@@ -325,6 +327,19 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	request.setAttribute("dispatch", dispatch);
 
 	return forward(request, "/regulationDispatch/viewDispatch.jsp");
+    }
+
+    public ActionForward downloadMainDocument(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+	IRegulationDispatchEntry dispatch = readDispatchEntry(request);
+	
+	RegulationDispatchProcessFile mainDocument = dispatch.getMainDocument();
+	
+	if(mainDocument == null) {
+	    throw new RuntimeException("this should not be here");
+	}
+	
+	return download(response, mainDocument.getFilename(), mainDocument.getStream(), mainDocument.getContentType());
     }
 
     private IRegulationDispatchEntry readDispatchEntry(final HttpServletRequest request) {

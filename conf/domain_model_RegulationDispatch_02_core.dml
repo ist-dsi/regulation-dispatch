@@ -7,6 +7,8 @@ class RegulationDispatchWorkflowMetaProcess extends .module.metaWorkflow.domain.
 }
 
 class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile {
+	Boolean mainDocument;
+	Boolean active;
 }
 
 relation RegulationDispatchQueueRegulationDispatchSystem {

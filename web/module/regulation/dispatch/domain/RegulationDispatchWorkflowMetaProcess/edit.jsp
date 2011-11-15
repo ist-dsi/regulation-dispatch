@@ -5,6 +5,8 @@
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
 <bean:define id="queueId" name="queue" property="externalId" />
+<bean:define id="dispatchId" name="dispatch" property="externalId" />
+
 
 <p>
 	<html:link action="/regulationDispatch.do?method=viewQueue" paramId="queueId" paramName="queueId"> 
@@ -14,7 +16,7 @@
 
 <h1> Editar despacho </h1>
 
-<fr:form action="<%= "/createRegulationDispatch.do?method=edit&amp;queueId=" + queueId %>">
+<fr:form action="<%= String.format("/createRegulationDispatch.do?method=edit&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>">
 
 	<fr:edit id="bean" name="bean" visible="false" />
 
@@ -35,7 +37,7 @@
 			</fr:slot>
 		</fr:schema>
 		
-		<fr:destination name="invalid" path="<%= "/createRegulationDispatch.do?method=editInvalid&amp;queueId=" + queueId %>"/>
+		<fr:destination name="invalid" path="<%= String.format("/createRegulationDispatch.do?method=editInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
 		<fr:destination name="cancel" path="<%= "/regulationDispatch.do?method=viewQueue&amp;queueId=" + queueId %>"/>
 
 		<fr:layout name="tabular">
@@ -46,6 +48,65 @@
 	
 	<p>
 		<html:submit>Editar</html:submit>
-		<html:cancel>Cancelar</html:cancel>
+	</p>
+	
+</fr:form>
+
+<hr />
+
+<h1> Inserir documento </h1>
+
+<fr:form action="<%= String.format("/createRegulationDispatch.do?method=upload&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>" encoding="multipart/form-data">
+	<fr:edit id="bean" name="bean" visible="false" />
+	
+	<fr:edit id="bean-upload" name="bean">
+		<fr:schema type="module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation" bundle="REGULATION_DISPATCH_RESOURCES">
+			<fr:slot name="file" required="true" >
+				<fr:property name="fileNameSlot" value="fileName" />
+				<fr:property name="fileSizeSlot" value="fileSize" />
+				<fr:property name="fileContentTypeSlot" value="mimeType" />
+			</fr:slot>
+		</fr:schema>
+
+		<fr:destination name="invalid" 
+			path="<%= String.format("/createRegulationDispatch.do?method=uploadInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
+		
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1" />
+		</fr:layout>
+	</fr:edit>
+	
+	<p>
+		<html:submit>Submeter</html:submit>
 	</p>
 </fr:form>
+
+<h1> Documentos </h1>
+
+<fr:view name="dispatch" property="files">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
+		<fr:slot name="displayName" />
+		<fr:slot name="creationDate" />
+		<fr:slot name="active" />
+		<fr:slot name="mainDocument" />
+	</fr:schema>
+	
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle2" />
+
+		<fr:link name="download" 
+			link="<%= String.format("/createRegulationDispatch.do?method=download&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>" 
+			label="link.download,REGULATION_DISPATCH_RESOURCES" />
+			
+		<fr:link name="remove" 
+			link="<%= String.format("/createRegulationDispatch.do?method=removeFile&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>"
+			label="link.remove,REGULATION_DISPATCH_RESOURCES" 
+			condition="ableToRemove" />
+			
+		<fr:link name="mainDocument" 
+			link="<%= String.format("/createRegulationDispatch.do?method=putFileAsMainDocument&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>"
+			label="link.module.regulation.dispatch.domain.RegulationDispatchProcessFile.asMainDocument,REGULATION_DISPATCH_RESOURCES" 
+			condition="ableToSetAsMainDocument" />
+	</fr:layout>
+		
+</fr:view>

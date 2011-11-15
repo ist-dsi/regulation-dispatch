@@ -10,7 +10,7 @@
 	<html:link action="/regulationDispatch?method=viewQueue" paramId="queueId" paramName="queueId">Voltar</html:link>
 </p>
 
-<h1>Visualizar despacho </h1>
+<h1> Visualizar despacho </h1>
 
 <fr:view name="dispatch">
 	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
@@ -21,7 +21,23 @@
 		<fr:slot name="regulationReference" />
 	</fr:schema>
 	
-	<layout name="tabular">
+	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2" />
-	</layout>
+	</fr:layout>
+</fr:view>
+
+<h2> Documentos </h2>
+
+<fr:view name="dispatch" property="activeFiles">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
+		<fr:slot name="displayName" />
+		<fr:slot name="creationDate" />
+		<fr:slot name="active" />
+		<fr:slot name="mainDocument" />
+	</fr:schema>
+	
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle2" />
+	</fr:layout>
+		
 </fr:view>

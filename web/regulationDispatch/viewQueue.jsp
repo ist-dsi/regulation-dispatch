@@ -94,7 +94,7 @@
 			<fr:property name="visibleIf(delete)" value="userAbleToDelete" />
 			<fr:property name="icon(delete)" value="delete" />
 			
-			<fr:property name="linkFormat(document)" value="<%= "/regulationDispatch.do?method=viewDocument&amp;dispatchId=${externalId}&amp;queueId=" + queueId %>" />
+			<fr:property name="linkFormat(document)" value="<%= "/regulationDispatch.do?method=downloadMainDocument&amp;dispatchId=${externalId}&amp;queueId=" + queueId %>" />
 			<fr:property name="bundle(document)" value="REGULATION_DISPATCH_RESOURCES" />
 			<fr:property name="key(document)" value="link.view.document" />
 			<fr:property name="order(document)" value="4" />
