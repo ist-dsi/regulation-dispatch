@@ -17,6 +17,7 @@
 		</fr:schema>
 		
 		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2" />
 			<fr:link name="view" link="/regulationDispatch.do?method=viewQueue&amp;queueId=${externalId}" 
 				label="link.view,REGULATION_DISPATCH_RESOURCES" />
 		</fr:layout>

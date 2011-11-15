@@ -33,7 +33,7 @@
 		</fr:schema>
 		
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1" />
+			<fr:property name="classes" value="tstyle2" />
 			
 			<fr:link name="view" link="/manageRegulationDispatchQueues.do?method=viewQueue&amp;queueId=${externalId}"
 				label="link.view,REGULATION_DISPATCH_RESOURCES" />

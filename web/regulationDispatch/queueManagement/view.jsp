@@ -56,15 +56,17 @@
 </fr:form>
 
 
+<h3> Utilizadores </h3>
+
 <fr:view name="queue" property="users">
 	<fr:schema type="myorg.domain.User" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="presentationName" />
 	</fr:schema>
 	
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle1" />
+		<fr:property name="classes" value="tstyle2" />
 		
-		<fr:link name="remove" link="<%= "/manageRegulationDispatchQueues.do?method=removeUser&amp;userId=${externalId}&amp;queueId=" + queueId %>"
+		<fr:link name="remove" link="<%= "/manageRegulationDispatchQueues.do?method=removeUserFromQueue&amp;userId=${externalId}&amp;queueId=" + queueId %>"
 			label="link.remove,REGULATION_DISPATCH_RESOURCES" 
 			confirmation="message.remove.confirmation,REGULATION_DISPATCH_RESOURCES" />
 	</fr:layout>

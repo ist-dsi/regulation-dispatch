@@ -19,7 +19,8 @@ import module.metaWorkflow.domain.WorkflowMetaProcess;
 import module.metaWorkflow.domain.WorkflowMetaType;
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
-import module.regulation.dispatch.domain.activities.CreateDispatch;
+import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean;
+import module.regulation.dispatch.domain.activities.EditDispatch;
 import module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -27,6 +28,7 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowQueue;
 import myorg.domain.User;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
@@ -37,7 +39,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     protected static Map<String, AbstractWorkflowActivity> activityMap = new HashMap<String, AbstractWorkflowActivity>();
 
     static {
-	activityMap.put(CreateDispatch.class.getSimpleName(), new CreateDispatch());
+	activityMap.put("EditDispatch", new EditDispatch());
     }
 
     protected RegulationDispatchWorkflowMetaProcess() {
@@ -45,21 +47,21 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     }
 
     protected RegulationDispatchWorkflowMetaProcess(RegulationDispatchQueue queue, String reference, LocalDate emissionDate,
-	    Person emissor, String regulationReference) {
+	    Person emissor, String description, String regulationReference) {
 	this();
-	init(queue, reference, emissionDate, emissor, regulationReference);
+	init(queue, reference, emissionDate, emissor, description, regulationReference);
     }
 
-    @Service
-    public static RegulationDispatchWorkflowMetaProcess createNewProcess(RegulationDispatchActivityInformation information,
-	    final User user) {
-	String reference = information.getReference();
-	LocalDate emissionDate = information.getEmissionDate();
-	Person emissor = information.getEmissor();
-	String regulationReference = information.getRegulationReference();
-	RegulationDispatchQueue queue = information.getQueue();
+    public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean, final User user) {
+	String reference = bean.getReference();
+	LocalDate emissionDate = bean.getEmissionDate();
+	Person emissor = bean.getEmissor();
+	String regulationReference = bean.getRegulationReference();
+	RegulationDispatchQueue queue = bean.getQueue();
+	String description = bean.getDispatchDescription();
 
-	return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, regulationReference);
+	return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, description,
+		regulationReference);
     }
 
     @Service
@@ -74,7 +76,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     }
 
     protected void init(RegulationDispatchQueue queue, String reference, LocalDate emissionDate, Person emissor,
-	    String regulationReference) {
+	    String description, String regulationReference) {
 	WorkflowMetaType type = RegulationDispatchSystem.getInstance().getMetaType();
 
 	Requestor requestor = emissor.getUser().getRequestor();
@@ -82,7 +84,10 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	    requestor = new UserRequestor(emissor.getUser());
 	}
 
-	super.init(type, reference, "", queue, requestor);
+	super.init(type, reference, description, queue, requestor);
+
+	setRegulationReference(regulationReference);
+	setEmissionDate(emissionDate);
     }
 
     @Override
@@ -96,24 +101,24 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     }
 
     @Override
-    public String getDescription() {
-	return super.getDescription();
+    public String getDispatchDescription() {
+	return super.getInstanceDescription();
     }
 
     @Override
-    public void setDescription(String description) {
-	setDescription(description);
+    public void setDispatchDescription(String description) {
+	super.setInstanceDescription(description);
     }
 
     @Override
     public LocalDate getEmissionDate() {
 	RegulationDispatchSystem instance = RegulationDispatchSystem.getInstance();
 	LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(instance.getEmissionDateMetaField());
-	
-	if(fieldValue == null) {
+
+	if (fieldValue == null) {
 	    return null;
 	}
-	
+
 	return fieldValue.getLocalDateValue();
     }
 
@@ -122,12 +127,12 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 	LocalDateMetaField emissionDateMetaField = system.getEmissionDateMetaField();
 	LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(emissionDateMetaField);
-	
+
 	if (fieldValue != null) {
 	    fieldValue.setLocalDateValue(emissionDate);
 	    return;
 	}
-	
+
 	new LocalDateFieldValue((LocalDateMetaField) emissionDateMetaField, getFieldSet(), emissionDate);
     }
 
@@ -171,6 +176,15 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     }
 
     @Override
+    public DateTime getUpdateDate() {
+	if (getDateFromLastActivity() != null) {
+	    return getDateFromLastActivity();
+	}
+
+	return getCreationDate();
+    }
+
+    @Override
     public void activate() {
 	open();
     }
@@ -178,11 +192,6 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     @Override
     public void deactivate() {
 	close();
-    }
-
-    @Override
-    public boolean isActive() {
-	return isOpen();
     }
 
     @Override
@@ -217,5 +226,13 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	}
 
 	return null;
+    }
+
+    public void edit(RegulationDispatchActivityInformation activityInformation) {
+	setReference(activityInformation.getReference());
+	setEmissionDate(activityInformation.getEmissionDate());
+	setDispatchDescription(activityInformation.getDispatchDescription());
+	setEmissor(activityInformation.getEmissor());
+	setRegulationReference(activityInformation.getRegulationReference());
     }
 }

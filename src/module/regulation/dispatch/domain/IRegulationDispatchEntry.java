@@ -2,6 +2,7 @@ package module.regulation.dispatch.domain;
 
 import module.organization.domain.Person;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 public interface IRegulationDispatchEntry {
@@ -13,9 +14,9 @@ public interface IRegulationDispatchEntry {
 
     public void setEmissionDate(final LocalDate emissionDate);
 
-    public String getDescription();
+    public String getDispatchDescription();
 
-    public void setDescription(final String description);
+    public void setDispatchDescription(final String description);
 
     public Person getEmissor();
 
@@ -30,4 +31,10 @@ public interface IRegulationDispatchEntry {
     public void deactivate();
 
     public boolean isActive();
+
+    public DateTime getCreationDate();
+
+    public DateTime getUpdateDate();
+
+    public String getExternalId();
 }

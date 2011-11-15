@@ -111,7 +111,8 @@ public class ManageRegulationDispatchQueues extends ContextBaseAction {
 	return forward(request, "/regulationDispatch/queueManagement/view.jsp");
     }
 
-    public ActionForward removeUserToQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+    public ActionForward removeUserFromQueue(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	RegulationDispatchQueue queue = readQueue(request);
 	User user = readUser(request);

@@ -2,12 +2,11 @@ package module.regulation.dispatch.domain.activities;
 
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
-import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
-import module.workflow.activities.ActivityInformation;
 
 import org.joda.time.LocalDate;
 
-public class RegulationDispatchActivityInformation extends ActivityInformation<RegulationDispatchWorkflowMetaProcess> {
+
+public class CreateRegulationDispatchBean implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,18 +17,8 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private String regulationReference;
     private RegulationDispatchQueue queue;
 
-    protected RegulationDispatchActivityInformation() {
-	super(null, null);
-    }
-
-    public RegulationDispatchActivityInformation(RegulationDispatchWorkflowMetaProcess process, AbstractWorkflowActivity activity) {
-	super(process, activity);
-
-	setReference(process.getReference());
-	setEmissionDate(process.getEmissionDate());
-	setDispatchDescription(process.getDescription());
-	setEmissor(process.getEmissor());
-	setRegulationReference(process.getRegulationReference());
+    public CreateRegulationDispatchBean(final RegulationDispatchQueue queue) {
+	setQueue(queue);
     }
 
     public String getReference() {
@@ -79,4 +68,5 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     public void setQueue(RegulationDispatchQueue queue) {
 	this.queue = queue;
     }
+
 }
