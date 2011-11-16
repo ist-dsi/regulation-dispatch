@@ -4,13 +4,15 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
-<h1>Gestão dos despachos</h1>
+<h2> <bean:message key="title.regulation.dispatch" bundle="REGULATION_DISPATCH_RESOURCES" /> </h2>
 
 <logic:empty name="queues">
-	<em>Não tem permissão para aceder a nenhuma fila</em>
+	<em><bean:message key="message.none.regulation.dispatch.systems" bundle="REGULATION_DISPATCH_RESOURCES" /></em>
 </logic:empty>
 
 <logic:notEmpty name="queues">
+	<em> <bean:message key="message.please.choose.one.of.systems.below" bundle="REGULATION_DISPATCH_RESOURCES" /></em>
+	
 	<fr:view name="queues">
 		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchQueue" bundle="REGULATION_DISPATCH_RESOURCES">
 			<fr:slot name="name" />
@@ -24,7 +26,16 @@
 	</fr:view>
 </logic:notEmpty>
 
+<logic:present role="myorg.domain.RoleType.MANAGER">
 
-<p>
-	<html:link action="/manageRegulationDispatchQueues.do?method=manageQueues">Gerir filas</html:link>
-</p>
+	<h3> <bean:message key="title.regulation.dispatch.system.management" bundle="REGULATION_DISPATCH_RESOURCES" /> </h3>
+	
+	<p><em><bean:message key="message.regulation.dispatch.management.system" bundle="REGULATION_DISPATCH_RESOURCES" /></em></p>
+	
+	<p>
+		<html:link action="/manageRegulationDispatchQueues.do?method=manageQueues">
+			<bean:message key="link.regulation.dispatch.systems.management" bundle="REGULATION_DISPATCH_RESOURCES" />	
+		</html:link>
+	</p>
+
+</logic:present>

@@ -10,7 +10,9 @@
 	<html:link action="/regulationDispatch?method=viewQueue" paramId="queueId" paramName="queueId">Voltar</html:link>
 </p>
 
-<h1> Visualizar despacho </h1>
+<h2 class="mbottom20px"> 
+	<bean:message key="title.dispatch" bundle="REGULATION_DISPATCH_RESOURCES" /> <bean:write name="dispatch" property="reference" />
+</h2>
 
 <fr:view name="dispatch">
 	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
@@ -22,22 +24,40 @@
 	</fr:schema>
 	
 	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2" />
+		<fr:property name="classes" value="tstyle2 mbottom20px" />
 	</fr:layout>
 </fr:view>
 
-<h2> Documentos </h2>
+<%--
+<h3> <bean:message key="title.observations" /></h3>
+
+<fr:view name="dispatch">
+	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+		<fr:slot name="observations" />
+	</fr:schema>
+	
+	<fr:layout name="tabular">
+		<fr:property name="classes" value="tstyle2" />
+	</fr:layout>
+</fr:view>
+--%>
+
+<h3 class="mtop20px mbottom20px"> <bean:message key="title.documents" bundle="REGULATION_DISPATCH_RESOURCES"/></h3>
 
 <fr:view name="dispatch" property="activeFiles">
+
 	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="displayName" />
-		<fr:slot name="creationDate" />
-		<fr:slot name="active" />
 		<fr:slot name="mainDocument" />
 	</fr:schema>
 	
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2" />
+		
+		<fr:link name="download" 
+			link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}&amp;queueId=" + queueId %>"
+			label="link.download,REGULATION_DISPATCH_RESOURCES" />
+	
 	</fr:layout>
 		
 </fr:view>

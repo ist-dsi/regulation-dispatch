@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/fenix-renderers.tld" prefix="fr"%>
 
-<h1>Fila <bean:write name="queue" property="name" /></h1>
+<h2 class="mbottom20px"><bean:write name="queue" property="name" /></h2>
 
 <bean:define id="queueId" name="queue" property="externalId" />
 
@@ -46,6 +46,13 @@
 	<bean:message key="message.regulation.dispatches.empty" bundle="REGULATION_DISPATCH_RESOURCES" /> 
 </logic:empty> 
 
+<p class="mtop20px mbottom20px">
+	<html:link action="/createRegulationDispatch.do?method=prepare" paramId="queueId" paramName="queueId" >
+		<bean:message key="link.regulation.dispatch.create.entry" bundle="REGULATION_DISPATCH_RESOURCES" />
+	</html:link>
+</p>
+
+
 <style type="text/css" title="currentStyle">
 	th.actions {
 		width : 140px;
@@ -77,30 +84,29 @@
 			<fr:property name="bundle(view)" value="REGULATION_DISPATCH_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="order(view)" value="1" />
-			<fr:property name="visibleIf(view)" value="userAbleToView" />
 			<fr:property name="icon(view)" value="view" />
 	
 			<fr:property name="linkFormat(edit)" value="<%= "/createRegulationDispatch.do?method=prepareEdit&amp;dispatchId=${externalId}" %>"/>
 			<fr:property name="bundle(edit)" value="REGULATION_DISPATCH_RESOURCES"/>
 			<fr:property name="key(edit)" value="link.edit"/>
 			<fr:property name="order(edit)" value="2" />
-			<fr:property name="visibleIf(edit)" value="userAbleToEdit" />
 			<fr:property name="icon(edit)" value="edit" />
 	
-			<fr:property name="linkFormat(delete)" value="<%= "/createRegulationDispatch.do?method=prepareRemove&amp;dispatchId=${externalId}&amp;queueId=" + queueId %>"/>
+			<fr:property name="linkFormat(delete)" value="<%= "/createRegulationDispatch.do?method=removeDispatch&amp;dispatchId=${externalId}&amp;queueId=" + queueId %>"/>
 			<fr:property name="bundle(delete)" value="REGULATION_DISPATCH_RESOURCES"/>
 			<fr:property name="key(delete)" value="link.remove"/>
 			<fr:property name="order(delete)" value="3" />
-			<fr:property name="visibleIf(delete)" value="userAbleToDelete" />
+			<fr:property name="confirmationBundle(delete)" value="REGULATION_DISPATCH_RESOURCES" />
+			<fr:property name="confirmationKey(delete)" value="message.regulation.dispatch.confirmation" />
 			<fr:property name="icon(delete)" value="delete" />
+			
 			
 			<fr:property name="linkFormat(document)" value="<%= "/regulationDispatch.do?method=downloadMainDocument&amp;dispatchId=${externalId}&amp;queueId=" + queueId %>" />
 			<fr:property name="bundle(document)" value="REGULATION_DISPATCH_RESOURCES" />
 			<fr:property name="key(document)" value="link.view.document" />
 			<fr:property name="order(document)" value="4" />
-			<fr:property name="visibleIf(document)" value="userAbleToViewDocument" />
 			<fr:property name="icon(document)" value="document" />
-
+			
 			<fr:property name="extraParameter(method)" value="processesForAjaxDataTable" />
 			<fr:property name="extraParameter(queueId)" value="<%= queueId.toString() %>" />
 			
@@ -109,9 +115,3 @@
 	</fr:view>
 
 </logic:notEmpty>
-
-<p>
-	<html:link action="/createRegulationDispatch.do?method=prepare" paramId="queueId" paramName="queueId" >
-		Criar entrada
-	</html:link>
-</p>

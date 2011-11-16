@@ -89,7 +89,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
 	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
-    
+
     public ActionForward editInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	RegulationDispatchActivityInformation bean = getRenderedObject("bean");
@@ -110,7 +110,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
 	    RegulationDispatchQueue queue = readQueue(request);
 	    return forwardToViewQueue(queue);
-	} catch(RegulationDispatchException e) {
+	} catch (RegulationDispatchException e) {
 	    addMessage(request, "error", e.getKey(), e.getArgs());
 	    return editInvalid(mapping, form, request, response);
 	}
@@ -181,6 +181,36 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 	    activity.execute(bean);
 
 	    return prepareEdit(mapping, form, request, response);
+
+	} catch (RegulationDispatchException e) {
+	    addMessage(request, "error", e.getKey(), e.getArgs());
+	    return editInvalid(mapping, form, request, response);
+	}
+    }
+
+    public ActionForward prepareRemoveDispatch(final ActionMapping mapping, final ActionForm form,
+	    final HttpServletRequest request, final HttpServletResponse response) {
+	RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+	
+	request.setAttribute("dispatch", process);
+
+	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
+    }
+
+    public ActionForward removeDispatch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	try {
+	    RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+	    RegulationDispatchProcessFile file = readFile(request);
+	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
+		    .getActivity("RemoveDispatch");
+
+	    RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process, file,
+		    (AbstractWorkflowActivity) activity);
+
+	    activity.execute(bean);
+
+	    return forwardToViewQueue(readQueue(request));
 
 	} catch (RegulationDispatchException e) {
 	    addMessage(request, "error", e.getKey(), e.getArgs());

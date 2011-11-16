@@ -22,6 +22,7 @@ import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
 import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean;
 import module.regulation.dispatch.domain.activities.EditDispatch;
 import module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation;
+import module.regulation.dispatch.domain.activities.RemoveDispatch;
 import module.regulation.dispatch.domain.activities.RemoveFile;
 import module.regulation.dispatch.domain.activities.SetFileAsMainDocument;
 import module.regulation.dispatch.domain.activities.UploadFile;
@@ -47,7 +48,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	activityMap.put("UploadFile", new UploadFile());
 	activityMap.put("SetFileAsMainDocument", new SetFileAsMainDocument());
 	activityMap.put("RemoveFile", new RemoveFile());
-
+	activityMap.put("RemoveDispatch", new RemoveDispatch());
     }
 
     protected RegulationDispatchWorkflowMetaProcess() {
@@ -272,4 +273,5 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
 	return result;
     }
+
 }

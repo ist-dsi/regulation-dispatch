@@ -7,14 +7,13 @@
 <bean:define id="queueId" name="queue" property="externalId" />
 <bean:define id="dispatchId" name="dispatch" property="externalId" />
 
-
 <p>
 	<html:link action="/regulationDispatch.do?method=viewQueue" paramId="queueId" paramName="queueId"> 
-		Voltar 
+		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
 	</html:link>
 </p>
 
-<h1> Editar despacho </h1>
+<h2 class="mbottom20px"> <bean:message key="title.regulation.dispatch.edition" bundle="REGULATION_DISPATCH_RESOURCES" /> </h2>
 
 <fr:form action="<%= String.format("/createRegulationDispatch.do?method=edit&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>">
 
@@ -42,46 +41,16 @@
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />
+			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 		
 	</fr:edit>
 	
-	<p>
-		<html:submit>Editar</html:submit>
-	</p>
+	<p><html:submit><bean:message key="link.edit" bundle="REGULATION_DISPATCH_RESOURCES" /></html:submit></p>
 	
 </fr:form>
 
-<hr />
-
-<h1> Inserir documento </h1>
-
-<fr:form action="<%= String.format("/createRegulationDispatch.do?method=upload&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>" encoding="multipart/form-data">
-	<fr:edit id="bean" name="bean" visible="false" />
-	
-	<fr:edit id="bean-upload" name="bean">
-		<fr:schema type="module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation" bundle="REGULATION_DISPATCH_RESOURCES">
-			<fr:slot name="file" required="true" >
-				<fr:property name="fileNameSlot" value="fileName" />
-				<fr:property name="fileSizeSlot" value="fileSize" />
-				<fr:property name="fileContentTypeSlot" value="mimeType" />
-			</fr:slot>
-		</fr:schema>
-
-		<fr:destination name="invalid" 
-			path="<%= String.format("/createRegulationDispatch.do?method=uploadInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
-		
-		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle1" />
-		</fr:layout>
-	</fr:edit>
-	
-	<p>
-		<html:submit>Submeter</html:submit>
-	</p>
-</fr:form>
-
-<h1> Documentos </h1>
+<h2 class="mbottom20px mtop20px"> <bean:message key="title.documents" bundle="REGULATION_DISPATCH_RESOURCES" /></h2>
 
 <fr:view name="dispatch" property="files">
 	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
@@ -110,3 +79,33 @@
 	</fr:layout>
 		
 </fr:view>
+
+<h3 class="mtop20px"> <bean:message key="title.upload.documents" bundle="REGULATION_DISPATCH_RESOURCES" /> </h3>
+
+<p> <em><bean:message key="message.upload.documents.pdf.maximum.8mb" bundle="REGULATION_DISPATCH_RESOURCES" /></em> </p>
+
+<fr:form action="<%= String.format("/createRegulationDispatch.do?method=upload&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>" encoding="multipart/form-data">
+	<fr:edit id="bean" name="bean" visible="false" />
+	
+	<fr:edit id="bean-upload" name="bean">
+		<fr:schema type="module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation" bundle="REGULATION_DISPATCH_RESOURCES">
+			<fr:slot name="file" required="true" >
+				<fr:property name="fileNameSlot" value="fileName" />
+				<fr:property name="fileSizeSlot" value="fileSize" />
+				<fr:property name="fileContentTypeSlot" value="mimeType" />
+			</fr:slot>
+		</fr:schema>
+
+		<fr:destination name="invalid" 
+			path="<%= String.format("/createRegulationDispatch.do?method=uploadInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
+		
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle1" />
+		</fr:layout>
+	</fr:edit>
+	
+	<p>
+		<html:submit><bean:message key="link.submit" bundle="REGULATION_DISPATCH_RESOURCES" /></html:submit>
+	</p>
+</fr:form>
+

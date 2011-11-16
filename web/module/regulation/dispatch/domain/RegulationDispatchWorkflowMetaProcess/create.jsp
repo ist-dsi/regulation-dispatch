@@ -8,11 +8,13 @@
 
 <p>
 	<html:link action="/regulationDispatch.do?method=viewQueue" paramId="queueId" paramName="queueId"> 
-		Voltar 
+		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
 	</html:link>
 </p>
 
-<h1> Criar despacho </h1>
+<h2 class="mbottom20px"> 
+	<bean:message key="title.regulation.dispatch.creation" bundle="REGULATION_DISPATCH_RESOURCES" />
+</h2>
 
 <fr:form action="<%= "/createRegulationDispatch.do?method=create&amp;queueId=" + queueId %>">
 
@@ -40,12 +42,13 @@
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />
+			<fr:property name="columnClasses" value=",,tderror" />
 		</fr:layout>
 		
 	</fr:edit>
 	
 	<p>
-		<html:submit>Criar</html:submit>
-		<html:cancel>Cancelar</html:cancel>
+		<html:submit><bean:message key="link.create" bundle="REGULATION_DISPATCH_RESOURCES" /></html:submit>
+		<html:cancel><bean:message key="link.cancel" bundle="REGULATION_DISPATCH_RESOURCES" /></html:cancel>
 	</p>
 </fr:form>

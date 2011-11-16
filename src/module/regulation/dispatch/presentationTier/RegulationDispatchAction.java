@@ -179,8 +179,7 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	String contextPath = request.getContextPath();
 	String realLink = contextPath
 		+ String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch&amp;queueId=%s",
-			entry.getExternalId(),
-			queue.getExternalId());
+			entry.getExternalId(), queue.getExternalId());
 	realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
 		GenericChecksumRewriter.calculateChecksum(realLink));
 
@@ -203,7 +202,7 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	RegulationDispatchQueue queue = readQueue(request);
 	String contextPath = request.getContextPath();
 	String realLink = contextPath
-		+ String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemove&amp;queueId=%s",
+		+ String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=removeDispatch&amp;queueId=%s",
 			entry.getExternalId(), queue.getExternalId());
 	realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
 		GenericChecksumRewriter.calculateChecksum(realLink));
@@ -241,8 +240,9 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	    String dispatchDescription = entry.getDispatchDescription();
 	    Person emissor = entry.getEmissor();
 	    String regulationReference = entry.getRegulationReference() != null ? entry.getRegulationReference() : "";
+	    Boolean hasMainDocument = entry.getMainDocument() != null;
 
-	    stringBuilder.append("[ \"").append(entry.getReference()).append("\", ");
+	    stringBuilder.append("[ \"").append(reference).append("\", ");
 	    stringBuilder.append("\"").append(escapeQuotes(emissionDate.toString("dd/MM/yyyy"))).append("\", ");
 	    stringBuilder.append("\"").append(escapeQuotes(dispatchDescription)).append("\", ");
 	    stringBuilder.append("\"").append(escapeQuotes(emissor.getName())).append("\", ");
@@ -258,8 +258,9 @@ public class RegulationDispatchAction extends ContextBaseAction {
 		    ableToAccessQueue && entry.isActive() ? generateLinkForRemoval(request, entry) : "permission_not_granted")
 		    .append(",");
 
-	    stringBuilder.append(ableToAccessQueue ? generateLinkForMainDocument(request, entry) : "permission_not_granted")
-		    .append("\",");
+	    stringBuilder
+		    .append(ableToAccessQueue && hasMainDocument ? generateLinkForMainDocument(request, entry)
+			    : "permission_not_granted").append("\",");
 
 	    stringBuilder.append("\"").append(entry.isActive()).append("\" ], ");
 
@@ -306,8 +307,8 @@ public class RegulationDispatchAction extends ContextBaseAction {
 		orderToUse, iDisplayStart, iDisplayLength);
 
 	String jsonResponseString = null;
-	jsonResponseString = serializeAjaxFilterResponse(sEcho, queue.getActiveEntries().size(),
-		numberOfRecordsMatched, limitedEntries, request);
+	jsonResponseString = serializeAjaxFilterResponse(sEcho, queue.getActiveEntries().size(), numberOfRecordsMatched,
+		limitedEntries, request);
 
 	final byte[] jsonResponsePayload = jsonResponseString.getBytes("iso-8859-15");
 
@@ -332,18 +333,33 @@ public class RegulationDispatchAction extends ContextBaseAction {
     public ActionForward downloadMainDocument(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 	IRegulationDispatchEntry dispatch = readDispatchEntry(request);
-	
+
 	RegulationDispatchProcessFile mainDocument = dispatch.getMainDocument();
-	
-	if(mainDocument == null) {
+
+	if (mainDocument == null) {
 	    throw new RuntimeException("this should not be here");
 	}
-	
+
 	return download(response, mainDocument.getFilename(), mainDocument.getStream(), mainDocument.getContentType());
+    }
+
+    public ActionForward downloadFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) throws IOException {
+	RegulationDispatchProcessFile file = readFile(request);
+
+	if (file == null) {
+	    throw new RuntimeException("this should not be here");
+	}
+
+	return download(response, file.getFilename(), file.getStream(), file.getContentType());
     }
 
     private IRegulationDispatchEntry readDispatchEntry(final HttpServletRequest request) {
 	return (IRegulationDispatchEntry) getDomainObject(request, "dispatchId");
+    }
+
+    private RegulationDispatchProcessFile readFile(final HttpServletRequest request) {
+	return (RegulationDispatchProcessFile) getDomainObject(request, "fileId");
     }
 
     private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
