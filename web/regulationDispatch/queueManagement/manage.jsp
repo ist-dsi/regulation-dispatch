@@ -6,22 +6,24 @@
 
 <p>
 	<html:link action="/regulationDispatch.do?method=prepare">
-		Voltar
+		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
 	</html:link>
 </p>
 
-<h1>Gestão de filas</h1>
+<h2 class="mtop20px mbottom20px">
+	<bean:message key="title.regulation.dispatch.system.management" bundle="REGULATION_DISPATCH_RESOURCES" />
+</h2>
 
 
 <logic:empty name="queues">
 	Não foram criadas filas para a gestão dos despachos
 </logic:empty>
 
-	<p>
-		<html:link action="/manageRegulationDispatchQueues.do?method=prepareCreateQueue">
-			Criar fila
-		</html:link>
-	</p>
+<p>
+	<html:link action="/manageRegulationDispatchQueues.do?method=prepareCreateQueue">
+		<bean:message key="link.regulation.dispatch.create.system" bundle="REGULATION_DISPATCH_RESOURCES" />
+	</html:link>
+</p>
 
 <logic:notEmpty name="queues">
 	
@@ -33,7 +35,7 @@
 		</fr:schema>
 		
 		<fr:layout name="tabular">
-			<fr:property name="classes" value="tstyle2" />
+			<fr:property name="classes" value="tstyle2 mtop20px" />
 			
 			<fr:link name="view" link="/manageRegulationDispatchQueues.do?method=viewQueue&amp;queueId=${externalId}"
 				label="link.view,REGULATION_DISPATCH_RESOURCES" />

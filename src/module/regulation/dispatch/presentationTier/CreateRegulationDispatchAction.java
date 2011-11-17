@@ -191,8 +191,14 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
     public ActionForward prepareRemoveDispatch(final ActionMapping mapping, final ActionForm form,
 	    final HttpServletRequest request, final HttpServletResponse response) {
 	RegulationDispatchWorkflowMetaProcess process = readProcess(request);
-	
+
+	WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
+		.getActivity("RemoveDispatch");
+	RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process,
+		(AbstractWorkflowActivity) activity);
+
 	request.setAttribute("dispatch", process);
+	request.setAttribute("bean", bean);
 
 	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
     }
@@ -200,13 +206,9 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
     public ActionForward removeDispatch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	try {
-	    RegulationDispatchWorkflowMetaProcess process = readProcess(request);
-	    RegulationDispatchProcessFile file = readFile(request);
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		    .getActivity("RemoveDispatch");
-
-	    RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process, file,
-		    (AbstractWorkflowActivity) activity);
+	    RegulationDispatchActivityInformation bean = getRenderedObject("bean");
+	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = bean
+		    .getProcess().getActivity("RemoveDispatch");
 
 	    activity.execute(bean);
 

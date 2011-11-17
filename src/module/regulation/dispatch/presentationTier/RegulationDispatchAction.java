@@ -113,11 +113,10 @@ public class RegulationDispatchAction extends ContextBaseAction {
     private static final java.util.Map<String, Object> DISPATCH_TABLE_COLUMNS_MAP = new java.util.HashMap<String, Object>();
     static {
 	DISPATCH_TABLE_COLUMNS_MAP.put("0", SORT_BY_REFERENCE_COMPARATOR);
-	DISPATCH_TABLE_COLUMNS_MAP.put("1", new RegulationDispatchEntryFieldComparator("reference"));
-	DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("emissionDate"));
-	DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("dispatchDescription"));
-	DISPATCH_TABLE_COLUMNS_MAP.put("4", new RegulationDispatchEntryFieldComparator("emissor.name"));
-	DISPATCH_TABLE_COLUMNS_MAP.put("5", new RegulationDispatchEntryFieldComparator("regulationReference"));
+	DISPATCH_TABLE_COLUMNS_MAP.put("1", new RegulationDispatchEntryFieldComparator("emissionDate"));
+	DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("dispatchDescription"));
+	DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("emissor.name"));
+	DISPATCH_TABLE_COLUMNS_MAP.put("4", new RegulationDispatchEntryFieldComparator("regulationReference"));
 	DISPATCH_TABLE_COLUMNS_MAP.put("asc", 1);
 	DISPATCH_TABLE_COLUMNS_MAP.put("desc", -1);
     }
@@ -202,7 +201,7 @@ public class RegulationDispatchAction extends ContextBaseAction {
 	RegulationDispatchQueue queue = readQueue(request);
 	String contextPath = request.getContextPath();
 	String realLink = contextPath
-		+ String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=removeDispatch&amp;queueId=%s",
+		+ String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemoveDispatch&amp;queueId=%s",
 			entry.getExternalId(), queue.getExternalId());
 	realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
 		GenericChecksumRewriter.calculateChecksum(realLink));

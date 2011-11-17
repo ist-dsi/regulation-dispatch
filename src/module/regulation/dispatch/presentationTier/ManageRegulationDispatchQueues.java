@@ -85,6 +85,17 @@ public class ManageRegulationDispatchQueues extends ContextBaseAction {
 	return forward(request, "/regulationDispatch/queueManagement/view.jsp");
     }
 
+    public ActionForward editQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+	    final HttpServletResponse response) {
+	RegulationDispatchQueue queue = readQueue(request);
+	RegulationDispatchQueueBean bean = getRenderedObject("bean");
+	queue.edit(bean);
+
+	RenderUtils.invalidateViewState();
+
+	return viewQueue(mapping, form, request, response);
+    }
+
     public ActionForward addUserToQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
 	    final HttpServletResponse response) {
 	RegulationDispatchQueue queue = readQueue(request);
@@ -92,6 +103,7 @@ public class ManageRegulationDispatchQueues extends ContextBaseAction {
 
 	try {
 	    queue.addUsers(bean.getUserToAdd());
+	    RenderUtils.invalidateViewState();
 
 	    return viewQueue(mapping, form, request, response);
 	} catch (RegulationDispatchException e) {

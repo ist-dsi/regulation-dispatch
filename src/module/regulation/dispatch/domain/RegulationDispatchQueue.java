@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import module.organization.domain.Person;
+import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.WorkflowQueueBean;
 import myorg.domain.User;
-import myorg.domain.exceptions.DomainException;
 
 import org.joda.time.LocalDate;
 
@@ -42,7 +43,7 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
     @Service
     public void addUsers(User user) {
 	if (isUserAbleToAccessQueue(user)) {
-	    throw new DomainException("user is already in queue", new String[0]);
+	    throw new RegulationDispatchException("error.regulation.dispatch.queue.user.already.in.queue");
 	}
 
 	super.addUsers(user);
@@ -102,6 +103,11 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
 	}
 
 	return result;
+    }
+
+    @Override
+    public void edit(WorkflowQueueBean bean) {
+	setName(bean.getName());
     }
 
 }

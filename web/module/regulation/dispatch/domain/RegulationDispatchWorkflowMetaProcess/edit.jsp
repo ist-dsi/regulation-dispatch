@@ -94,6 +94,11 @@
 				<fr:property name="fileNameSlot" value="fileName" />
 				<fr:property name="fileSizeSlot" value="fileSize" />
 				<fr:property name="fileContentTypeSlot" value="mimeType" />
+				<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.FileValidator" >
+					<property name="required" value="true" />
+					<property name="maxSize" value="8388608" />
+					<property name="acceptedExtensions" value="pdf" />
+				</fr:validator>
 			</fr:slot>
 		</fr:schema>
 
