@@ -66,3 +66,14 @@ relation RegulationDispatchSystemRegulationReferenceMetaField {
 		multiplicity 0..1;
 	}
 }
+
+
+relation RegulationDispatchSystemArticlesMetaField {
+	RegulationDispatchSystem playsRole regulationDispatchSystemForArticles {
+		multiplicity 0..1;
+	}
+	
+	.module.metaWorkflow.domain.StringsMetaField playsRole articlesMetaField {
+		multiplicity 0..1;
+	}
+}

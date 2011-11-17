@@ -5,6 +5,8 @@ import module.organization.domain.Person;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.utl.ist.fenix.tools.util.Strings;
+
 public interface IRegulationDispatchEntry {
     public String getReference();
 
@@ -39,4 +41,8 @@ public interface IRegulationDispatchEntry {
     public String getExternalId();
 
     public RegulationDispatchProcessFile getMainDocument();
+
+    public Strings getArticles();
+
+    public void setArticles(Strings value);
 }

@@ -34,6 +34,7 @@
 				<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 				<fr:property name="size" value="60"/>
 			</fr:slot>
+			<fr:slot name="articles" />
 		</fr:schema>
 		
 		<fr:destination name="invalid" path="<%= String.format("/createRegulationDispatch.do?method=editInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>

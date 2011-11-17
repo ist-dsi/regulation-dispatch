@@ -14,6 +14,8 @@ import module.metaWorkflow.domain.MetaFieldSet;
 import module.metaWorkflow.domain.Requestor;
 import module.metaWorkflow.domain.StringFieldValue;
 import module.metaWorkflow.domain.StringMetaField;
+import module.metaWorkflow.domain.StringsFieldValue;
+import module.metaWorkflow.domain.StringsMetaField;
 import module.metaWorkflow.domain.UserRequestor;
 import module.metaWorkflow.domain.WorkflowMetaProcess;
 import module.metaWorkflow.domain.WorkflowMetaType;
@@ -37,6 +39,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.services.Service;
+import pt.utl.ist.fenix.tools.util.Strings;
 
 public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWorkflowMetaProcess_Base implements
 	IRegulationDispatchEntry {
@@ -174,7 +177,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	StringMetaField metaField = system.getRegulationReferenceMetaField();
 	StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
 
-	if (fieldValue == null) {
+	if (fieldValue != null) {
 	    fieldValue.setStringValue(regulationReference);
 	    return;
 	}
@@ -182,6 +185,35 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
 	FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
 	new StringFieldValue(regulationReference, parentFieldSet, metaField);
+    }
+
+    @Override
+    public Strings getArticles() {
+	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+	StringsMetaField metaField = system.getArticlesMetaField();
+	StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
+
+	if (fieldValue == null) {
+	    return null;
+	}
+
+	return fieldValue.getStringsValue();
+    }
+
+    @Override
+    public void setArticles(Strings value) {
+	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+	StringsMetaField metaField = system.getArticlesMetaField();
+	StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
+
+	if (fieldValue != null) {
+	    fieldValue.setStringsValue(value);
+	}
+
+	MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
+	FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
+
+	new StringsFieldValue(metaField, parentFieldSet, value);
     }
 
     @Override
@@ -237,12 +269,13 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	return null;
     }
 
-    public void edit(RegulationDispatchActivityInformation activityInformation) {
+    public void edit(final RegulationDispatchActivityInformation activityInformation) {
 	setReference(activityInformation.getReference());
 	setEmissionDate(activityInformation.getEmissionDate());
 	setDispatchDescription(activityInformation.getDispatchDescription());
 	setEmissor(activityInformation.getEmissor());
 	setRegulationReference(activityInformation.getRegulationReference());
+	setArticles(activityInformation.getArticles());
     }
 
     public RegulationDispatchProcessFile getMainDocument() {

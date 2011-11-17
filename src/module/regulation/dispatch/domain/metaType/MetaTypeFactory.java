@@ -7,6 +7,7 @@ import java.util.Locale;
 import module.metaWorkflow.domain.LocalDateMetaField;
 import module.metaWorkflow.domain.MetaFieldSet;
 import module.metaWorkflow.domain.StringMetaField;
+import module.metaWorkflow.domain.StringsMetaField;
 import module.metaWorkflow.domain.WorkflowMetaType;
 import module.organization.domain.OrganizationalModel;
 import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
@@ -60,6 +61,10 @@ public class MetaTypeFactory {
 	StringMetaField regulationReferenceMetaField = new StringMetaField(new MultiLanguageString(regulationReferenceName), 1,
 		regulationMetaField);
 	system.setRegulationReferenceMetaField(regulationReferenceMetaField);
+
+	String articlesName = getKey("label.workflow.meta.type.field.articles");
+	StringsMetaField articlesMetaField = new StringsMetaField(new MultiLanguageString(articlesName), 2, regulationMetaField);
+	system.setArticlesMetaField(articlesMetaField);
     }
 
     private static OrganizationalModel readOrganizationalModel() {

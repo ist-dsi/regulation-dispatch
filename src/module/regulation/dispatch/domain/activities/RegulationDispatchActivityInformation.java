@@ -11,6 +11,8 @@ import module.workflow.activities.ActivityInformation;
 
 import org.joda.time.LocalDate;
 
+import pt.utl.ist.fenix.tools.util.Strings;
+
 public class RegulationDispatchActivityInformation extends ActivityInformation<RegulationDispatchWorkflowMetaProcess> {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +23,7 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private Person emissor;
     private String regulationReference;
     private RegulationDispatchQueue queue;
+    private Strings articles;
 
     private InputStream file;
     private String fileName;
@@ -41,6 +44,7 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
 	setDispatchDescription(process.getDispatchDescription());
 	setEmissor(process.getEmissor());
 	setRegulationReference(process.getRegulationReference());
+	setArticles(process.getArticles());
     }
     
     public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process,
@@ -135,6 +139,14 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
 
     public void setRegulationDispatchProcessFile(RegulationDispatchProcessFile regulationDispatchProcessFile) {
 	this.regulationDispatchProcessFile = regulationDispatchProcessFile;
+    }
+
+    public Strings getArticles() {
+	return articles;
+    }
+
+    public void setArticles(Strings articles) {
+	this.articles = articles;
     }
 
     public byte[] getFileContent() throws IOException {

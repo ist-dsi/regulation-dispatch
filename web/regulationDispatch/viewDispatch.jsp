@@ -20,7 +20,10 @@
 		<fr:slot name="emissionDate" />
 		<fr:slot name="dispatchDescription" />
 		<fr:slot name="emissor.name" />
-		<fr:slot name="regulationReference" />
+		<fr:slot name="regulationReference" layout="null-as-label"/>
+		<fr:slot name="articles" layout="format">
+			<fr:property name="format" value="${presentationString}" />
+		</fr:slot>
 	</fr:schema>
 	
 	<fr:layout name="tabular">
@@ -44,20 +47,26 @@
 
 <h3 class="mtop20px mbottom20px"> <bean:message key="title.documents" bundle="REGULATION_DISPATCH_RESOURCES"/></h3>
 
-<fr:view name="dispatch" property="activeFiles">
+<logic:empty>
+	<p class="mtop20px mbottom20px"><em><bean:message key="message.regulation.dispatch.documents.empty" bundle="REGULATION_DISPATCH_RESOURCES" /><em></p>
+</logic:empty>
 
-	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
-		<fr:slot name="displayName" />
-		<fr:slot name="mainDocument" />
-	</fr:schema>
+<logic:notEmpty>
+	<fr:view name="dispatch" property="activeFiles">
 	
-	<fr:layout name="tabular">
-		<fr:property name="classes" value="tstyle2" />
+		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
+			<fr:slot name="displayName" />
+			<fr:slot name="mainDocument" />
+		</fr:schema>
 		
-		<fr:link name="download" 
-			link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}&amp;queueId=" + queueId %>"
-			label="link.download,REGULATION_DISPATCH_RESOURCES" />
-	
-	</fr:layout>
+		<fr:layout name="tabular">
+			<fr:property name="classes" value="tstyle2 mtop20px mbottom20px" />
+			
+			<fr:link name="download" 
+				link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}&amp;queueId=" + queueId %>"
+				label="link.download,REGULATION_DISPATCH_RESOURCES" />
 		
-</fr:view>
+		</fr:layout>
+
+	</fr:view>
+</logic:notEmpty>
