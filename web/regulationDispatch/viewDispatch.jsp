@@ -47,11 +47,11 @@
 
 <h3 class="mtop20px mbottom20px"> <bean:message key="title.documents" bundle="REGULATION_DISPATCH_RESOURCES"/></h3>
 
-<logic:empty>
+<logic:empty name="dispatch" property="activeFiles">
 	<p class="mtop20px mbottom20px"><em><bean:message key="message.regulation.dispatch.documents.empty" bundle="REGULATION_DISPATCH_RESOURCES" /><em></p>
 </logic:empty>
 
-<logic:notEmpty>
+<logic:notEmpty name="dispatch" property="activeFiles">
 	<fr:view name="dispatch" property="activeFiles">
 	
 		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchProcessFile" bundle="REGULATION_DISPATCH_RESOURCES">
