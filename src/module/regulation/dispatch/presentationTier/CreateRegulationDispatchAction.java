@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @Mapping(path = "/createRegulationDispatch")
@@ -65,15 +66,19 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
 	try {
 	    RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
-	    return forwardToViewQueue(queue);
+	    return forwardToViewQueue(request, queue);
 	} catch (final RegulationDispatchException e) {
 	    addMessage(request, "error", e.getMessage(), e.getArgs());
 	    return createInvalid(mapping, form, request, response);
 	}
     }
 
-    private ActionForward forwardToViewQueue(RegulationDispatchQueue queue) {
-	return new ActionForward("/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId(), true);
+    private ActionForward forwardToViewQueue(final HttpServletRequest request, RegulationDispatchQueue queue) {
+	String contextPath = request.getContextPath();
+	String realLink = contextPath + "/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId();
+	String checksum = String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+		GenericChecksumRewriter.calculateChecksum(realLink));
+	return new ActionForward("/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId() + checksum, true);
     }
 
     public ActionForward prepareEdit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -109,7 +114,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 	    activity.execute(bean);
 
 	    RegulationDispatchQueue queue = readQueue(request);
-	    return forwardToViewQueue(queue);
+	    return forwardToViewQueue(request, queue);
 	} catch (RegulationDispatchException e) {
 	    addMessage(request, "error", e.getKey(), e.getArgs());
 	    return editInvalid(mapping, form, request, response);
@@ -212,7 +217,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
 	    activity.execute(bean);
 
-	    return forwardToViewQueue(readQueue(request));
+	    return forwardToViewQueue(request, readQueue(request));
 
 	} catch (RegulationDispatchException e) {
 	    addMessage(request, "error", e.getKey(), e.getArgs());
