@@ -1,2 +1,0 @@
-name=regulation-dispatch
-depends=core,content,organization,fileSupport,metaWorkflow
