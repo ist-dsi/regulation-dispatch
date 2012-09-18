@@ -20,7 +20,9 @@ relation RegulationDispatchQueueRegulationDispatchSystem {
 }
 
 relation RegulationDispatchWorkflowMetaProcessRegulationDispatchSystem {
-	RegulationDispatchSystem playsRole regulationDispatchSystem;
+	RegulationDispatchSystem playsRole regulationDispatchSystem {
+		multiplicity 1..1;
+	}
 	
 	RegulationDispatchWorkflowMetaProcess playsRole processes {
 		multiplicity *;

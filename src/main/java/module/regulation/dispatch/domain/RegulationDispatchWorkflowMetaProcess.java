@@ -57,6 +57,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowQueue;
+import module.workflow.domain.WorkflowSystem;
 import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.DateTime;
@@ -85,6 +86,8 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     protected RegulationDispatchWorkflowMetaProcess() {
 	super();
+	setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
+	setWorkflowSystem(WorkflowSystem.getInstance());
     }
 
     protected RegulationDispatchWorkflowMetaProcess(RegulationDispatchQueue queue, String reference, LocalDate emissionDate,
@@ -174,7 +177,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	    return;
 	}
 
-	new LocalDateFieldValue((LocalDateMetaField) emissionDateMetaField, getFieldSet(), emissionDate);
+	new LocalDateFieldValue(emissionDateMetaField, getFieldSet(), emissionDate);
     }
 
     @Override
@@ -307,6 +310,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 	setArticles(activityInformation.getArticles());
     }
 
+    @Override
     public RegulationDispatchProcessFile getMainDocument() {
 	List<ProcessFile> files = getFiles();
 
