@@ -24,6 +24,17 @@
  */
 package module.regulation.dispatch.domain;
 
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import module.workflow.domain.AbstractWFDocsGroup;
+import module.workflow.domain.ProcessDocumentMetaDataResolver;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WFDocsDefaultWriteGroup;
+
+import org.joda.time.format.DateTimeFormat;
+
 /**
  * 
  * @author Anil Kassamali
@@ -36,10 +47,10 @@ public class RegulationDispatchProcessFile extends RegulationDispatchProcessFile
 	super();
 	init(displayName, filename, content);
 	RegulationDispatchProcessFile mainDocument = process.getMainDocument();
-	setProcess(process);
 
 	activate();
 	setMainDocument(mainDocument == null);
+	process.addFiles(this);
     }
 
     public static RegulationDispatchProcessFile create(final RegulationDispatchWorkflowMetaProcess process,
@@ -55,9 +66,46 @@ public class RegulationDispatchProcessFile extends RegulationDispatchProcessFile
 	setActive(false);
     }
 
+    public static class RegulationDispatchProcessFileMetadataResolver extends
+	    ProcessDocumentMetaDataResolver<RegulationDispatchProcessFile> {
+
+	private static final String REFERENCE = "Referência";
+	private static final String EMISSION_DATE = "Data de emissão";
+	private static final String DESCRIPTION = "Descrição";
+	private static final String REGULATION = "Regulamento";
+	private static final String EMITTER = "Emissor";
+	private static final String ARTICLES = "Artigos";
+
+	@Override
+	public @Nonnull
+	Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+	    return WFDocsDefaultWriteGroup.class;
+	}
+
+	@Override
+	public Map<String, String> getMetadataKeysAndValuesMap(RegulationDispatchProcessFile processDocument) {
+	    RegulationDispatchWorkflowMetaProcess regulationDispatchWorkflowMetaProcess = processDocument.getProcess();
+	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+	    metadataKeysAndValuesMap.put(REFERENCE, regulationDispatchWorkflowMetaProcess.getReference());
+	    metadataKeysAndValuesMap.put(EMISSION_DATE,
+		    regulationDispatchWorkflowMetaProcess.getEmissionDate().toString(DateTimeFormat.forPattern("dd.MM.yyyy")));
+	    metadataKeysAndValuesMap.put(EMITTER, regulationDispatchWorkflowMetaProcess.getEmissor().getPresentationName());
+	    metadataKeysAndValuesMap.put(REGULATION, regulationDispatchWorkflowMetaProcess.getRegulationReference());
+	    if (regulationDispatchWorkflowMetaProcess.getArticles() != null)
+		metadataKeysAndValuesMap.put(ARTICLES, regulationDispatchWorkflowMetaProcess.getArticles()
+			.getPresentationString());
+	    return metadataKeysAndValuesMap;
+	}
+    }
+
     @Override
     public RegulationDispatchWorkflowMetaProcess getProcess() {
 	return (RegulationDispatchWorkflowMetaProcess) super.getProcess();
+    }
+
+    @Override
+    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
+	return new RegulationDispatchProcessFileMetadataResolver();
     }
 
     public void setAsMainDocument() {
