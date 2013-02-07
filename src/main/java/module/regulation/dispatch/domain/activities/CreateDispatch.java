@@ -39,10 +39,10 @@ public class CreateDispatch {
 
     @Service
     public IRegulationDispatchEntry create(CreateRegulationDispatchBean bean, final User user) {
-	RegulationDispatchWorkflowMetaProcess process = RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
-	new ActivityLog(process, user, "CreateRegulationDispatchEntry", process.getReference());
-	
-	return process;
+        RegulationDispatchWorkflowMetaProcess process = RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
+        new ActivityLog(process, user, "CreateRegulationDispatchEntry", process.getReference());
+
+        return process;
     }
 
 }

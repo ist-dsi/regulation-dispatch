@@ -58,11 +58,11 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.WorkflowSystem;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.User;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.utl.ist.fenix.tools.util.Strings;
 
@@ -72,272 +72,273 @@ import pt.utl.ist.fenix.tools.util.Strings;
  * 
  */
 public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWorkflowMetaProcess_Base implements
-	IRegulationDispatchEntry {
+        IRegulationDispatchEntry {
 
     protected static Map<String, AbstractWorkflowActivity> activityMap = new HashMap<String, AbstractWorkflowActivity>();
 
     static {
-	activityMap.put("EditDispatch", new EditDispatch());
-	activityMap.put("UploadFile", new UploadFile());
-	activityMap.put("SetFileAsMainDocument", new SetFileAsMainDocument());
-	activityMap.put("RemoveFile", new RemoveFile());
-	activityMap.put("RemoveDispatch", new RemoveDispatch());
+        activityMap.put("EditDispatch", new EditDispatch());
+        activityMap.put("UploadFile", new UploadFile());
+        activityMap.put("SetFileAsMainDocument", new SetFileAsMainDocument());
+        activityMap.put("RemoveFile", new RemoveFile());
+        activityMap.put("RemoveDispatch", new RemoveDispatch());
     }
 
     protected RegulationDispatchWorkflowMetaProcess() {
-	super();
-	setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
-	setWorkflowSystem(WorkflowSystem.getInstance());
+        super();
+        setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
+        setWorkflowSystem(WorkflowSystem.getInstance());
     }
 
     protected RegulationDispatchWorkflowMetaProcess(RegulationDispatchQueue queue, String reference, LocalDate emissionDate,
-	    Person emissor, String description, String regulationReference) {
-	this();
-	init(queue, reference, emissionDate, emissor, description, regulationReference);
+            Person emissor, String description, String regulationReference) {
+        this();
+        init(queue, reference, emissionDate, emissor, description, regulationReference);
     }
 
     public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean, final User user) {
-	String reference = bean.getReference();
-	LocalDate emissionDate = bean.getEmissionDate();
-	Person emissor = bean.getEmissor();
-	String regulationReference = bean.getRegulationReference();
-	RegulationDispatchQueue queue = bean.getQueue();
-	String description = bean.getDispatchDescription();
+        String reference = bean.getReference();
+        LocalDate emissionDate = bean.getEmissionDate();
+        Person emissor = bean.getEmissor();
+        String regulationReference = bean.getRegulationReference();
+        RegulationDispatchQueue queue = bean.getQueue();
+        String description = bean.getDispatchDescription();
 
-	return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, description,
-		regulationReference);
+        return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, description,
+                regulationReference);
     }
 
     @Service
     public static WorkflowMetaProcess createNewProcess(String subject, String instanceDescription, WorkflowQueue queue, User user) {
-	throw new RuntimeException("invalid use");
+        throw new RuntimeException("invalid use");
     }
 
     @Override
     protected void init(WorkflowMetaType type, String subject, String instanceDescription, WorkflowQueue queue,
-	    Requestor requestor) {
-	throw new RuntimeException("use other init()");
+            Requestor requestor) {
+        throw new RuntimeException("use other init()");
     }
 
     protected void init(RegulationDispatchQueue queue, String reference, LocalDate emissionDate, Person emissor,
-	    String description, String regulationReference) {
-	WorkflowMetaType type = RegulationDispatchSystem.getInstance().getMetaType();
+            String description, String regulationReference) {
+        WorkflowMetaType type = RegulationDispatchSystem.getInstance().getMetaType();
 
-	Requestor requestor = emissor.getUser().getRequestor();
-	if (requestor == null) {
-	    requestor = new UserRequestor(emissor.getUser());
-	}
+        Requestor requestor = emissor.getUser().getRequestor();
+        if (requestor == null) {
+            requestor = new UserRequestor(emissor.getUser());
+        }
 
-	super.init(type, reference, description, queue, requestor);
+        super.init(type, reference, description, queue, requestor);
 
-	setRegulationReference(regulationReference);
-	setEmissionDate(emissionDate);
+        setRegulationReference(regulationReference);
+        setEmissionDate(emissionDate);
     }
 
     @Override
     public String getReference() {
-	return getSubject();
+        return getSubject();
     }
 
     @Override
     public void setReference(final String reference) {
-	setSubject(reference);
+        setSubject(reference);
     }
 
     @Override
     public String getDispatchDescription() {
-	return super.getInstanceDescription();
+        return super.getInstanceDescription();
     }
 
     @Override
     public void setDispatchDescription(String description) {
-	super.setInstanceDescription(description);
+        super.setInstanceDescription(description);
     }
 
     @Override
     public LocalDate getEmissionDate() {
-	RegulationDispatchSystem instance = RegulationDispatchSystem.getInstance();
-	LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(instance.getEmissionDateMetaField());
+        RegulationDispatchSystem instance = RegulationDispatchSystem.getInstance();
+        LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(instance.getEmissionDateMetaField());
 
-	if (fieldValue == null) {
-	    return null;
-	}
+        if (fieldValue == null) {
+            return null;
+        }
 
-	return fieldValue.getLocalDateValue();
+        return fieldValue.getLocalDateValue();
     }
 
     @Override
     public void setEmissionDate(final LocalDate emissionDate) {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-	LocalDateMetaField emissionDateMetaField = system.getEmissionDateMetaField();
-	LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(emissionDateMetaField);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        LocalDateMetaField emissionDateMetaField = system.getEmissionDateMetaField();
+        LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(emissionDateMetaField);
 
-	if (fieldValue != null) {
-	    fieldValue.setLocalDateValue(emissionDate);
-	    return;
-	}
+        if (fieldValue != null) {
+            fieldValue.setLocalDateValue(emissionDate);
+            return;
+        }
 
-	new LocalDateFieldValue(emissionDateMetaField, getFieldSet(), emissionDate);
+        new LocalDateFieldValue(emissionDateMetaField, getFieldSet(), emissionDate);
     }
 
     @Override
     public Person getEmissor() {
-	return getRequestor().getUser().getPerson();
+        return getRequestor().getUser().getPerson();
     }
 
     @Override
     public void setEmissor(Person emissor) {
-	setRequestor(emissor.getUser().getRequestor());
+        setRequestor(emissor.getUser().getRequestor());
     }
 
     @Override
     public String getRegulationReference() {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-	StringMetaField metaField = system.getRegulationReferenceMetaField();
-	StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        StringMetaField metaField = system.getRegulationReferenceMetaField();
+        StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
 
-	if (fieldValue == null) {
-	    return null;
-	}
+        if (fieldValue == null) {
+            return null;
+        }
 
-	return fieldValue.getStringValue();
+        return fieldValue.getStringValue();
     }
 
     @Override
     public void setRegulationReference(final String regulationReference) {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-	StringMetaField metaField = system.getRegulationReferenceMetaField();
-	StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        StringMetaField metaField = system.getRegulationReferenceMetaField();
+        StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
 
-	if (fieldValue != null) {
-	    fieldValue.setStringValue(regulationReference);
-	    return;
-	}
+        if (fieldValue != null) {
+            fieldValue.setStringValue(regulationReference);
+            return;
+        }
 
-	MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
-	FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
-	new StringFieldValue(regulationReference, parentFieldSet, metaField);
+        MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
+        FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
+        new StringFieldValue(regulationReference, parentFieldSet, metaField);
     }
 
     @Override
     public Strings getArticles() {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-	StringsMetaField metaField = system.getArticlesMetaField();
-	StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        StringsMetaField metaField = system.getArticlesMetaField();
+        StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
 
-	if (fieldValue == null) {
-	    return null;
-	}
+        if (fieldValue == null) {
+            return null;
+        }
 
-	return fieldValue.getStringsValue();
+        return fieldValue.getStringsValue();
     }
 
     @Override
     public void setArticles(Strings value) {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-	StringsMetaField metaField = system.getArticlesMetaField();
-	StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        StringsMetaField metaField = system.getArticlesMetaField();
+        StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
 
-	if (fieldValue != null) {
-	    fieldValue.setStringsValue(value);
-	}
+        if (fieldValue != null) {
+            fieldValue.setStringsValue(value);
+        }
 
-	MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
-	FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
+        MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
+        FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
 
-	new StringsFieldValue(metaField, parentFieldSet, value);
+        new StringsFieldValue(metaField, parentFieldSet, value);
     }
 
     @Override
     public DateTime getUpdateDate() {
-	if (getDateFromLastActivity() != null) {
-	    return getDateFromLastActivity();
-	}
+        if (getDateFromLastActivity() != null) {
+            return getDateFromLastActivity();
+        }
 
-	return getCreationDate();
+        return getCreationDate();
     }
 
     @Override
     public void activate() {
-	open();
+        open();
     }
 
     @Override
     public void deactivate() {
-	close();
+        close();
     }
 
     @Override
     public List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> getActivities() {
-	List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> list = new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
-	list.addAll(activityMap.values());
-	return list;
+        List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> list =
+                new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
+        list.addAll(activityMap.values());
+        return list;
     }
 
     private FieldValue findFieldValueByMetaField(final MetaField metaField) {
-	return findFieldValueByMetaFieldRec(getFieldSet(), metaField);
+        return findFieldValueByMetaFieldRec(getFieldSet(), metaField);
     }
 
     private FieldValue findFieldValueByMetaFieldRec(final FieldSetValue fieldSetValue, final MetaField metaField) {
-	if (fieldSetValue.getMetaField() == metaField) {
-	    return fieldSetValue;
-	}
+        if (fieldSetValue.getMetaField() == metaField) {
+            return fieldSetValue;
+        }
 
-	for (FieldValue fieldValue : fieldSetValue.getChildFieldValues()) {
+        for (FieldValue fieldValue : fieldSetValue.getChildFieldValues()) {
 
-	    if (fieldValue.isFieldSet()) {
-		FieldValue ret = findFieldValueByMetaFieldRec((FieldSetValue) fieldValue, metaField);
+            if (fieldValue.isFieldSet()) {
+                FieldValue ret = findFieldValueByMetaFieldRec((FieldSetValue) fieldValue, metaField);
 
-		if (ret != null) {
-		    return ret;
-		}
-	    } else {
-		if (fieldValue.getMetaField() == metaField) {
-		    return fieldValue;
-		}
-	    }
-	}
+                if (ret != null) {
+                    return ret;
+                }
+            } else {
+                if (fieldValue.getMetaField() == metaField) {
+                    return fieldValue;
+                }
+            }
+        }
 
-	return null;
+        return null;
     }
 
     public void edit(final RegulationDispatchActivityInformation activityInformation) {
-	setReference(activityInformation.getReference());
-	setEmissionDate(activityInformation.getEmissionDate());
-	setDispatchDescription(activityInformation.getDispatchDescription());
-	setEmissor(activityInformation.getEmissor());
-	setRegulationReference(activityInformation.getRegulationReference());
-	setArticles(activityInformation.getArticles());
+        setReference(activityInformation.getReference());
+        setEmissionDate(activityInformation.getEmissionDate());
+        setDispatchDescription(activityInformation.getDispatchDescription());
+        setEmissor(activityInformation.getEmissor());
+        setRegulationReference(activityInformation.getRegulationReference());
+        setArticles(activityInformation.getArticles());
     }
 
     @Override
     public RegulationDispatchProcessFile getMainDocument() {
-	List<ProcessFile> files = getFiles();
+        List<ProcessFile> files = getFiles();
 
-	for (ProcessFile processFile : files) {
-	    RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
+        for (ProcessFile processFile : files) {
+            RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
 
-	    if (file.getMainDocument()) {
-		return file;
-	    }
-	}
+            if (file.getMainDocument()) {
+                return file;
+            }
+        }
 
-	return null;
+        return null;
     }
 
     public List<RegulationDispatchProcessFile> getActiveFiles() {
-	List<RegulationDispatchProcessFile> result = new ArrayList<RegulationDispatchProcessFile>();
-	List<ProcessFile> files = getFiles();
-	
-	for (ProcessFile processFile : files) {
-	    RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
+        List<RegulationDispatchProcessFile> result = new ArrayList<RegulationDispatchProcessFile>();
+        List<ProcessFile> files = getFiles();
 
-	    if (file.getActive()) {
-		result.add(file);
-	    }
-	}
+        for (ProcessFile processFile : files) {
+            RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
 
-	return result;
+            if (file.getActive()) {
+                result.add(file);
+            }
+        }
+
+        return result;
     }
 
 }

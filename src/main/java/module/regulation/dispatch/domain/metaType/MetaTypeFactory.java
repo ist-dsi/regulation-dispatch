@@ -50,65 +50,65 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 public class MetaTypeFactory {
 
     public static WorkflowMetaType createMetaType() {
-	Locale pt = new Locale("pt", "PT");
-	Language.setLocale(pt);
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        Locale pt = new Locale("pt", "PT");
+        Language.setLocale(pt);
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
-	if (system.hasMetaType()) {
-	    throw new RegulationDispatchException("workflow meta type for regulation dispatch is already created");
-	}
-	String name = getKey("label.workflow.meta.type.name");
-	String description = getKey("label.workflow.meta.type.description");
+        if (system.hasMetaType()) {
+            throw new RegulationDispatchException("workflow meta type for regulation dispatch is already created");
+        }
+        String name = getKey("label.workflow.meta.type.name");
+        String description = getKey("label.workflow.meta.type.description");
 
-	OrganizationalModel model = readOrganizationalModel();
-	List<Class<? extends ProcessFile>> associatedProcessFileTypes = associatedProcessFileTypes();
+        OrganizationalModel model = readOrganizationalModel();
+        List<Class<? extends ProcessFile>> associatedProcessFileTypes = associatedProcessFileTypes();
 
-	WorkflowMetaType metaType = WorkflowMetaType.createNewMetaType(name, description, model, associatedProcessFileTypes);
-	system.setMetaType(metaType);
+        WorkflowMetaType metaType = WorkflowMetaType.createNewMetaType(name, description, model, associatedProcessFileTypes);
+        system.setMetaType(metaType);
 
-	defineParameters(metaType);
+        defineParameters(metaType);
 
-	Language.setLocale(null);
+        Language.setLocale(null);
 
-	return metaType;
+        return metaType;
     }
 
     private static void defineParameters(WorkflowMetaType metaType) {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
-	MetaFieldSet rootFieldSet = metaType.getFieldSet();
+        MetaFieldSet rootFieldSet = metaType.getFieldSet();
 
-	String emissionDateName = getKey("label.workflow.meta.type.field.emissionDate");
-	LocalDateMetaField emissionDateMetaField = new LocalDateMetaField(new MultiLanguageString(emissionDateName), 1,
-		rootFieldSet);
-	system.setEmissionDateMetaField(emissionDateMetaField);
+        String emissionDateName = getKey("label.workflow.meta.type.field.emissionDate");
+        LocalDateMetaField emissionDateMetaField =
+                new LocalDateMetaField(new MultiLanguageString(emissionDateName), 1, rootFieldSet);
+        system.setEmissionDateMetaField(emissionDateMetaField);
 
-	String regulationName = getKey("label.workflow.meta.type.field.regulation");
-	MetaFieldSet regulationMetaField = new MetaFieldSet(new MultiLanguageString(regulationName), 2, rootFieldSet);
-	regulationMetaField.setRegulationDispatchSystemForRegulation(system);
+        String regulationName = getKey("label.workflow.meta.type.field.regulation");
+        MetaFieldSet regulationMetaField = new MetaFieldSet(new MultiLanguageString(regulationName), 2, rootFieldSet);
+        regulationMetaField.setRegulationDispatchSystemForRegulation(system);
 
-	String regulationReferenceName = getKey("label.workflow.meta.type.field.regulation.reference");
-	StringMetaField regulationReferenceMetaField = new StringMetaField(new MultiLanguageString(regulationReferenceName), 1,
-		regulationMetaField);
-	system.setRegulationReferenceMetaField(regulationReferenceMetaField);
+        String regulationReferenceName = getKey("label.workflow.meta.type.field.regulation.reference");
+        StringMetaField regulationReferenceMetaField =
+                new StringMetaField(new MultiLanguageString(regulationReferenceName), 1, regulationMetaField);
+        system.setRegulationReferenceMetaField(regulationReferenceMetaField);
 
-	String articlesName = getKey("label.workflow.meta.type.field.articles");
-	StringsMetaField articlesMetaField = new StringsMetaField(new MultiLanguageString(articlesName), 2, regulationMetaField);
-	system.setArticlesMetaField(articlesMetaField);
+        String articlesName = getKey("label.workflow.meta.type.field.articles");
+        StringsMetaField articlesMetaField = new StringsMetaField(new MultiLanguageString(articlesName), 2, regulationMetaField);
+        system.setArticlesMetaField(articlesMetaField);
     }
 
     private static OrganizationalModel readOrganizationalModel() {
-	return null;
+        return null;
     }
 
     private static List<Class<? extends ProcessFile>> associatedProcessFileTypes() {
-	List<Class<? extends ProcessFile>> classes = new ArrayList<Class<? extends ProcessFile>>();
-	classes.add(RegulationDispatchProcessFile.class);
+        List<Class<? extends ProcessFile>> classes = new ArrayList<Class<? extends ProcessFile>>();
+        classes.add(RegulationDispatchProcessFile.class);
 
-	return classes;
+        return classes;
     }
 
     public static String getKey(String key) {
-	return BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources", key);
+        return BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources", key);
     }
 }

@@ -62,126 +62,127 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private RegulationDispatchProcessFile regulationDispatchProcessFile;
 
     protected RegulationDispatchActivityInformation() {
-	super(null, null);
+        super(null, null);
     }
 
-    public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process, final AbstractWorkflowActivity activity) {
-	super(process, activity);
-
-	setReference(process.getReference());
-	setEmissionDate(process.getEmissionDate());
-	setDispatchDescription(process.getDispatchDescription());
-	setEmissor(process.getEmissor());
-	setRegulationReference(process.getRegulationReference());
-	setArticles(process.getArticles());
-    }
-    
     public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process,
-	    final RegulationDispatchProcessFile file, final AbstractWorkflowActivity activity) {
-	this(process, activity);
-	setRegulationDispatchProcessFile(file);
+            final AbstractWorkflowActivity activity) {
+        super(process, activity);
+
+        setReference(process.getReference());
+        setEmissionDate(process.getEmissionDate());
+        setDispatchDescription(process.getDispatchDescription());
+        setEmissor(process.getEmissor());
+        setRegulationReference(process.getRegulationReference());
+        setArticles(process.getArticles());
+    }
+
+    public RegulationDispatchActivityInformation(final RegulationDispatchWorkflowMetaProcess process,
+            final RegulationDispatchProcessFile file, final AbstractWorkflowActivity activity) {
+        this(process, activity);
+        setRegulationDispatchProcessFile(file);
     }
 
     public String getReference() {
-	return reference;
+        return reference;
     }
 
     public void setReference(String reference) {
-	this.reference = reference;
+        this.reference = reference;
     }
 
     public LocalDate getEmissionDate() {
-	return emissionDate;
+        return emissionDate;
     }
 
     public void setEmissionDate(LocalDate emissionDate) {
-	this.emissionDate = emissionDate;
+        this.emissionDate = emissionDate;
     }
 
     public String getDispatchDescription() {
-	return dispatchDescription;
+        return dispatchDescription;
     }
 
     public void setDispatchDescription(String description) {
-	this.dispatchDescription = description;
+        this.dispatchDescription = description;
     }
 
     public Person getEmissor() {
-	return emissor;
+        return emissor;
     }
 
     public void setEmissor(Person emissor) {
-	this.emissor = emissor;
+        this.emissor = emissor;
     }
 
     public String getRegulationReference() {
-	return regulationReference;
+        return regulationReference;
     }
 
     public void setRegulationReference(String regulationReference) {
-	this.regulationReference = regulationReference;
+        this.regulationReference = regulationReference;
     }
 
     public RegulationDispatchQueue getQueue() {
-	return queue;
+        return queue;
     }
 
     public void setQueue(RegulationDispatchQueue queue) {
-	this.queue = queue;
+        this.queue = queue;
     }
 
     public InputStream getFile() {
-	return file;
+        return file;
     }
 
     public void setFile(InputStream file) {
-	this.file = file;
+        this.file = file;
     }
 
     public String getFileName() {
-	return fileName;
+        return fileName;
     }
 
     public void setFileName(String fileName) {
-	this.fileName = fileName;
+        this.fileName = fileName;
     }
 
     public Long getFileSize() {
-	return fileSize;
+        return fileSize;
     }
 
     public void setFileSize(Long fileSize) {
-	this.fileSize = fileSize;
+        this.fileSize = fileSize;
     }
 
     public String getMimeType() {
-	return mimeType;
+        return mimeType;
     }
 
     public void setMimeType(String mimeType) {
-	this.mimeType = mimeType;
+        this.mimeType = mimeType;
     }
 
     public RegulationDispatchProcessFile getRegulationDispatchProcessFile() {
-	return regulationDispatchProcessFile;
+        return regulationDispatchProcessFile;
     }
 
     public void setRegulationDispatchProcessFile(RegulationDispatchProcessFile regulationDispatchProcessFile) {
-	this.regulationDispatchProcessFile = regulationDispatchProcessFile;
+        this.regulationDispatchProcessFile = regulationDispatchProcessFile;
     }
 
     public Strings getArticles() {
-	return articles;
+        return articles;
     }
 
     public void setArticles(Strings articles) {
-	this.articles = articles;
+        this.articles = articles;
     }
 
     public byte[] getFileContent() throws IOException {
-	byte[] contents = new byte[(int) this.getFileSize().longValue()];
-	getFile().read(contents);
+        byte[] contents = new byte[(int) this.getFileSize().longValue()];
+        getFile().read(contents);
 
-	return contents;
+        return contents;
     }
 }

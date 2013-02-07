@@ -42,22 +42,22 @@ public class AddArticlesMetaField extends CustomTask implements TransactionalCom
 
     @Override
     public void doIt() {
-	RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
-	MetaFieldSet parentMetaField = system.getRegulationMetaFieldSet();
+        MetaFieldSet parentMetaField = system.getRegulationMetaFieldSet();
 
-	String articlesName = getKey("label.workflow.meta.type.field.articles");
-	StringsMetaField articlesMetaField = new StringsMetaField(new MultiLanguageString(articlesName), 2, parentMetaField);
-	system.setArticlesMetaField(articlesMetaField);
+        String articlesName = getKey("label.workflow.meta.type.field.articles");
+        StringsMetaField articlesMetaField = new StringsMetaField(new MultiLanguageString(articlesName), 2, parentMetaField);
+        system.setArticlesMetaField(articlesMetaField);
     }
 
     @Override
     public void run() {
-	Transaction.withTransaction(false, this);
-	out.println("Done.");
+        Transaction.withTransaction(false, this);
+        out.println("Done.");
     }
 
     public static String getKey(String key) {
-	return BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources", key);
+        return BundleUtil.getStringFromResourceBundle("resources/RegulationDispatchResources", key);
     }
 }

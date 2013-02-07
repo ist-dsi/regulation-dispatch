@@ -39,18 +39,18 @@ public class RegulationDispatchQueueBean extends WorkflowUserGroupQueueBean impl
     private static final long serialVersionUID = 1L;
 
     public RegulationDispatchQueueBean() {
-	super();
+        super();
     }
 
     public RegulationDispatchQueueBean(final RegulationDispatchQueue queue) {
-	super();
-	setQueue(queue);
+        super();
+        setQueue(queue);
     }
 
     @Override
     @Service
     public RegulationDispatchQueue createWorkflowQueue() {
-	return new RegulationDispatchQueue(this);
+        return new RegulationDispatchQueue(this);
     }
 
 }

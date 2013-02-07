@@ -33,6 +33,6 @@ import module.workflow.activities.WorkflowActivity;
  * 
  */
 public abstract class AbstractWorkflowActivity extends
-	WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> {
+        WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> {
 
 }

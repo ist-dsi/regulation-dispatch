@@ -38,15 +38,15 @@ import module.regulation.dispatch.domain.activities.RegulationDispatchActivityIn
 import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.presentationTier.WorkflowLayoutContext;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.presentationTier.Context;
+import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -61,218 +61,219 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	    throws Exception {
+            throws Exception {
 
-	RegulationDispatchQueue queue = readQueue(request);
-	request.setAttribute("queue", queue);
+        RegulationDispatchQueue queue = readQueue(request);
+        request.setAttribute("queue", queue);
 
-	return super.execute(mapping, form, request, response);
+        return super.execute(mapping, form, request, response);
     }
 
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+            final HttpServletResponse response) {
 
-	RegulationDispatchQueue queue = readQueue(request);
-	CreateRegulationDispatchBean bean = new CreateRegulationDispatchBean(queue);
+        RegulationDispatchQueue queue = readQueue(request);
+        CreateRegulationDispatchBean bean = new CreateRegulationDispatchBean(queue);
 
-	request.setAttribute("bean", bean);
+        request.setAttribute("bean", bean);
 
-	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
+        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
     public ActionForward createInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	request.setAttribute("bean", getRenderedObject("bean"));
+            final HttpServletResponse response) {
+        request.setAttribute("bean", getRenderedObject("bean"));
 
-	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
+        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
     public ActionForward create(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	CreateRegulationDispatchBean bean = getRenderedObject("bean");
-	RegulationDispatchQueue queue = readQueue(request);
-	User user = UserView.getCurrentUser();
+            final HttpServletResponse response) {
+        CreateRegulationDispatchBean bean = getRenderedObject("bean");
+        RegulationDispatchQueue queue = readQueue(request);
+        User user = UserView.getCurrentUser();
 
-	try {
-	    RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
-	    return forwardToViewQueue(request, queue);
-	} catch (final RegulationDispatchException e) {
-	    addMessage(request, "error", e.getMessage(), e.getArgs());
-	    return createInvalid(mapping, form, request, response);
-	}
+        try {
+            RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
+            return forwardToViewQueue(request, queue);
+        } catch (final RegulationDispatchException e) {
+            addMessage(request, "error", e.getMessage(), e.getArgs());
+            return createInvalid(mapping, form, request, response);
+        }
     }
 
     private ActionForward forwardToViewQueue(final HttpServletRequest request, RegulationDispatchQueue queue) {
-	String contextPath = request.getContextPath();
-	String realLink = contextPath + "/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId();
-	String checksum = String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-		GenericChecksumRewriter.calculateChecksum(realLink));
-	return new ActionForward("/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId() + checksum, true);
+        String contextPath = request.getContextPath();
+        String realLink = contextPath + "/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId();
+        String checksum =
+                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+                        GenericChecksumRewriter.calculateChecksum(realLink));
+        return new ActionForward("/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId() + checksum, true);
     }
 
     public ActionForward prepareEdit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	RegulationDispatchWorkflowMetaProcess process = readProcess(request);
-	WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		.getActivity("EditDispatch");
-	RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process,
-		(AbstractWorkflowActivity) activity);
+            final HttpServletResponse response) {
+        RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+        WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                process.getActivity("EditDispatch");
+        RegulationDispatchActivityInformation bean =
+                new RegulationDispatchActivityInformation(process, (AbstractWorkflowActivity) activity);
 
-	request.setAttribute("dispatch", process);
-	request.setAttribute("bean", bean);
+        request.setAttribute("dispatch", process);
+        request.setAttribute("bean", bean);
 
-	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
+        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
 
     public ActionForward editInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	RegulationDispatchActivityInformation bean = getRenderedObject("bean");
-	request.setAttribute("bean", bean);
+            final HttpServletResponse response) {
+        RegulationDispatchActivityInformation bean = getRenderedObject("bean");
+        request.setAttribute("bean", bean);
 
-	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
+        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
 
     public ActionForward edit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	try {
-	    RegulationDispatchActivityInformation bean = getRenderedObject("bean");
-	    RegulationDispatchWorkflowMetaProcess process = bean.getProcess();
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		    .getActivity("EditDispatch");
+            final HttpServletResponse response) {
+        try {
+            RegulationDispatchActivityInformation bean = getRenderedObject("bean");
+            RegulationDispatchWorkflowMetaProcess process = bean.getProcess();
+            WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                    process.getActivity("EditDispatch");
 
-	    activity.execute(bean);
+            activity.execute(bean);
 
-	    RegulationDispatchQueue queue = readQueue(request);
-	    return forwardToViewQueue(request, queue);
-	} catch (RegulationDispatchException e) {
-	    addMessage(request, "error", e.getKey(), e.getArgs());
-	    return editInvalid(mapping, form, request, response);
-	}
+            RegulationDispatchQueue queue = readQueue(request);
+            return forwardToViewQueue(request, queue);
+        } catch (RegulationDispatchException e) {
+            addMessage(request, "error", e.getKey(), e.getArgs());
+            return editInvalid(mapping, form, request, response);
+        }
     }
 
     public ActionForward upload(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	try {
-	    RegulationDispatchActivityInformation bean = getRenderedObject("bean");
-	    RegulationDispatchWorkflowMetaProcess process = bean.getProcess();
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		    .getActivity("UploadFile");
+            final HttpServletResponse response) {
+        try {
+            RegulationDispatchActivityInformation bean = getRenderedObject("bean");
+            RegulationDispatchWorkflowMetaProcess process = bean.getProcess();
+            WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                    process.getActivity("UploadFile");
 
-	    activity.execute(bean);
-	    RenderUtils.invalidateViewState();
+            activity.execute(bean);
+            RenderUtils.invalidateViewState();
 
-	    return prepareEdit(mapping, form, request, response);
-	} catch (RegulationDispatchException e) {
-	    addMessage(request, "error", e.getKey(), e.getArgs());
-	    return editInvalid(mapping, form, request, response);
-	}
+            return prepareEdit(mapping, form, request, response);
+        } catch (RegulationDispatchException e) {
+            addMessage(request, "error", e.getKey(), e.getArgs());
+            return editInvalid(mapping, form, request, response);
+        }
     }
 
     public ActionForward uploadInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	return prepareEdit(mapping, form, request, response);
+            final HttpServletResponse response) {
+        return prepareEdit(mapping, form, request, response);
     }
 
     public ActionForward download(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) throws IOException {
-	RegulationDispatchProcessFile file = readFile(request);
-	return download(response, file.getFilename(), file.getStream(), file.getContentType());
+            final HttpServletResponse response) throws IOException {
+        RegulationDispatchProcessFile file = readFile(request);
+        return download(response, file.getFilename(), file.getStream(), file.getContentType());
     }
 
     public ActionForward removeFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
+            final HttpServletResponse response) {
 
-	try {
-	    RegulationDispatchWorkflowMetaProcess process = readProcess(request);
-	    RegulationDispatchProcessFile file = readFile(request);
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		    .getActivity("RemoveFile");
+        try {
+            RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+            RegulationDispatchProcessFile file = readFile(request);
+            WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                    process.getActivity("RemoveFile");
 
-	    RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process, file,
-		    (AbstractWorkflowActivity) activity);
+            RegulationDispatchActivityInformation bean =
+                    new RegulationDispatchActivityInformation(process, file, (AbstractWorkflowActivity) activity);
 
-	    activity.execute(bean);
+            activity.execute(bean);
 
-	    return prepareEdit(mapping, form, request, response);
+            return prepareEdit(mapping, form, request, response);
 
-	} catch (RegulationDispatchException e) {
-	    addMessage(request, "error", e.getKey(), e.getArgs());
-	    return editInvalid(mapping, form, request, response);
-	}
+        } catch (RegulationDispatchException e) {
+            addMessage(request, "error", e.getKey(), e.getArgs());
+            return editInvalid(mapping, form, request, response);
+        }
     }
 
     public ActionForward putFileAsMainDocument(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	try {
-	    RegulationDispatchWorkflowMetaProcess process = readProcess(request);
-	    RegulationDispatchProcessFile file = readFile(request);
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		    .getActivity("SetFileAsMainDocument");
+            final HttpServletRequest request, final HttpServletResponse response) {
+        try {
+            RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+            RegulationDispatchProcessFile file = readFile(request);
+            WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                    process.getActivity("SetFileAsMainDocument");
 
-	    RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process, file,
-		    (AbstractWorkflowActivity) activity);
+            RegulationDispatchActivityInformation bean =
+                    new RegulationDispatchActivityInformation(process, file, (AbstractWorkflowActivity) activity);
 
-	    activity.execute(bean);
+            activity.execute(bean);
 
-	    return prepareEdit(mapping, form, request, response);
+            return prepareEdit(mapping, form, request, response);
 
-	} catch (RegulationDispatchException e) {
-	    addMessage(request, "error", e.getKey(), e.getArgs());
-	    return editInvalid(mapping, form, request, response);
-	}
+        } catch (RegulationDispatchException e) {
+            addMessage(request, "error", e.getKey(), e.getArgs());
+            return editInvalid(mapping, form, request, response);
+        }
     }
 
     public ActionForward prepareRemoveDispatch(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) {
-	RegulationDispatchWorkflowMetaProcess process = readProcess(request);
+            final HttpServletRequest request, final HttpServletResponse response) {
+        RegulationDispatchWorkflowMetaProcess process = readProcess(request);
 
-	WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = process
-		.getActivity("RemoveDispatch");
-	RegulationDispatchActivityInformation bean = new RegulationDispatchActivityInformation(process,
-		(AbstractWorkflowActivity) activity);
+        WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                process.getActivity("RemoveDispatch");
+        RegulationDispatchActivityInformation bean =
+                new RegulationDispatchActivityInformation(process, (AbstractWorkflowActivity) activity);
 
-	request.setAttribute("dispatch", process);
-	request.setAttribute("bean", bean);
+        request.setAttribute("dispatch", process);
+        request.setAttribute("bean", bean);
 
-	return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
+        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
     }
 
     public ActionForward removeDispatch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-	    final HttpServletResponse response) {
-	try {
-	    RegulationDispatchActivityInformation bean = getRenderedObject("bean");
-	    WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity = bean
-		    .getProcess().getActivity("RemoveDispatch");
+            final HttpServletResponse response) {
+        try {
+            RegulationDispatchActivityInformation bean = getRenderedObject("bean");
+            WorkflowActivity<RegulationDispatchWorkflowMetaProcess, RegulationDispatchActivityInformation> activity =
+                    bean.getProcess().getActivity("RemoveDispatch");
 
-	    activity.execute(bean);
+            activity.execute(bean);
 
-	    return forwardToViewQueue(request, readQueue(request));
+            return forwardToViewQueue(request, readQueue(request));
 
-	} catch (RegulationDispatchException e) {
-	    addMessage(request, "error", e.getKey(), e.getArgs());
-	    return editInvalid(mapping, form, request, response);
-	}
+        } catch (RegulationDispatchException e) {
+            addMessage(request, "error", e.getKey(), e.getArgs());
+            return editInvalid(mapping, form, request, response);
+        }
     }
 
     private RegulationDispatchProcessFile readFile(final HttpServletRequest request) {
-	return getDomainObject(request, "fileId");
+        return getDomainObject(request, "fileId");
     }
 
     private RegulationDispatchWorkflowMetaProcess readProcess(final HttpServletRequest request) {
-	return getDomainObject(request, "dispatchId");
+        return getDomainObject(request, "dispatchId");
     }
 
     private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
-	return getDomainObject(request, "queueId");
+        return getDomainObject(request, "queueId");
     }
 
     @Override
     public Context createContext(String contextPathString, HttpServletRequest request) {
-	WorkflowLayoutContext context = WorkflowLayoutContext
-		.getDefaultWorkflowLayoutContext(RegulationDispatchWorkflowMetaProcess.class);
-	context.setElements(contextPathString);
+        WorkflowLayoutContext context =
+                WorkflowLayoutContext.getDefaultWorkflowLayoutContext(RegulationDispatchWorkflowMetaProcess.class);
+        context.setElements(contextPathString);
 
-	return context;
+        return context;
     }
 
 }

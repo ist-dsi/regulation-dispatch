@@ -38,23 +38,23 @@ public class RegulationDispatchException extends DomainException {
     private static final long serialVersionUID = 1L;
 
     public RegulationDispatchException() {
-	super();
+        super();
     }
 
     public RegulationDispatchException(String key, ResourceBundle bundle, String... args) {
-	super(key, bundle, args);
+        super(key, bundle, args);
     }
 
     public RegulationDispatchException(String key, String... args) {
-	super(key, args);
+        super(key, args);
     }
 
     public RegulationDispatchException(String key, Throwable cause, ResourceBundle bundle, String... args) {
-	super(key, cause, bundle, args);
+        super(key, cause, bundle, args);
     }
 
     public RegulationDispatchException(String key, Throwable cause, String... args) {
-	super(key, cause, args);
+        super(key, cause, args);
     }
 
 }

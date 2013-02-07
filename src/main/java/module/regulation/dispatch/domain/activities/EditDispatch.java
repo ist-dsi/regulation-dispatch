@@ -36,12 +36,12 @@ public class EditDispatch extends AbstractWorkflowActivity {
 
     @Override
     public boolean isActive(RegulationDispatchWorkflowMetaProcess process, User user) {
-	return process.isUserAbleToAccessCurrentQueues(user);
+        return process.isUserAbleToAccessCurrentQueues(user);
     }
 
     @Override
     protected void process(RegulationDispatchActivityInformation activityInformation) {
-	activityInformation.getProcess().edit(activityInformation);
+        activityInformation.getProcess().edit(activityInformation);
     }
 
 }

@@ -29,7 +29,6 @@ import module.regulation.dispatch.domain.RegulationDispatchQueue;
 
 import org.joda.time.LocalDate;
 
-
 /**
  * 
  * @author Anil Kassamali
@@ -47,55 +46,55 @@ public class CreateRegulationDispatchBean implements java.io.Serializable {
     private RegulationDispatchQueue queue;
 
     public CreateRegulationDispatchBean(final RegulationDispatchQueue queue) {
-	setQueue(queue);
+        setQueue(queue);
     }
 
     public String getReference() {
-	return reference;
+        return reference;
     }
 
     public void setReference(String reference) {
-	this.reference = reference;
+        this.reference = reference;
     }
 
     public LocalDate getEmissionDate() {
-	return emissionDate;
+        return emissionDate;
     }
 
     public void setEmissionDate(LocalDate emissionDate) {
-	this.emissionDate = emissionDate;
+        this.emissionDate = emissionDate;
     }
 
     public String getDispatchDescription() {
-	return dispatchDescription;
+        return dispatchDescription;
     }
 
     public void setDispatchDescription(String description) {
-	this.dispatchDescription = description;
+        this.dispatchDescription = description;
     }
 
     public Person getEmissor() {
-	return emissor;
+        return emissor;
     }
 
     public void setEmissor(Person emissor) {
-	this.emissor = emissor;
+        this.emissor = emissor;
     }
 
     public String getRegulationReference() {
-	return regulationReference;
+        return regulationReference;
     }
 
     public void setRegulationReference(String regulationReference) {
-	this.regulationReference = regulationReference;
+        this.regulationReference = regulationReference;
     }
 
     public RegulationDispatchQueue getQueue() {
-	return queue;
+        return queue;
     }
 
     public void setQueue(RegulationDispatchQueue queue) {
-	this.queue = queue;
+        this.queue = queue;
     }
 
 }

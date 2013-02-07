@@ -32,23 +32,23 @@ import pt.ist.bennu.core.domain.MyOrg;
  * 
  */
 public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
-    
+
     private RegulationDispatchSystem() {
         super();
-	setMyOrg(MyOrg.getInstance());
+        setMyOrg(MyOrg.getInstance());
     }
-    
+
     public static RegulationDispatchSystem getInstance() {
-	MyOrg myOrg = MyOrg.getInstance();
+        MyOrg myOrg = MyOrg.getInstance();
 
-	if (!myOrg.hasRegulationDispatchSystem()) {
-	    return createRegulationDispatchSystem();
-	}
+        if (!myOrg.hasRegulationDispatchSystem()) {
+            return createRegulationDispatchSystem();
+        }
 
-	return myOrg.getRegulationDispatchSystem();
+        return myOrg.getRegulationDispatchSystem();
     }
 
     private static RegulationDispatchSystem createRegulationDispatchSystem() {
-	return new RegulationDispatchSystem();
+        return new RegulationDispatchSystem();
     }
 }

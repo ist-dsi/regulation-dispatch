@@ -35,6 +35,6 @@ import pt.ist.bennu.core.domain.User;
 public class RegulationDispatchUtils {
 
     public static boolean isMyOrgManager(final User user) {
-	return user.hasRoleType(RoleType.MANAGER);
+        return user.hasRoleType(RoleType.MANAGER);
     }
 }

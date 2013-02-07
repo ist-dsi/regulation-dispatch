@@ -31,10 +31,10 @@ import module.organization.domain.Person;
 import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.WorkflowQueueBean;
-import pt.ist.bennu.core.domain.User;
 
 import org.joda.time.LocalDate;
 
+import pt.ist.bennu.core.domain.User;
 import pt.ist.fenixWebFramework.services.Service;
 
 /**
@@ -43,100 +43,100 @@ import pt.ist.fenixWebFramework.services.Service;
  * 
  */
 public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
-    
+
     RegulationDispatchQueue(String name, List<User> baseUsers) {
-	super();
-	init(name, baseUsers);
-	setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
-	setMetaType(RegulationDispatchSystem.getInstance().getMetaType());
+        super();
+        init(name, baseUsers);
+        setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
+        setMetaType(RegulationDispatchSystem.getInstance().getMetaType());
     }
-    
+
     RegulationDispatchQueue(final RegulationDispatchQueueBean bean) {
-	this(bean.getName(), new ArrayList<User>(bean.getUsers()));
+        this(bean.getName(), new ArrayList<User>(bean.getUsers()));
     }
-    
+
     public static List<RegulationDispatchQueue> getRegulationDispatchQueuesForUser(final User user) {
-	List<RegulationDispatchQueue> result = new ArrayList<RegulationDispatchQueue>();
-	List<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueues();
+        List<RegulationDispatchQueue> result = new ArrayList<RegulationDispatchQueue>();
+        List<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueues();
 
-	for (RegulationDispatchQueue regulationDispatchQueue : queues) {
-	    if (regulationDispatchQueue.isUserAbleToAccessQueue(user)) {
-		result.add(regulationDispatchQueue);
-	    }
-	}
+        for (RegulationDispatchQueue regulationDispatchQueue : queues) {
+            if (regulationDispatchQueue.isUserAbleToAccessQueue(user)) {
+                result.add(regulationDispatchQueue);
+            }
+        }
 
-	return result;
+        return result;
     }
-    
+
     @Override
     @Service
     public void addUsers(User user) {
-	if (isUserAbleToAccessQueue(user)) {
-	    throw new RegulationDispatchException("error.regulation.dispatch.queue.user.already.in.queue");
-	}
+        if (isUserAbleToAccessQueue(user)) {
+            throw new RegulationDispatchException("error.regulation.dispatch.queue.user.already.in.queue");
+        }
 
-	super.addUsers(user);
+        super.addUsers(user);
     }
 
     public List<IRegulationDispatchEntry> getActiveEntries() {
-	List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-	List<WorkflowProcess> activeProcesses = super.getActiveProcesses();
+        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
+        List<WorkflowProcess> activeProcesses = super.getActiveProcesses();
 
-	for (WorkflowProcess workflowProcess : activeProcesses) {
-	    result.add((IRegulationDispatchEntry) workflowProcess);
-	}
+        for (WorkflowProcess workflowProcess : activeProcesses) {
+            result.add((IRegulationDispatchEntry) workflowProcess);
+        }
 
-	return result;
+        return result;
     }
 
     public List<IRegulationDispatchEntry> getNotActiveEntries() {
-	List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-	List<WorkflowProcess> notActiveProcesses = super.getNotActiveProcesses();
+        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
+        List<WorkflowProcess> notActiveProcesses = super.getNotActiveProcesses();
 
-	for (WorkflowProcess workflowProcess : notActiveProcesses) {
-	    result.add((IRegulationDispatchEntry) workflowProcess);
-	}
+        for (WorkflowProcess workflowProcess : notActiveProcesses) {
+            result.add((IRegulationDispatchEntry) workflowProcess);
+        }
 
-	return result;
+        return result;
     }
 
     public List<IRegulationDispatchEntry> getAllEntries() {
-	List<IRegulationDispatchEntry> result = getActiveEntries();
-	result.addAll(getNotActiveEntries());
+        List<IRegulationDispatchEntry> result = getActiveEntries();
+        result.addAll(getNotActiveEntries());
 
-	return result;
+        return result;
     }
 
     public List<IRegulationDispatchEntry> findEntriesBy(String sSearch) {
-	List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-	List<IRegulationDispatchEntry> activeEntries = getActiveEntries();
+        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
+        List<IRegulationDispatchEntry> activeEntries = getActiveEntries();
 
-	for (IRegulationDispatchEntry dispatch : activeEntries) {
-	    String reference = dispatch.getReference();
-	    LocalDate emissionDate = dispatch.getEmissionDate();
-	    String dispatchDescription = dispatch.getDispatchDescription();
-	    Person emissor = dispatch.getEmissor();
-	    String regulationReference = dispatch.getRegulationReference() != null ? dispatch.getRegulationReference() : "";
+        for (IRegulationDispatchEntry dispatch : activeEntries) {
+            String reference = dispatch.getReference();
+            LocalDate emissionDate = dispatch.getEmissionDate();
+            String dispatchDescription = dispatch.getDispatchDescription();
+            Person emissor = dispatch.getEmissor();
+            String regulationReference = dispatch.getRegulationReference() != null ? dispatch.getRegulationReference() : "";
 
-	    if (reference.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
-		result.add(dispatch);
-	    } else if (emissionDate.toString("dd/MM/yyyy").indexOf(sSearch.toLowerCase()) > -1) {
-		result.add(dispatch);
-	    } else if (dispatchDescription.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
-		result.add(dispatch);
-	    } else if (emissor.getName().toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
-		result.add(dispatch);
-	    } else if (regulationReference.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
-		result.add(dispatch);
-	    }
-	}
+            if (reference.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
+                result.add(dispatch);
+            } else if (emissionDate.toString("dd/MM/yyyy").indexOf(sSearch.toLowerCase()) > -1) {
+                result.add(dispatch);
+            } else if (dispatchDescription.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
+                result.add(dispatch);
+            } else if (emissor.getName().toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
+                result.add(dispatch);
+            } else if (regulationReference.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
+                result.add(dispatch);
+            }
+        }
 
-	return result;
+        return result;
     }
 
     @Override
     public void edit(WorkflowQueueBean bean) {
-	setName(bean.getName());
+        setName(bean.getName());
     }
 
 }

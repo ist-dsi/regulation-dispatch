@@ -40,19 +40,19 @@ public class UploadFile extends AbstractWorkflowActivity {
 
     @Override
     public boolean isActive(RegulationDispatchWorkflowMetaProcess process, User user) {
-	return process.isUserAbleToAccessCurrentQueues(user);
+        return process.isUserAbleToAccessCurrentQueues(user);
     }
 
     @Override
     protected void process(RegulationDispatchActivityInformation activityInformation) {
-	try {
-	    byte[] fileContent = activityInformation.getFileContent();
-	    String fileName = activityInformation.getFileName();
+        try {
+            byte[] fileContent = activityInformation.getFileContent();
+            String fileName = activityInformation.getFileName();
 
-	    RegulationDispatchProcessFile.create(activityInformation.getProcess(), fileName, fileName, fileContent);
-	} catch (IOException e) {
-	    throw new RegulationDispatchException(e.getMessage());
-	}
+            RegulationDispatchProcessFile.create(activityInformation.getProcess(), fileName, fileName, fileContent);
+        } catch (IOException e) {
+            throw new RegulationDispatchException(e.getMessage());
+        }
     }
 
 }

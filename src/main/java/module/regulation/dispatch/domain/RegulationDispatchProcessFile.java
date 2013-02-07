@@ -43,83 +43,84 @@ import org.joda.time.format.DateTimeFormat;
 public class RegulationDispatchProcessFile extends RegulationDispatchProcessFile_Base {
 
     private RegulationDispatchProcessFile(final RegulationDispatchWorkflowMetaProcess process, final String displayName,
-	    final String filename, final byte[] content) {
-	super();
-	init(displayName, filename, content);
-	RegulationDispatchProcessFile mainDocument = process.getMainDocument();
+            final String filename, final byte[] content) {
+        super();
+        init(displayName, filename, content);
+        RegulationDispatchProcessFile mainDocument = process.getMainDocument();
 
-	activate();
-	setMainDocument(mainDocument == null);
-	process.addFiles(this);
+        activate();
+        setMainDocument(mainDocument == null);
+        process.addFiles(this);
     }
 
     public static RegulationDispatchProcessFile create(final RegulationDispatchWorkflowMetaProcess process,
-	    final String displayName, final String filename, final byte[] content) {
-	return new RegulationDispatchProcessFile(process, displayName, filename, content);
+            final String displayName, final String filename, final byte[] content) {
+        return new RegulationDispatchProcessFile(process, displayName, filename, content);
     }
 
     public void activate() {
-	setActive(true);
+        setActive(true);
     }
 
     public void deactivate() {
-	setActive(false);
+        setActive(false);
     }
 
     public static class RegulationDispatchProcessFileMetadataResolver extends
-	    ProcessDocumentMetaDataResolver<RegulationDispatchProcessFile> {
+            ProcessDocumentMetaDataResolver<RegulationDispatchProcessFile> {
 
-	private static final String REFERENCE = "Referência";
-	private static final String EMISSION_DATE = "Data de emissão";
-	private static final String DESCRIPTION = "Descrição";
-	private static final String REGULATION = "Regulamento";
-	private static final String EMITTER = "Emissor";
-	private static final String ARTICLES = "Artigos";
+        private static final String REFERENCE = "Referência";
+        private static final String EMISSION_DATE = "Data de emissão";
+        private static final String DESCRIPTION = "Descrição";
+        private static final String REGULATION = "Regulamento";
+        private static final String EMITTER = "Emissor";
+        private static final String ARTICLES = "Artigos";
 
-	@Override
-	public @Nonnull
-	Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-	    return WFDocsDefaultWriteGroup.class;
-	}
+        @Override
+        public @Nonnull
+        Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
+            return WFDocsDefaultWriteGroup.class;
+        }
 
-	@Override
-	public Map<String, String> getMetadataKeysAndValuesMap(RegulationDispatchProcessFile processDocument) {
-	    RegulationDispatchWorkflowMetaProcess regulationDispatchWorkflowMetaProcess = processDocument.getProcess();
-	    Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
-	    metadataKeysAndValuesMap.put(REFERENCE, regulationDispatchWorkflowMetaProcess.getReference());
-	    metadataKeysAndValuesMap.put(EMISSION_DATE,
-		    regulationDispatchWorkflowMetaProcess.getEmissionDate().toString(DateTimeFormat.forPattern("dd.MM.yyyy")));
-	    metadataKeysAndValuesMap.put(EMITTER, regulationDispatchWorkflowMetaProcess.getEmissor().getPresentationName());
-	    metadataKeysAndValuesMap.put(REGULATION, regulationDispatchWorkflowMetaProcess.getRegulationReference());
-	    if (regulationDispatchWorkflowMetaProcess.getArticles() != null)
-		metadataKeysAndValuesMap.put(ARTICLES, regulationDispatchWorkflowMetaProcess.getArticles()
-			.getPresentationString());
-	    return metadataKeysAndValuesMap;
-	}
+        @Override
+        public Map<String, String> getMetadataKeysAndValuesMap(RegulationDispatchProcessFile processDocument) {
+            RegulationDispatchWorkflowMetaProcess regulationDispatchWorkflowMetaProcess = processDocument.getProcess();
+            Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processDocument);
+            metadataKeysAndValuesMap.put(REFERENCE, regulationDispatchWorkflowMetaProcess.getReference());
+            metadataKeysAndValuesMap.put(EMISSION_DATE,
+                    regulationDispatchWorkflowMetaProcess.getEmissionDate().toString(DateTimeFormat.forPattern("dd.MM.yyyy")));
+            metadataKeysAndValuesMap.put(EMITTER, regulationDispatchWorkflowMetaProcess.getEmissor().getPresentationName());
+            metadataKeysAndValuesMap.put(REGULATION, regulationDispatchWorkflowMetaProcess.getRegulationReference());
+            if (regulationDispatchWorkflowMetaProcess.getArticles() != null) {
+                metadataKeysAndValuesMap.put(ARTICLES, regulationDispatchWorkflowMetaProcess.getArticles()
+                        .getPresentationString());
+            }
+            return metadataKeysAndValuesMap;
+        }
     }
 
     @Override
     public RegulationDispatchWorkflowMetaProcess getProcess() {
-	return (RegulationDispatchWorkflowMetaProcess) super.getProcess();
+        return (RegulationDispatchWorkflowMetaProcess) super.getProcess();
     }
 
     @Override
     public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-	return new RegulationDispatchProcessFileMetadataResolver();
+        return new RegulationDispatchProcessFileMetadataResolver();
     }
 
     public void setAsMainDocument() {
-	RegulationDispatchProcessFile currentMainDocument = getProcess().getMainDocument();
-	currentMainDocument.setMainDocument(false);
-	setMainDocument(true);
+        RegulationDispatchProcessFile currentMainDocument = getProcess().getMainDocument();
+        currentMainDocument.setMainDocument(false);
+        setMainDocument(true);
     }
 
     public boolean isAbleToRemove() {
-	return getActive() && !getMainDocument();
+        return getActive() && !getMainDocument();
     }
 
     public boolean isAbleToSetAsMainDocument() {
-	return getActive() && !getMainDocument();
+        return getActive() && !getMainDocument();
     }
 
 }
