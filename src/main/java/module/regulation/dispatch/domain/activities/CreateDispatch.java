@@ -28,7 +28,7 @@ import module.regulation.dispatch.domain.IRegulationDispatchEntry;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.workflow.domain.ActivityLog;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -37,7 +37,7 @@ import pt.ist.fenixWebFramework.services.Service;
  */
 public class CreateDispatch {
 
-    @Service
+    @Atomic
     public IRegulationDispatchEntry create(CreateRegulationDispatchBean bean, final User user) {
         RegulationDispatchWorkflowMetaProcess process = RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
         new ActivityLog(process, user, "CreateRegulationDispatchEntry", process.getReference());

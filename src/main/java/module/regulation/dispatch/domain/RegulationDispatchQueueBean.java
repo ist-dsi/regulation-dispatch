@@ -27,7 +27,7 @@ package module.regulation.dispatch.domain;
 import java.io.Serializable;
 
 import module.workflow.domain.WorkflowUserGroupQueueBean;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -48,7 +48,7 @@ public class RegulationDispatchQueueBean extends WorkflowUserGroupQueueBean impl
     }
 
     @Override
-    @Service
+    @Atomic
     public RegulationDispatchQueue createWorkflowQueue() {
         return new RegulationDispatchQueue(this);
     }

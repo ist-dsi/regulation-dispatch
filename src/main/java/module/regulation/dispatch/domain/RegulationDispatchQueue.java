@@ -25,6 +25,7 @@
 package module.regulation.dispatch.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import module.organization.domain.Person;
@@ -35,7 +36,7 @@ import module.workflow.util.WorkflowQueueBean;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.User;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -57,7 +58,7 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
 
     public static List<RegulationDispatchQueue> getRegulationDispatchQueuesForUser(final User user) {
         List<RegulationDispatchQueue> result = new ArrayList<RegulationDispatchQueue>();
-        List<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueues();
+        Collection<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueues();
 
         for (RegulationDispatchQueue regulationDispatchQueue : queues) {
             if (regulationDispatchQueue.isUserAbleToAccessQueue(user)) {
@@ -69,7 +70,7 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
     }
 
     @Override
-    @Service
+    @Atomic
     public void addUsers(User user) {
         if (isUserAbleToAccessQueue(user)) {
             throw new RegulationDispatchException("error.regulation.dispatch.queue.user.already.in.queue");

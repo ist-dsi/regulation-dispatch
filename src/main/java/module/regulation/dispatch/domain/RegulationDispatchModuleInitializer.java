@@ -26,7 +26,7 @@ package module.regulation.dispatch.domain;
 
 import module.regulation.dispatch.domain.metaType.MetaTypeFactory;
 import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -51,7 +51,7 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
         return myOrg.getRegulationDispatchModuleInitializer();
     }
 
-    @Service
+    @Atomic
     public synchronized static void initialize() {
         if (!isInitialized) {
             try {
