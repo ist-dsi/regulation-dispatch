@@ -41,7 +41,7 @@ public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
     public static RegulationDispatchSystem getInstance() {
         MyOrg myOrg = MyOrg.getInstance();
 
-        if (!myOrg.hasRegulationDispatchSystem()) {
+        if (myOrg.getRegulationDispatchSystem() == null) {
             return createRegulationDispatchSystem();
         }
 

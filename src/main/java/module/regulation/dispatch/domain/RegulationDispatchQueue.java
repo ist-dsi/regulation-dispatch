@@ -58,7 +58,7 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
 
     public static List<RegulationDispatchQueue> getRegulationDispatchQueuesForUser(final User user) {
         List<RegulationDispatchQueue> result = new ArrayList<RegulationDispatchQueue>();
-        Collection<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueues();
+        Collection<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueuesSet();
 
         for (RegulationDispatchQueue regulationDispatchQueue : queues) {
             if (regulationDispatchQueue.isUserAbleToAccessQueue(user)) {

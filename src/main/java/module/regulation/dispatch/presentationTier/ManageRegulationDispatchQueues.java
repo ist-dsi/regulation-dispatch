@@ -69,7 +69,7 @@ public class ManageRegulationDispatchQueues extends ContextBaseAction {
             final HttpServletResponse response) {
 
         RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        Collection<RegulationDispatchQueue> queues = system.getQueues();
+        Collection<RegulationDispatchQueue> queues = system.getQueuesSet();
 
         request.setAttribute("queues", queues);
         return forward(request, "/regulationDispatch/queueManagement/manage.jsp");

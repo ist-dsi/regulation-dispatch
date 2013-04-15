@@ -79,7 +79,7 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
     public void init(MyOrg root) {
         RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
-        if (!system.hasMetaType()) {
+        if (system.getMetaType() == null) {
             MetaTypeFactory.createMetaType();
         }
     }
