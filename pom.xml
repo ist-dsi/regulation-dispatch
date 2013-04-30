@@ -3,7 +3,7 @@
   <parent>
     <groupId>pt.ist</groupId>
     <artifactId>bennu-project</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-rc1</version>
   </parent>
   <groupId>pt.ist</groupId>
   <artifactId>regulation-dispatch</artifactId>
@@ -11,11 +11,11 @@
   <packaging>jar</packaging>
   <name>regulation-dispatch</name>
   <properties>
-    <version.pt.ist.bennu.core>1.0.0</version.pt.ist.bennu.core>
-    <version.pt.ist.content>1.0.0</version.pt.ist.content>
-    <version.pt.ist.organization>1.0.0</version.pt.ist.organization>
-    <version.pt.ist.file.support>1.0.0</version.pt.ist.file.support>
-    <version.pt.ist.meta.workflow>1.0.0</version.pt.ist.meta.workflow>
+    <version.pt.ist.bennu.core>1.1.0-rc1</version.pt.ist.bennu.core>
+    <version.pt.ist.content>1.1.0-rc1</version.pt.ist.content>
+    <version.pt.ist.organization>1.1.0-rc1</version.pt.ist.organization>
+    <version.pt.ist.file.support>1.1.0-rc1</version.pt.ist.file.support>
+    <version.pt.ist.meta.workflow>1.1.0-rc1</version.pt.ist.meta.workflow>
   </properties>
   <dependencies>
     <dependency>
