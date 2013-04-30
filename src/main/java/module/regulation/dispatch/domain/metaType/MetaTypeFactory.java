@@ -54,7 +54,7 @@ public class MetaTypeFactory {
         Language.setLocale(pt);
         RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
-        if (system.hasMetaType()) {
+        if (system.getMetaType() != null) {
             throw new RegulationDispatchException("workflow meta type for regulation dispatch is already created");
         }
         String name = getKey("label.workflow.meta.type.name");

@@ -24,7 +24,7 @@
  */
 package module.regulation.dispatch.presentationTier;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,7 +69,7 @@ public class ManageRegulationDispatchQueues extends ContextBaseAction {
             final HttpServletResponse response) {
 
         RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        List<RegulationDispatchQueue> queues = system.getQueues();
+        Collection<RegulationDispatchQueue> queues = system.getQueuesSet();
 
         request.setAttribute("queues", queues);
         return forward(request, "/regulationDispatch/queueManagement/manage.jsp");

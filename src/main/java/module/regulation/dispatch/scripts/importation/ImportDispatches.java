@@ -24,7 +24,6 @@
  */
 package module.regulation.dispatch.scripts.importation;
 
-import jvstm.TransactionalCommand;
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
@@ -36,24 +35,18 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.scheduler.CustomTask;
-import pt.ist.fenixframework.pstm.Transaction;
+import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
  * @author Anil Kassamali
  * 
  */
-public class ImportDispatches extends CustomTask implements TransactionalCommand {
+public class ImportDispatches extends WriteCustomTask {
 
     @Override
-    public void run() {
-        Transaction.withTransaction(false, this);
-        out.println("Done.");
-    }
-
-    @Override
-    public void doIt() {
+    public void doService() {
         RegulationDispatchQueue queue = readQueue();
 
         int created = 0;
@@ -84,7 +77,7 @@ public class ImportDispatches extends CustomTask implements TransactionalCommand
     }
 
     private RegulationDispatchQueue readQueue() {
-        return RegulationDispatchQueue.fromExternalId("7602092115122");
+        return FenixFramework.getDomainObject("7602092115122");
     }
 
     private static class DispatchEntry {
