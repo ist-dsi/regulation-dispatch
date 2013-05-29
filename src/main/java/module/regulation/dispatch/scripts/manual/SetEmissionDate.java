@@ -26,7 +26,6 @@ package module.regulation.dispatch.scripts.manual;
 
 import java.util.List;
 
-import jvstm.TransactionalCommand;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.workflow.domain.WorkflowProcess;
@@ -34,18 +33,18 @@ import module.workflow.domain.WorkflowProcess;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import pt.ist.bennu.core.domain.scheduler.CustomTask;
-import pt.ist.fenixframework.pstm.Transaction;
+import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
+import pt.ist.fenixframework.FenixFramework;
 
 /**
  * 
  * @author Anil Kassamali
  * 
  */
-public class SetEmissionDate extends CustomTask implements TransactionalCommand {
+public class SetEmissionDate extends WriteCustomTask {
 
     @Override
-    public void doIt() {
+    public void doService() {
         DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd.MM.yyyy");
 
         RegulationDispatchQueue queue = readQueue();
@@ -69,14 +68,8 @@ public class SetEmissionDate extends CustomTask implements TransactionalCommand 
         }
     }
 
-    @Override
-    public void run() {
-        Transaction.withTransaction(false, this);
-        out.println("Done.");
-    }
-
     private RegulationDispatchQueue readQueue() {
-        return RegulationDispatchQueue.fromExternalId("7602092115122");
+        return FenixFramework.getDomainObject("7602092115122");
     }
 
 }

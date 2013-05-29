@@ -25,6 +25,7 @@
 package module.regulation.dispatch.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import pt.ist.bennu.core.domain.User;
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.Strings;
 
 /**
@@ -108,7 +109,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
                 regulationReference);
     }
 
-    @Service
+    @Atomic
     public static WorkflowMetaProcess createNewProcess(String subject, String instanceDescription, WorkflowQueue queue, User user) {
         throw new RuntimeException("invalid use");
     }
@@ -313,7 +314,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     @Override
     public RegulationDispatchProcessFile getMainDocument() {
-        List<ProcessFile> files = getFiles();
+        Collection<ProcessFile> files = getFiles();
 
         for (ProcessFile processFile : files) {
             RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
@@ -328,7 +329,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     public List<RegulationDispatchProcessFile> getActiveFiles() {
         List<RegulationDispatchProcessFile> result = new ArrayList<RegulationDispatchProcessFile>();
-        List<ProcessFile> files = getFiles();
+        Collection<ProcessFile> files = getFiles();
 
         for (ProcessFile processFile : files) {
             RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
