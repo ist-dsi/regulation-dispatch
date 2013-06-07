@@ -50,6 +50,7 @@ import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixframework.Atomic;
 
 @Mapping(path = "/createRegulationDispatch")
 /**
@@ -87,6 +88,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
         return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
+    @Atomic
     public ActionForward create(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         CreateRegulationDispatchBean bean = getRenderedObject("bean");
