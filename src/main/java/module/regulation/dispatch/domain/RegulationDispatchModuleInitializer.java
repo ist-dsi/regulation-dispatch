@@ -25,7 +25,9 @@
 package module.regulation.dispatch.domain;
 
 import module.regulation.dispatch.domain.metaType.MetaTypeFactory;
+import module.workflow.domain.WorkflowSystem;
 import pt.ist.bennu.core.domain.MyOrg;
+import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -80,7 +82,17 @@ public class RegulationDispatchModuleInitializer extends RegulationDispatchModul
         RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
 
         if (system.getMetaType() == null) {
-            MetaTypeFactory.createMetaType();
+            for (final VirtualHost virtualHost : root.getVirtualHostsSet()) {
+        	try {
+        	    VirtualHost.setVirtualHostForThread(virtualHost);
+        	    if (virtualHost.getWorkflowSystem() == null) {
+        		WorkflowSystem.createSystem(virtualHost);
+        		MetaTypeFactory.createMetaType();
+        	    }
+        	} finally {
+        	    VirtualHost.releaseVirtualHostFromThread();
+        	}
+            }
         }
     }
 
