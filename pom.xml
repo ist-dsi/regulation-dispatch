@@ -9,7 +9,7 @@
 
     <groupId>pt.ist</groupId>
     <artifactId>regulation-dispatch</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>regulation-dispatch</name>
 
@@ -17,7 +17,7 @@
         <connection>scm:git:git@github.com:ist-dsi/regulation-dispatch.git</connection>
         <developerConnection>scm:git:git@github.com:ist-dsi/regulation-dispatch.git</developerConnection>
         <url>http://ist-dsi.github.io/regulation-dispatch/</url>
-        <tag>v1.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -25,10 +25,15 @@
         <version.pt.ist.content>1.1.0</version.pt.ist.content>
         <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
         <version.pt.ist.file.support>1.1.0</version.pt.ist.file.support>
-        <version.pt.ist.meta.workflow>1.1.0</version.pt.ist.meta.workflow>
+        <version.pt.ist.meta.workflow>1.2.1</version.pt.ist.meta.workflow>
     </properties>
 
     <dependencies>
+	<dependency>
+	        <groupId>org.eclipse.equinox</groupId>
+	        <artifactId>app</artifactId>
+	        <version>1.0.0-v20070606</version>
+	</dependency>
         <dependency>
             <groupId>pt.ist</groupId>
             <artifactId>bennu-core</artifactId>

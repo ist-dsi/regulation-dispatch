@@ -33,7 +33,7 @@ relation RegulationDispatchSystemWorkflowMetaType {
 	}
 	
 	.module.metaWorkflow.domain.WorkflowMetaType playsRole metaType {
-		multiplicity 1..1;
+		multiplicity 0..1;
 	}
 }
 
