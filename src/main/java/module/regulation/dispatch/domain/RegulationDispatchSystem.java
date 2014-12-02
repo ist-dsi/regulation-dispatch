@@ -24,7 +24,9 @@
  */
 package module.regulation.dispatch.domain;
 
-import pt.ist.bennu.core.domain.MyOrg;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
 
 /**
  * 
@@ -35,20 +37,25 @@ public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
 
     private RegulationDispatchSystem() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
     }
 
     public static RegulationDispatchSystem getInstance() {
-        MyOrg myOrg = MyOrg.getInstance();
+        Bennu bennu = Bennu.getInstance();
 
-        if (myOrg.getRegulationDispatchSystem() == null) {
+        if (bennu.getRegulationDispatchSystem() == null) {
             return createRegulationDispatchSystem();
         }
 
-        return myOrg.getRegulationDispatchSystem();
+        return bennu.getRegulationDispatchSystem();
     }
 
     private static RegulationDispatchSystem createRegulationDispatchSystem() {
         return new RegulationDispatchSystem();
     }
+
+    public static boolean isRegulationDispatchManager(final User user) {
+        return DynamicGroup.get("RegulationDispatchManagers").isMember(user);
+    }
+
 }

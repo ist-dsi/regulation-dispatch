@@ -37,16 +37,14 @@ import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean
 import module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation;
 import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
 import module.workflow.activities.WorkflowActivity;
-import module.workflow.presentationTier.WorkflowLayoutContext;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.presentationTier.actions.BaseAction;
+import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -58,7 +56,7 @@ import pt.ist.fenixframework.Atomic;
  * @author Anil Kassamali
  * 
  */
-public class CreateRegulationDispatchAction extends ContextBaseAction {
+public class CreateRegulationDispatchAction extends BaseAction {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
@@ -78,14 +76,14 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
         request.setAttribute("bean", bean);
 
-        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
+        return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
     public ActionForward createInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         request.setAttribute("bean", getRenderedObject("bean"));
 
-        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
+        return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
     @Atomic
@@ -93,7 +91,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
             final HttpServletResponse response) {
         CreateRegulationDispatchBean bean = getRenderedObject("bean");
         RegulationDispatchQueue queue = readQueue(request);
-        User user = UserView.getCurrentUser();
+        User user = Authenticate.getUser();
 
         try {
             RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
@@ -106,11 +104,11 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
     private ActionForward forwardToViewQueue(final HttpServletRequest request, RegulationDispatchQueue queue) {
         String contextPath = request.getContextPath();
-        String realLink = contextPath + "/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId();
+        String realLink = contextPath + "/regulationDispatch.do?method=viewQueue";
         String checksum =
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink));
-        return new ActionForward("/regulationDispatch.do?method=viewQueue&queueId=" + queue.getExternalId() + checksum, true);
+                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
+        return new ActionForward("/regulationDispatch.do?method=viewQueue" + checksum, true);
     }
 
     public ActionForward prepareEdit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -124,7 +122,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
         request.setAttribute("dispatch", process);
         request.setAttribute("bean", bean);
 
-        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
+        return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
 
     public ActionForward editInvalid(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -132,7 +130,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
         RegulationDispatchActivityInformation bean = getRenderedObject("bean");
         request.setAttribute("bean", bean);
 
-        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
+        return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
 
     public ActionForward edit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -237,7 +235,7 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
         request.setAttribute("dispatch", process);
         request.setAttribute("bean", bean);
 
-        return forward(request, "/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
+        return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/remove.jsp");
     }
 
     public ActionForward removeDispatch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -267,15 +265,6 @@ public class CreateRegulationDispatchAction extends ContextBaseAction {
 
     private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
         return getDomainObject(request, "queueId");
-    }
-
-    @Override
-    public Context createContext(String contextPathString, HttpServletRequest request) {
-        WorkflowLayoutContext context =
-                WorkflowLayoutContext.getDefaultWorkflowLayoutContext(RegulationDispatchWorkflowMetaProcess.class);
-        context.setElements(contextPathString);
-
-        return context;
     }
 
 }

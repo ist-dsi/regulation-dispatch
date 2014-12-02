@@ -62,7 +62,7 @@
 <logic:notEmpty name="activeEntries">
 
 	<fr:view name="activeEntries">
-		<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 			<fr:slot name="reference" />
 			<fr:slot name="emissionDate" layout="null-as-label" />
 			<fr:slot name="dispatchDescription" />

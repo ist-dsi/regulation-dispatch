@@ -24,8 +24,10 @@
  */
 package module.regulation.dispatch.domain.activities;
 
+import module.regulation.dispatch.domain.RegulationDispatchSystem;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
 
 /**
  * 
@@ -36,7 +38,7 @@ public class EditDispatch extends AbstractWorkflowActivity {
 
     @Override
     public boolean isActive(RegulationDispatchWorkflowMetaProcess process, User user) {
-        return process.isUserAbleToAccessCurrentQueues(user);
+        return RegulationDispatchSystem.isRegulationDispatchManager(user);
     }
 
     @Override

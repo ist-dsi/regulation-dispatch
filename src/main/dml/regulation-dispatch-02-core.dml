@@ -1,9 +1,14 @@
 package module.regulation.dispatch.domain;
 
-class RegulationDispatchQueue extends .module.workflow.domain.WorkflowUserGroupQueue {
-}
+class RegulationDispatchWorkflowMetaProcess extends .module.workflow.domain.WorkflowProcess {
+	String instanceDescription;
+	String reference;
+	DateTime creationDate;
 
-class RegulationDispatchWorkflowMetaProcess extends .module.metaWorkflow.domain.WorkflowMetaProcess {
+	LocalDate emissionDate;
+	String regulation;
+	String regulationReference;
+	Strings articles;
 }
 
 class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile {
@@ -11,10 +16,20 @@ class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile 
 	Boolean active;
 }
 
-relation RegulationDispatchQueueRegulationDispatchSystem {
-	RegulationDispatchSystem playsRole regulationDispatchSystem;
-	
-	RegulationDispatchQueue playsRole queues {
+relation RegulationDispatchSystemActiveRegulationDispatchWorkflowMetaProcess {
+	RegulationDispatchSystem playsRole regulationDispatchSystemFromActive {
+		multiplicity 1..1;
+	}
+	RegulationDispatchWorkflowMetaProcess playsRole activeProcesses {
+		multiplicity *;
+	}
+}
+
+relation RegulationDispatchSystemNotActiveRegulationDispatchWorkflowMetaProcess {
+	RegulationDispatchSystem playsRole regulationDispatchSystemFromNotActive {
+		multiplicity 1..1;
+	}
+	RegulationDispatchWorkflowMetaProcess playsRole notActiveProcesses {
 		multiplicity *;
 	}
 }
@@ -34,5 +49,14 @@ relation RegulationDispatchProcessFileRegulationDispatchSystem {
 	
 	RegulationDispatchProcessFile playsRole files {
 		multiplicity *;
+	}
+}
+
+relation RegulationDispatchWorkflowMetaProcessUserRequestor {
+	RegulationDispatchWorkflowMetaProcess playsRole regulationDispatchWorkflowMetaProcess {
+		multiplicity *;
+	}
+	.org.fenixedu.bennu.core.domain.User playsRole requestorUser {
+		multiplicity 1..1;
 	}
 }

@@ -71,8 +71,8 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
 
         setReference(process.getReference());
         setEmissionDate(process.getEmissionDate());
-        setDispatchDescription(process.getDispatchDescription());
-        setEmissor(process.getEmissor());
+        setDispatchDescription(process.getInstanceDescription());
+        setEmissor(process.getRequestorUser().getPerson());
         setRegulationReference(process.getRegulationReference());
         setArticles(process.getArticles());
     }

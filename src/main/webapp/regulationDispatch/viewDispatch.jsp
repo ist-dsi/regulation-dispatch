@@ -15,7 +15,7 @@
 </h2>
 
 <fr:view name="dispatch">
-	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="reference" />
 		<fr:slot name="emissionDate" />
 		<fr:slot name="dispatchDescription" />
@@ -35,7 +35,7 @@
 <h3> <bean:message key="title.observations" /></h3>
 
 <fr:view name="dispatch">
-	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="observations" />
 	</fr:schema>
 	
