@@ -17,18 +17,14 @@ class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile 
 }
 
 relation RegulationDispatchSystemActiveRegulationDispatchWorkflowMetaProcess {
-	RegulationDispatchSystem playsRole regulationDispatchSystemFromActive {
-		multiplicity 1..1;
-	}
+	RegulationDispatchSystem playsRole regulationDispatchSystemFromActive;
 	RegulationDispatchWorkflowMetaProcess playsRole activeProcesses {
 		multiplicity *;
 	}
 }
 
 relation RegulationDispatchSystemNotActiveRegulationDispatchWorkflowMetaProcess {
-	RegulationDispatchSystem playsRole regulationDispatchSystemFromNotActive {
-		multiplicity 1..1;
-	}
+	RegulationDispatchSystem playsRole regulationDispatchSystemFromNotActive;
 	RegulationDispatchWorkflowMetaProcess playsRole notActiveProcesses {
 		multiplicity *;
 	}
@@ -45,8 +41,7 @@ relation RegulationDispatchWorkflowMetaProcessRegulationDispatchSystem {
 }
 
 relation RegulationDispatchProcessFileRegulationDispatchSystem {
-	RegulationDispatchSystem playsRole regulationDispatchSystem;
-	
+	RegulationDispatchSystem playsRole regulationDispatchSystem;	
 	RegulationDispatchProcessFile playsRole files {
 		multiplicity *;
 	}

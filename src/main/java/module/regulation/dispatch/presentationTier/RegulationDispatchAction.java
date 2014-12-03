@@ -49,11 +49,19 @@ import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.presentationTier.actions.BaseAction;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsApplication;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsApplication(bundle = "RegulationDispatchResources", path = "regulationDispatch",
+        titleKey = "title.node.configuration.module.regulation.dispatch", accessGroup = "#RegulationDispatchManagers",
+        hint = "Regulation Dispatch")
+@StrutsFunctionality(app = RegulationDispatchAction.class, path = "regulationDispatch",
+        titleKey = "title.node.configuration.module.regulation.dispatch")
 @Mapping(path = "/regulationDispatch")
 /**
  * 
@@ -62,22 +70,19 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class RegulationDispatchAction extends BaseAction {
 
+    @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         User user = Authenticate.getUser();
         if (RegulationDispatchSystem.isRegulationDispatchManager(user)) {
-            request.setAttribute("regulationDispatchSystem", RegulationDispatchSystem.getInstance());
+            return viewQueue(mapping, form, request, response);
         }
         return forward("/regulationDispatch/chooseQueue.jsp");
     }
 
     public ActionForward viewQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-
-        if (readQueue(request) == null) {
-            return prepare(mapping, form, request, response);
-        }
-
+        request.setAttribute("regulationDispatchSystem", RegulationDispatchSystem.getInstance());
         return forward("/regulationDispatch/viewQueue.jsp");
     }
 
@@ -313,8 +318,8 @@ public class RegulationDispatchAction extends BaseAction {
 
         String jsonResponseString = null;
         jsonResponseString =
-                serializeAjaxFilterResponse(sEcho, RegulationDispatchSystem.getInstance().getActiveProcessesSet().size(), numberOfRecordsMatched, limitedEntries,
-                        request);
+                serializeAjaxFilterResponse(sEcho, RegulationDispatchSystem.getInstance().getActiveProcessesSet().size(),
+                        numberOfRecordsMatched, limitedEntries, request);
 
         final byte[] jsonResponsePayload = jsonResponseString.getBytes("iso-8859-15");
 

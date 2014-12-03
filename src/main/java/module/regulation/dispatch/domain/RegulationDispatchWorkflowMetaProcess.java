@@ -75,10 +75,10 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         setWorkflowSystem(WorkflowSystem.getInstance());
     }
 
-    protected RegulationDispatchWorkflowMetaProcess(RegulationDispatchQueue queue, String reference, LocalDate emissionDate,
+    protected RegulationDispatchWorkflowMetaProcess(String reference, LocalDate emissionDate,
             Person emissor, String description, String regulationReference) {
         this();
-        init(queue, reference, emissionDate, emissor, description, regulationReference);
+        init(reference, emissionDate, emissor, description, regulationReference);
     }
 
     public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean, final User user) {
@@ -86,10 +86,9 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         LocalDate emissionDate = bean.getEmissionDate();
         Person emissor = bean.getEmissor();
         String regulationReference = bean.getRegulationReference();
-        RegulationDispatchQueue queue = bean.getQueue();
         String description = bean.getDispatchDescription();
 
-        return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, description,
+        return new RegulationDispatchWorkflowMetaProcess(reference, emissionDate, emissor, description,
                 regulationReference);
     }
 
@@ -98,7 +97,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         throw new RuntimeException("invalid use");
     }
 
-    protected void init(RegulationDispatchQueue queue, String reference, LocalDate emissionDate, Person emissor,
+    protected void init(String reference, LocalDate emissionDate, Person emissor,
             String description, String regulationReference) {
         setRequestorUser(emissor.getUser());
         setReference(reference);

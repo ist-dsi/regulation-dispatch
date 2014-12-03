@@ -4,10 +4,8 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<bean:define id="queueId" name="queue" property="externalId" />
-
 <p>
-	<html:link action="/regulationDispatch.do?method=viewQueue" paramId="queueId" paramName="queueId"> 
+	<html:link action="/regulationDispatch.do?method=viewQueue"> 
 		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
 	</html:link>
 </p>
@@ -16,7 +14,7 @@
 	<bean:message key="title.regulation.dispatch.creation" bundle="REGULATION_DISPATCH_RESOURCES" />
 </h2>
 
-<fr:form action="<%= "/createRegulationDispatch.do?method=create&amp;queueId=" + queueId %>">
+<fr:form action="/createRegulationDispatch.do?method=create">
 
 	<fr:edit id="bean" name="bean" visible="false" />
 
@@ -37,8 +35,8 @@
 			</fr:slot>
 		</fr:schema>
 		
-		<fr:destination name="invalid" path="<%= "/createRegulationDispatch.do?method=createInvalid&amp;queueId=" + queueId %>"/>
-		<fr:destination name="cancel" path="<%= "/regulationDispatch.do?method=viewQueue&amp;queueId=" + queueId %>"/>
+		<fr:destination name="invalid" path="/createRegulationDispatch.do?method=createInvalid"/>
+		<fr:destination name="cancel" path="/regulationDispatch.do?method=viewQueue"/>
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />

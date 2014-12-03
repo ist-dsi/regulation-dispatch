@@ -43,10 +43,8 @@ public class CreateRegulationDispatchBean implements java.io.Serializable {
     private String dispatchDescription;
     private Person emissor;
     private String regulationReference;
-    private RegulationDispatchQueue queue;
 
-    public CreateRegulationDispatchBean(final RegulationDispatchQueue queue) {
-        setQueue(queue);
+    public CreateRegulationDispatchBean() {
     }
 
     public String getReference() {
@@ -87,14 +85,6 @@ public class CreateRegulationDispatchBean implements java.io.Serializable {
 
     public void setRegulationReference(String regulationReference) {
         this.regulationReference = regulationReference;
-    }
-
-    public RegulationDispatchQueue getQueue() {
-        return queue;
-    }
-
-    public void setQueue(RegulationDispatchQueue queue) {
-        this.queue = queue;
     }
 
 }

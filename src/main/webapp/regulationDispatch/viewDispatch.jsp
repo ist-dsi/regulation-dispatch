@@ -4,10 +4,8 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<bean:define id="queueId" name="queue" property="externalId" />
-
 <p>
-	<html:link action="/regulationDispatch?method=viewQueue" paramId="queueId" paramName="queueId">Voltar</html:link>
+	<html:link action="/regulationDispatch?method=viewQueue">Voltar</html:link>
 </p>
 
 <h2 class="mbottom20px"> 
@@ -63,7 +61,7 @@
 			<fr:property name="classes" value="tstyle2 mtop20px mbottom20px" />
 			
 			<fr:link name="download" 
-				link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}&amp;queueId=" + queueId %>"
+				link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}" %>"
 				label="link.download,REGULATION_DISPATCH_RESOURCES" />
 		
 		</fr:layout>

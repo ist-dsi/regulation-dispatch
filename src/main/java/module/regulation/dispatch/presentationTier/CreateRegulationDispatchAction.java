@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
-import module.regulation.dispatch.domain.RegulationDispatchQueue;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
 import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean;
@@ -44,12 +43,15 @@ import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.presentationTier.actions.BaseAction;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.Atomic;
 
+@StrutsFunctionality(app = RegulationDispatchAction.class, path = "regulationDispatch-create", titleKey = "link.regulation.dispatch.create.entry")
 @Mapping(path = "/createRegulationDispatch")
 /**
  * 
@@ -58,21 +60,11 @@ import pt.ist.fenixframework.Atomic;
  */
 public class CreateRegulationDispatchAction extends BaseAction {
 
-    @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-
-        RegulationDispatchQueue queue = readQueue(request);
-        request.setAttribute("queue", queue);
-
-        return super.execute(mapping, form, request, response);
-    }
-
+    @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
 
-        RegulationDispatchQueue queue = readQueue(request);
-        CreateRegulationDispatchBean bean = new CreateRegulationDispatchBean(queue);
+        CreateRegulationDispatchBean bean = new CreateRegulationDispatchBean();
 
         request.setAttribute("bean", bean);
 
@@ -90,19 +82,18 @@ public class CreateRegulationDispatchAction extends BaseAction {
     public ActionForward create(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         CreateRegulationDispatchBean bean = getRenderedObject("bean");
-        RegulationDispatchQueue queue = readQueue(request);
         User user = Authenticate.getUser();
 
         try {
             RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
-            return forwardToViewQueue(request, queue);
+            return forwardToViewQueue(request);
         } catch (final RegulationDispatchException e) {
             addMessage(request, "error", e.getMessage(), e.getArgs());
             return createInvalid(mapping, form, request, response);
         }
     }
 
-    private ActionForward forwardToViewQueue(final HttpServletRequest request, RegulationDispatchQueue queue) {
+    private ActionForward forwardToViewQueue(final HttpServletRequest request) {
         String contextPath = request.getContextPath();
         String realLink = contextPath + "/regulationDispatch.do?method=viewQueue";
         String checksum =
@@ -143,8 +134,7 @@ public class CreateRegulationDispatchAction extends BaseAction {
 
             activity.execute(bean);
 
-            RegulationDispatchQueue queue = readQueue(request);
-            return forwardToViewQueue(request, queue);
+            return forwardToViewQueue(request);
         } catch (RegulationDispatchException e) {
             addMessage(request, "error", e.getKey(), e.getArgs());
             return editInvalid(mapping, form, request, response);
@@ -247,7 +237,7 @@ public class CreateRegulationDispatchAction extends BaseAction {
 
             activity.execute(bean);
 
-            return forwardToViewQueue(request, readQueue(request));
+            return forwardToViewQueue(request);
 
         } catch (RegulationDispatchException e) {
             addMessage(request, "error", e.getKey(), e.getArgs());
@@ -261,10 +251,6 @@ public class CreateRegulationDispatchAction extends BaseAction {
 
     private RegulationDispatchWorkflowMetaProcess readProcess(final HttpServletRequest request) {
         return getDomainObject(request, "dispatchId");
-    }
-
-    private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
-        return getDomainObject(request, "queueId");
     }
 
 }

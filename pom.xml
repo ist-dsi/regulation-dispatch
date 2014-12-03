@@ -24,6 +24,7 @@
         <version.org.fenixedu.bennu.core>3.4.0</version.org.fenixedu.bennu.core>
         <version.org.fenixedu.organization>1.2.0-SNAPSHOT</version.org.fenixedu.organization>
         <version.org.fenixedu.workflow>2.0.0-SNAPSHOT</version.org.fenixedu.workflow>
+        <version.org.webjars.jquery-ui>1.11.1</version.org.webjars.jquery-ui>
     </properties>
 
     <dependencies>
@@ -47,6 +48,11 @@
             <artifactId>workflow</artifactId>
             <version>${version.org.fenixedu.workflow}</version>
         </dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery-ui</artifactId>
+			<version>${version.org.webjars.jquery-ui}</version>
+		</dependency>
     </dependencies>
 
     <repositories>

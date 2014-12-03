@@ -25,17 +25,3 @@
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
-
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
-
-	<h3> <bean:message key="title.regulation.dispatch.system.management" bundle="REGULATION_DISPATCH_RESOURCES" /> </h3>
-	
-	<p><em><bean:message key="message.regulation.dispatch.management.system" bundle="REGULATION_DISPATCH_RESOURCES" /></em></p>
-	
-	<p>
-		<html:link action="/manageRegulationDispatchQueues.do?method=manageQueues">
-			<bean:message key="link.regulation.dispatch.systems.management" bundle="REGULATION_DISPATCH_RESOURCES" />	
-		</html:link>
-	</p>
-
-</logic:present>
