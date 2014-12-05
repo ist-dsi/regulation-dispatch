@@ -4,7 +4,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<script type="text/javascript" src="<%= request.getContextPath() + "/js/regulationDispatch_jquery.dataTables.js"%>"></script>
+<script type="text/javascript" src="<%= request.getContextPath() + "/javaScript/dataTables/media/js/jquery.dataTables.js"%>"></script>
 
 <style type="text/css" title="currentStyle">
 	@import "<%= request.getContextPath() + "/CSS/regulationDispatch_demo_table.css" %>";
@@ -63,7 +63,7 @@
 		<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 			<fr:slot name="reference" />
 			<fr:slot name="emissionDate" layout="null-as-label" />
-			<fr:slot name="dispatchDescription" />
+			<fr:slot name="instanceDescription" />
 			<fr:slot name="emissor" />
 			<fr:slot name="regulationReference" layout="null-as-label" />
 		</fr:schema>

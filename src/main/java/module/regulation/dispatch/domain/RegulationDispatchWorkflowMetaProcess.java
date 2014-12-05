@@ -71,7 +71,9 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     protected RegulationDispatchWorkflowMetaProcess() {
         super();
-        setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
+        final RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        setRegulationDispatchSystem(system);
+        setRegulationDispatchSystemFromActive(system);
         setWorkflowSystem(WorkflowSystem.getInstance());
     }
 

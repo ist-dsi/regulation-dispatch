@@ -16,12 +16,10 @@
 	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="reference" />
 		<fr:slot name="emissionDate" />
-		<fr:slot name="dispatchDescription" />
-		<fr:slot name="emissor.name" />
+		<fr:slot name="instanceDescription" />
+		<fr:slot name="requestorUser.name" />
 		<fr:slot name="regulationReference" layout="null-as-label"/>
-		<fr:slot name="articles" layout="format">
-			<fr:property name="format" value="${presentationString}" />
-		</fr:slot>
+		<fr:slot name="articles"/>
 	</fr:schema>
 	
 	<fr:layout name="tabular">

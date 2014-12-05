@@ -47,15 +47,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.presentationTier.actions.BaseAction;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.portal.EntryPoint;
-import org.fenixedu.bennu.portal.StrutsApplication;
-import org.fenixedu.bennu.portal.StrutsFunctionality;
+import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.bennu.struts.base.BaseAction;
+import org.fenixedu.bennu.struts.portal.EntryPoint;
+import org.fenixedu.bennu.struts.portal.StrutsApplication;
+import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @StrutsApplication(bundle = "RegulationDispatchResources", path = "regulationDispatch",
         titleKey = "title.node.configuration.module.regulation.dispatch", accessGroup = "#RegulationDispatchManagers",
@@ -121,8 +121,8 @@ public class RegulationDispatchAction extends BaseAction {
     static {
         DISPATCH_TABLE_COLUMNS_MAP.put("0", SORT_BY_REFERENCE_COMPARATOR);
         DISPATCH_TABLE_COLUMNS_MAP.put("1", new RegulationDispatchEntryFieldComparator("emissionDate"));
-        DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("dispatchDescription"));
-        DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("emissor.name"));
+        DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("instanceDescription"));
+        DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("requestorUser.name"));
         DISPATCH_TABLE_COLUMNS_MAP.put("4", new RegulationDispatchEntryFieldComparator("regulationReference"));
         DISPATCH_TABLE_COLUMNS_MAP.put("asc", 1);
         DISPATCH_TABLE_COLUMNS_MAP.put("desc", -1);
@@ -224,7 +224,7 @@ public class RegulationDispatchAction extends BaseAction {
         String contextPath = request.getContextPath();
         String realLink =
                 contextPath
-                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument&amp;queueId=%s",
+                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument",
                                 entry.getExternalId());
         realLink +=
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
@@ -244,7 +244,7 @@ public class RegulationDispatchAction extends BaseAction {
 
         for (RegulationDispatchWorkflowMetaProcess entry : limitedEntries) {
             RegulationDispatchWorkflowMetaProcess meta = ((RegulationDispatchWorkflowMetaProcess) entry);
-            boolean ableToAccessQueue = meta.isCurrentUserAbleToAccessAnyQueues();
+            boolean ableToAccessQueue = RegulationDispatchSystem.isRegulationDispatchManager(Authenticate.getUser());
 
             String reference = entry.getReference();
             LocalDate emissionDate = entry.getEmissionDate();
@@ -321,9 +321,9 @@ public class RegulationDispatchAction extends BaseAction {
                 serializeAjaxFilterResponse(sEcho, RegulationDispatchSystem.getInstance().getActiveProcessesSet().size(),
                         numberOfRecordsMatched, limitedEntries, request);
 
-        final byte[] jsonResponsePayload = jsonResponseString.getBytes("iso-8859-15");
+        final byte[] jsonResponsePayload = jsonResponseString.getBytes("UTF-8");
 
-        response.setContentType("application/json; charset=iso-8859-15");
+        response.setContentType("application/json; charset=utf-8");
         response.setContentLength(jsonResponsePayload.length);
         response.getOutputStream().write(jsonResponsePayload);
         response.getOutputStream().flush();
@@ -371,10 +371,6 @@ public class RegulationDispatchAction extends BaseAction {
 
     private RegulationDispatchProcessFile readFile(final HttpServletRequest request) {
         return (RegulationDispatchProcessFile) getDomainObject(request, "fileId");
-    }
-
-    private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
-        return getDomainObject(request, "queueId");
     }
 
     protected RegulationDispatchWorkflowMetaProcess getProcess(final HttpServletRequest request) {

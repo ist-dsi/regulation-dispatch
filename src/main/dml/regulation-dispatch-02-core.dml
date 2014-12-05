@@ -8,7 +8,7 @@ class RegulationDispatchWorkflowMetaProcess extends .module.workflow.domain.Work
 	LocalDate emissionDate;
 	String regulation;
 	String regulationReference;
-	Strings articles;
+	String articles;
 }
 
 class RegulationDispatchProcessFile extends .module.workflow.domain.ProcessFile {

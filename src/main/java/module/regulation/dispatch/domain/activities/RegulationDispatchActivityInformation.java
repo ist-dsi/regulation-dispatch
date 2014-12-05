@@ -35,8 +35,6 @@ import module.workflow.activities.ActivityInformation;
 
 import org.joda.time.LocalDate;
 
-import pt.utl.ist.fenix.tools.util.Strings;
-
 /**
  * 
  * @author Anil Kassamali
@@ -52,7 +50,7 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
     private Person emissor;
     private String regulationReference;
     private RegulationDispatchQueue queue;
-    private Strings articles;
+    private String articles;
 
     private InputStream file;
     private String fileName;
@@ -171,11 +169,11 @@ public class RegulationDispatchActivityInformation extends ActivityInformation<R
         this.regulationDispatchProcessFile = regulationDispatchProcessFile;
     }
 
-    public Strings getArticles() {
+    public String getArticles() {
         return articles;
     }
 
-    public void setArticles(Strings articles) {
+    public void setArticles(String articles) {
         this.articles = articles;
     }
 

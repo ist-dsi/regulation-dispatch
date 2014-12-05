@@ -25,7 +25,6 @@
 package module.regulation.dispatch.domain.activities;
 
 import module.organization.domain.Person;
-import module.regulation.dispatch.domain.RegulationDispatchQueue;
 
 import org.joda.time.LocalDate;
 

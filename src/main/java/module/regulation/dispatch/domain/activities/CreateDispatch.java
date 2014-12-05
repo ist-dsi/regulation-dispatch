@@ -25,7 +25,6 @@
 package module.regulation.dispatch.domain.activities;
 
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
-import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.workflow.domain.ActivityLog;
 
 import org.fenixedu.bennu.core.domain.User;

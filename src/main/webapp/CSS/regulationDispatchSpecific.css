@@ -95,10 +95,10 @@ padding-bottom: 0;
 
 
 .sorting, .sorting_asc, .sorting_desc { cursor: pointer; }
-.paginate_disabled_previous { background-image: url('../images/back_disabled.jpg'); }
-.paginate_enabled_previous { background-image: url('../images/back_enabled.jpg'); }
-.paginate_disabled_next { background-image: url('../images/forward_disabled.jpg'); }
-.paginate_enabled_next { background-image: url('../images/forward_enabled.jpg'); }
+.paginate_disabled_previous { background-image: url('../javaScript/dataTables/media/images/back_disabled.jpg'); }
+.paginate_enabled_previous { background-image: url('../javaScript/dataTables/media/images/back_enabled.jpg'); }
+.paginate_disabled_next { background-image: url('../javaScript/dataTables/media/images/forward_disabled.jpg'); }
+.paginate_enabled_next { background-image: url('../javaScript/dataTables/media/images/forward_enabled.jpg'); }
 /*
 tr.odd td.sorting_1 { background-color: #f5f5f5; }
 tr.even td.sorting_1 { background-color: #f5f5f5; }
