@@ -17,7 +17,7 @@
 		<fr:slot name="reference" />
 		<fr:slot name="emissionDate" />
 		<fr:slot name="instanceDescription" />
-		<fr:slot name="requestorUser.name" />
+		<fr:slot name="requestorUser.presentationName" />
 		<fr:slot name="regulationReference" layout="null-as-label"/>
 		<fr:slot name="articles"/>
 	</fr:schema>

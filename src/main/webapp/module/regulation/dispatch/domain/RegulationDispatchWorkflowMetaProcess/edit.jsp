@@ -27,8 +27,8 @@
 			<fr:slot name="emissor" layout="autoComplete"
 				validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 				
-		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${partyName} (${user.username})"/>
+		        <fr:property name="labelField" value="user.presentationName"/>
+				<fr:property name="format" value="<%= "${user.presentationName}" %>"/>
 				<fr:property name="minChars" value="3"/>
 				<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 				<fr:property name="size" value="60"/>
