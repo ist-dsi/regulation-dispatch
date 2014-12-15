@@ -27,9 +27,11 @@ package module.regulation.dispatch.domain.activities;
 import java.io.IOException;
 
 import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
+import module.regulation.dispatch.domain.RegulationDispatchSystem;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
 
 /**
  * 
@@ -40,7 +42,7 @@ public class UploadFile extends AbstractWorkflowActivity {
 
     @Override
     public boolean isActive(RegulationDispatchWorkflowMetaProcess process, User user) {
-        return process.isUserAbleToAccessCurrentQueues(user);
+        return RegulationDispatchSystem.isRegulationDispatchManager(user);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class UploadFile extends AbstractWorkflowActivity {
 
             RegulationDispatchProcessFile.create(activityInformation.getProcess(), fileName, fileName, fileContent);
         } catch (IOException e) {
-            throw new RegulationDispatchException(e.getMessage());
+            throw new RegulationDispatchException(e, "resources.RegulationDispatchResources", e.getMessage());
         }
     }
 

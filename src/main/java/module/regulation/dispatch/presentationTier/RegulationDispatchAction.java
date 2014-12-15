@@ -25,103 +25,79 @@
 package module.regulation.dispatch.presentationTier;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.organization.domain.Person;
-import module.regulation.dispatch.domain.IRegulationDispatchEntry;
 import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
 import module.regulation.dispatch.domain.RegulationDispatchQueue;
+import module.regulation.dispatch.domain.RegulationDispatchSystem;
 import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
 import module.regulation.dispatch.utils.NaturalOrderComparator;
-import module.workflow.domain.WorkflowUserGroupQueue;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.bennu.struts.base.BaseAction;
+import org.fenixedu.bennu.struts.portal.EntryPoint;
+import org.fenixedu.bennu.struts.portal.StrutsApplication;
+import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.contents.ActionNode;
-import pt.ist.bennu.core.domain.contents.Node;
-import pt.ist.bennu.core.domain.groups.UserGroup;
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.LayoutContext;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
-import pt.ist.fenixWebFramework.servlets.functionalities.CreateNodeAction;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsApplication(bundle = "RegulationDispatchResources", path = "regulationDispatch",
+        titleKey = "title.node.configuration.module.regulation.dispatch", accessGroup = "#RegulationDispatchManagers",
+        hint = "Regulation Dispatch")
+@StrutsFunctionality(app = RegulationDispatchAction.class, path = "regulationDispatch",
+        titleKey = "title.node.configuration.module.regulation.dispatch")
 @Mapping(path = "/regulationDispatch")
 /**
  * 
  * @author Anil Kassamali
  * 
  */
-public class RegulationDispatchAction extends ContextBaseAction {
+public class RegulationDispatchAction extends BaseAction {
 
-    @Override
-    public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) throws Exception {
-        WorkflowUserGroupQueue regulationProcessesQueue = readQueue(request);
-        request.setAttribute("queue", regulationProcessesQueue);
-
-        return super.execute(mapping, form, request, response);
-    }
-
-    @CreateNodeAction(bundle = "REGULATION_DISPATCH_RESOURCES", key = "link.node.configuration.regulation.dispatch.interface",
-            groupKey = "title.node.configuration.module.regulation.dispatch")
-    public ActionForward prepareCreateNewPage(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
-        final VirtualHost virtualHost = getDomainObject(request, "virtualHostToManageId");
-        final Node node = getDomainObject(request, "parentOfNodesToManageId");
-
-        ActionNode.createActionNode(virtualHost, node, "/regulationDispatch", "prepare", "resources.RegulationDispatchResources",
-                "label.sideBar.regulation.dispatch.manage", UserGroup.getInstance());
-
-        return forwardToMuneConfiguration(request, virtualHost, node);
-    }
-
+    @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        User user = UserView.getCurrentUser();
-        List<RegulationDispatchQueue> queues = RegulationDispatchQueue.getRegulationDispatchQueuesForUser(user);
-
-        request.setAttribute("queues", queues);
-
-        return forward(request, "/regulationDispatch/chooseQueue.jsp");
+        User user = Authenticate.getUser();
+        if (RegulationDispatchSystem.isRegulationDispatchManager(user)) {
+            return viewQueue(mapping, form, request, response);
+        }
+        return forward("/regulationDispatch/chooseQueue.jsp");
     }
 
     public ActionForward viewQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-
-        if (readQueue(request) == null) {
-            return prepare(mapping, form, request, response);
-        }
-
-        return forward(request, "/regulationDispatch/viewQueue.jsp");
+        request.setAttribute("regulationDispatchSystem", RegulationDispatchSystem.getInstance());
+        return forward("/regulationDispatch/viewQueue.jsp");
     }
 
     public static final NaturalOrderComparator NATURAL_ORDER_COMPARATOR = new NaturalOrderComparator();
 
-    public static final Comparator<IRegulationDispatchEntry> SORT_BY_REFERENCE_COMPARATOR =
-            new Comparator<IRegulationDispatchEntry>() {
+    public static final Comparator<RegulationDispatchWorkflowMetaProcess> SORT_BY_REFERENCE_COMPARATOR =
+            new Comparator<RegulationDispatchWorkflowMetaProcess>() {
 
                 @Override
-                public int compare(IRegulationDispatchEntry left, IRegulationDispatchEntry right) {
+                public int compare(RegulationDispatchWorkflowMetaProcess left, RegulationDispatchWorkflowMetaProcess right) {
                     return NATURAL_ORDER_COMPARATOR.compare(left.getReference(), right.getReference());
                 }
             };
 
-    public static class RegulationDispatchEntryFieldComparator implements Comparator<IRegulationDispatchEntry> {
+    public static class RegulationDispatchEntryFieldComparator implements Comparator<RegulationDispatchWorkflowMetaProcess> {
         private Comparator beanComparator;
 
         public RegulationDispatchEntryFieldComparator(final String property) {
@@ -129,7 +105,7 @@ public class RegulationDispatchAction extends ContextBaseAction {
         }
 
         @Override
-        public int compare(IRegulationDispatchEntry left, IRegulationDispatchEntry right) {
+        public int compare(RegulationDispatchWorkflowMetaProcess left, RegulationDispatchWorkflowMetaProcess right) {
             int value = beanComparator.compare(left, right);
 
             if (value == 0) {
@@ -145,8 +121,8 @@ public class RegulationDispatchAction extends ContextBaseAction {
     static {
         DISPATCH_TABLE_COLUMNS_MAP.put("0", SORT_BY_REFERENCE_COMPARATOR);
         DISPATCH_TABLE_COLUMNS_MAP.put("1", new RegulationDispatchEntryFieldComparator("emissionDate"));
-        DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("dispatchDescription"));
-        DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("emissor.name"));
+        DISPATCH_TABLE_COLUMNS_MAP.put("2", new RegulationDispatchEntryFieldComparator("instanceDescription"));
+        DISPATCH_TABLE_COLUMNS_MAP.put("3", new RegulationDispatchEntryFieldComparator("requestorUser.name"));
         DISPATCH_TABLE_COLUMNS_MAP.put("4", new RegulationDispatchEntryFieldComparator("regulationReference"));
         DISPATCH_TABLE_COLUMNS_MAP.put("asc", 1);
         DISPATCH_TABLE_COLUMNS_MAP.put("desc", -1);
@@ -178,13 +154,15 @@ public class RegulationDispatchAction extends ContextBaseAction {
         return order.toArray(new Integer[] {});
     }
 
-    private java.util.List<IRegulationDispatchEntry> limitAndOrderSearchedEntries(java.util.List searchedEntries,
+    private java.util.List<RegulationDispatchWorkflowMetaProcess> limitAndOrderSearchedEntries(java.util.Set searchedEntries,
             final Comparator[] propertiesToCompare, final Integer[] orderToUse, Integer iDisplayStart, Integer iDisplayLength) {
+        final List<RegulationDispatchWorkflowMetaProcess> result = new ArrayList<>();
+        result.addAll(searchedEntries);
 
-        Collections.sort(searchedEntries, new Comparator<IRegulationDispatchEntry>() {
+        Collections.sort(result, new Comparator<RegulationDispatchWorkflowMetaProcess>() {
 
             @Override
-            public int compare(IRegulationDispatchEntry oLeft, IRegulationDispatchEntry oRight) {
+            public int compare(RegulationDispatchWorkflowMetaProcess oLeft, RegulationDispatchWorkflowMetaProcess oRight) {
                 for (int i = 0; i < propertiesToCompare.length; i++) {
                     try {
                         Comparator comparator = propertiesToCompare[i];
@@ -201,68 +179,62 @@ public class RegulationDispatchAction extends ContextBaseAction {
             }
         });
 
-        return searchedEntries.subList(iDisplayStart, Math.min(iDisplayStart + iDisplayLength, searchedEntries.size()));
+        return result.subList(iDisplayStart, Math.min(iDisplayStart + iDisplayLength, searchedEntries.size()));
     }
 
-    private String generateLinkForView(HttpServletRequest request, IRegulationDispatchEntry entry) {
-        RegulationDispatchQueue queue = readQueue(request);
+    private String generateLinkForView(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
         String realLink =
                 contextPath
-                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch&amp;queueId=%s",
-                                entry.getExternalId(), queue.getExternalId());
+                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch", entry.getExternalId());
         realLink +=
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink));
+                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
-    private String generateLinkForEdition(HttpServletRequest request, IRegulationDispatchEntry entry) {
-        RegulationDispatchQueue queue = readQueue(request);
+    private String generateLinkForEdition(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
         String realLink =
                 contextPath
-                        + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareEdit&amp;queueId=%s",
-                                entry.getExternalId(), queue.getExternalId());
+                        + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareEdit",
+                                entry.getExternalId());
         realLink +=
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink));
+                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
-    private String generateLinkForRemoval(HttpServletRequest request, IRegulationDispatchEntry entry) {
-        RegulationDispatchQueue queue = readQueue(request);
+    private String generateLinkForRemoval(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
         String realLink =
                 contextPath
-                        + String.format(
-                                "/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemoveDispatch&amp;queueId=%s",
-                                entry.getExternalId(), queue.getExternalId());
+                        + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemoveDispatch",
+                                entry.getExternalId());
         realLink +=
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink));
+                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
-    private String generateLinkForMainDocument(HttpServletRequest request, IRegulationDispatchEntry entry) {
-        RegulationDispatchQueue queue = readQueue(request);
+    private String generateLinkForMainDocument(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
         String realLink =
                 contextPath
-                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument&amp;queueId=%s",
-                                entry.getExternalId(), queue.getExternalId());
+                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument",
+                                entry.getExternalId());
         realLink +=
                 String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink));
+                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
     private String serializeAjaxFilterResponse(String sEcho, Integer iTotalRecords, Integer iTotalDisplayRecords,
-            java.util.List<IRegulationDispatchEntry> limitedEntries, HttpServletRequest request) {
+            java.util.List<RegulationDispatchWorkflowMetaProcess> limitedEntries, HttpServletRequest request) {
 
         StringBuilder stringBuilder = new StringBuilder("{");
         stringBuilder.append("\"sEcho\": ").append(sEcho).append(", \n");
@@ -270,14 +242,14 @@ public class RegulationDispatchAction extends ContextBaseAction {
         stringBuilder.append("\"iTotalDisplayRecords\": ").append(iTotalDisplayRecords).append(", \n");
         stringBuilder.append("\"aaData\": ").append("[ \n");
 
-        for (IRegulationDispatchEntry entry : limitedEntries) {
+        for (RegulationDispatchWorkflowMetaProcess entry : limitedEntries) {
             RegulationDispatchWorkflowMetaProcess meta = ((RegulationDispatchWorkflowMetaProcess) entry);
-            boolean ableToAccessQueue = meta.isCurrentUserAbleToAccessAnyQueues();
+            boolean ableToAccessQueue = RegulationDispatchSystem.isRegulationDispatchManager(Authenticate.getUser());
 
             String reference = entry.getReference();
             LocalDate emissionDate = entry.getEmissionDate();
-            String dispatchDescription = entry.getDispatchDescription();
-            Person emissor = entry.getEmissor();
+            String dispatchDescription = entry.getInstanceDescription();
+            Person emissor = entry.getRequestorUser().getPerson();
             String regulationReference = entry.getRegulationReference() != null ? entry.getRegulationReference() : "";
             Boolean hasMainDocument = entry.getMainDocument() != null;
 
@@ -332,27 +304,26 @@ public class RegulationDispatchAction extends ContextBaseAction {
             orderToUse = new Integer[] { -1 };
         }
 
-        List<IRegulationDispatchEntry> entries = null;
+        Set<RegulationDispatchWorkflowMetaProcess> entries = null;
 
-        RegulationDispatchQueue queue = readQueue(request);
         if (StringUtils.isEmpty(sSearch)) {
-            entries = queue.getActiveEntries();
+            entries = RegulationDispatchSystem.getInstance().getActiveProcessesSet();
         } else {
-            entries = queue.findEntriesBy(sSearch);
+            entries = RegulationDispatchQueue.findEntriesBy(sSearch);
         }
 
         Integer numberOfRecordsMatched = entries.size();
-        java.util.List<IRegulationDispatchEntry> limitedEntries =
+        java.util.List<RegulationDispatchWorkflowMetaProcess> limitedEntries =
                 limitAndOrderSearchedEntries(entries, propertiesToCompare, orderToUse, iDisplayStart, iDisplayLength);
 
         String jsonResponseString = null;
         jsonResponseString =
-                serializeAjaxFilterResponse(sEcho, queue.getActiveEntries().size(), numberOfRecordsMatched, limitedEntries,
-                        request);
+                serializeAjaxFilterResponse(sEcho, RegulationDispatchSystem.getInstance().getActiveProcessesSet().size(),
+                        numberOfRecordsMatched, limitedEntries, request);
 
-        final byte[] jsonResponsePayload = jsonResponseString.getBytes("iso-8859-15");
+        final byte[] jsonResponsePayload = jsonResponseString.getBytes("UTF-8");
 
-        response.setContentType("application/json; charset=iso-8859-15");
+        response.setContentType("application/json; charset=utf-8");
         response.setContentLength(jsonResponsePayload.length);
         response.getOutputStream().write(jsonResponsePayload);
         response.getOutputStream().flush();
@@ -363,16 +334,16 @@ public class RegulationDispatchAction extends ContextBaseAction {
 
     public ActionForward viewDispatch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        IRegulationDispatchEntry dispatch = readDispatchEntry(request);
+        RegulationDispatchWorkflowMetaProcess dispatch = readDispatchEntry(request);
 
         request.setAttribute("dispatch", dispatch);
 
-        return forward(request, "/regulationDispatch/viewDispatch.jsp");
+        return forward("/regulationDispatch/viewDispatch.jsp");
     }
 
     public ActionForward downloadMainDocument(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        IRegulationDispatchEntry dispatch = readDispatchEntry(request);
+        RegulationDispatchWorkflowMetaProcess dispatch = readDispatchEntry(request);
 
         RegulationDispatchProcessFile mainDocument = dispatch.getMainDocument();
 
@@ -394,27 +365,16 @@ public class RegulationDispatchAction extends ContextBaseAction {
         return download(response, file.getFilename(), file.getStream(), file.getContentType());
     }
 
-    private IRegulationDispatchEntry readDispatchEntry(final HttpServletRequest request) {
-        return (IRegulationDispatchEntry) getDomainObject(request, "dispatchId");
+    private RegulationDispatchWorkflowMetaProcess readDispatchEntry(final HttpServletRequest request) {
+        return (RegulationDispatchWorkflowMetaProcess) getDomainObject(request, "dispatchId");
     }
 
     private RegulationDispatchProcessFile readFile(final HttpServletRequest request) {
         return (RegulationDispatchProcessFile) getDomainObject(request, "fileId");
     }
 
-    private RegulationDispatchQueue readQueue(final HttpServletRequest request) {
-        return getDomainObject(request, "queueId");
-    }
-
     protected RegulationDispatchWorkflowMetaProcess getProcess(final HttpServletRequest request) {
         return getDomainObject(request, "processId");
-    }
-
-    @Override
-    public Context createContext(String contextPathString, HttpServletRequest request) {
-        LayoutContext context = (LayoutContext) super.createContext(contextPathString, request);
-        context.addHead("/regulationDispatch/layoutHead.jsp");
-        return context;
     }
 
 }

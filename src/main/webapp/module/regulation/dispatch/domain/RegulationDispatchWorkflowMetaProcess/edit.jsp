@@ -4,18 +4,17 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<bean:define id="queueId" name="queue" property="externalId" />
 <bean:define id="dispatchId" name="dispatch" property="externalId" />
 
 <p>
-	<html:link action="/regulationDispatch.do?method=viewQueue" paramId="queueId" paramName="queueId"> 
+	<html:link action="/regulationDispatch.do?method=viewQueue"> 
 		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
 	</html:link>
 </p>
 
 <h2 class="mbottom20px"> <bean:message key="title.regulation.dispatch.edition" bundle="REGULATION_DISPATCH_RESOURCES" /> </h2>
 
-<fr:form action="<%= String.format("/createRegulationDispatch.do?method=edit&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>">
+<fr:form action="<%= String.format("/createRegulationDispatch.do?method=edit&amp;dispatchId=%s", dispatchId) %>">
 
 	<fr:edit id="bean" name="bean" visible="false" />
 
@@ -28,8 +27,8 @@
 			<fr:slot name="emissor" layout="autoComplete"
 				validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
 				
-		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${partyName} (${user.username})"/>
+		        <fr:property name="labelField" value="user.presentationName"/>
+				<fr:property name="format" value="<%= "${user.presentationName}" %>"/>
 				<fr:property name="minChars" value="3"/>
 				<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider"/>
 				<fr:property name="size" value="60"/>
@@ -37,8 +36,8 @@
 			<fr:slot name="articles" />
 		</fr:schema>
 		
-		<fr:destination name="invalid" path="<%= String.format("/createRegulationDispatch.do?method=editInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
-		<fr:destination name="cancel" path="<%= "/regulationDispatch.do?method=viewQueue&amp;queueId=" + queueId %>"/>
+		<fr:destination name="invalid" path="<%= String.format("/createRegulationDispatch.do?method=editInvalid&amp;dispatchId=%s", dispatchId) %>"/>
+		<fr:destination name="cancel" path="/regulationDispatch.do?method=viewQueue"/>
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />
@@ -65,16 +64,16 @@
 		<fr:property name="classes" value="tstyle2" />
 
 		<fr:link name="download" 
-			link="<%= String.format("/createRegulationDispatch.do?method=download&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>" 
+			link="<%= String.format("/createRegulationDispatch.do?method=download&amp;dispatchId=%s&amp;fileId=${externalId}", dispatchId) %>" 
 			label="link.download,REGULATION_DISPATCH_RESOURCES" />
 			
 		<fr:link name="remove" 
-			link="<%= String.format("/createRegulationDispatch.do?method=removeFile&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>"
+			link="<%= String.format("/createRegulationDispatch.do?method=removeFile&amp;dispatchId=%s&amp;fileId=${externalId}", dispatchId) %>"
 			label="link.remove,REGULATION_DISPATCH_RESOURCES" 
 			condition="ableToRemove" />
 			
 		<fr:link name="mainDocument" 
-			link="<%= String.format("/createRegulationDispatch.do?method=putFileAsMainDocument&amp;queueId=%s&amp;dispatchId=%s&amp;fileId=${externalId}", queueId, dispatchId) %>"
+			link="<%= String.format("/createRegulationDispatch.do?method=putFileAsMainDocument&amp;dispatchId=%s&amp;fileId=${externalId}", dispatchId) %>"
 			label="link.module.regulation.dispatch.domain.RegulationDispatchProcessFile.asMainDocument,REGULATION_DISPATCH_RESOURCES" 
 			condition="ableToSetAsMainDocument" />
 	</fr:layout>
@@ -85,7 +84,7 @@
 
 <p> <em><bean:message key="message.upload.documents.pdf.maximum.8mb" bundle="REGULATION_DISPATCH_RESOURCES" /></em> </p>
 
-<fr:form action="<%= String.format("/createRegulationDispatch.do?method=upload&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>" encoding="multipart/form-data">
+<fr:form action="<%= String.format("/createRegulationDispatch.do?method=upload&amp;dispatchId=%s", dispatchId) %>" encoding="multipart/form-data">
 	<fr:edit id="bean" name="bean" visible="false" />
 	
 	<fr:edit id="bean-upload" name="bean">
@@ -103,7 +102,7 @@
 		</fr:schema>
 
 		<fr:destination name="invalid" 
-			path="<%= String.format("/createRegulationDispatch.do?method=uploadInvalid&amp;queueId=%s&amp;dispatchId=%s", queueId, dispatchId) %>"/>
+			path="<%= String.format("/createRegulationDispatch.do?method=uploadInvalid&amp;dispatchId=%s", dispatchId) %>"/>
 		
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />
