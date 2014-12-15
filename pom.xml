@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.0.1</version>
+        <version>2.2.0</version>
     </parent>
 
     <groupId>pt.ist</groupId>
@@ -25,15 +26,15 @@
         <version.org.fenixedu.organization>2.0.0-rc1</version.org.fenixedu.organization>
         <version.org.fenixedu.workflow>2.0.0-rc1</version.org.fenixedu.workflow>
         <version.org.webjars.jquery-ui>1.11.1</version.org.webjars.jquery-ui>
-	<version.org.eclipse.equinox.app>1.0.0-v20070606</version.org.eclipse.equinox.app>
+        <version.org.eclipse.equinox.app>1.0.0-v20070606</version.org.eclipse.equinox.app>
     </properties>
 
     <dependencies>
-	<dependency>
-	       <groupId>org.eclipse.equinox</groupId>
-	       <artifactId>app</artifactId>
-	       <version>${version.org.eclipse.equinox.app}</version>
-	</dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>app</artifactId>
+            <version>${version.org.eclipse.equinox.app}</version>
+        </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
@@ -49,18 +50,25 @@
             <artifactId>workflow</artifactId>
             <version>${version.org.fenixedu.workflow}</version>
         </dependency>
-	<dependency>
-		<groupId>org.webjars</groupId>
-		<artifactId>jquery-ui</artifactId>
-		<version>${version.org.webjars.jquery-ui}</version>
-	</dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>${version.org.webjars.jquery-ui}</version>
+        </dependency>
     </dependencies>
 
     <repositories>
-	<repository>
-		<id>fenixedu-maven-repository</id>
-		<url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
-	</repository>
+        <repository>
+            <id>fenixedu-maven-repository</id>
+            <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
+        </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>fenixedu-contrib-releases</id>
+            <url>https://repo.fenixedu.org/fenixedu-contrib-releases</url>
+        </repository>
+    </distributionManagement>
 
 </project>
