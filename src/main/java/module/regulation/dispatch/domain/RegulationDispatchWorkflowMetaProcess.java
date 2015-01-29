@@ -30,20 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import module.metaWorkflow.domain.FieldSetValue;
-import module.metaWorkflow.domain.FieldValue;
-import module.metaWorkflow.domain.LocalDateFieldValue;
-import module.metaWorkflow.domain.LocalDateMetaField;
-import module.metaWorkflow.domain.MetaField;
-import module.metaWorkflow.domain.MetaFieldSet;
-import module.metaWorkflow.domain.Requestor;
-import module.metaWorkflow.domain.StringFieldValue;
-import module.metaWorkflow.domain.StringMetaField;
-import module.metaWorkflow.domain.StringsFieldValue;
-import module.metaWorkflow.domain.StringsMetaField;
-import module.metaWorkflow.domain.UserRequestor;
-import module.metaWorkflow.domain.WorkflowMetaProcess;
-import module.metaWorkflow.domain.WorkflowMetaType;
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
 import module.regulation.dispatch.domain.activities.CreateRegulationDispatchBean;
@@ -60,20 +46,18 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.WorkflowSystem;
 
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.Strings;
 
 /**
  * 
  * @author Anil Kassamali
  * 
  */
-public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWorkflowMetaProcess_Base implements
-        IRegulationDispatchEntry {
+public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWorkflowMetaProcess_Base {
 
     protected static Map<String, AbstractWorkflowActivity> activityMap = new HashMap<String, AbstractWorkflowActivity>();
 
@@ -87,14 +71,16 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
 
     protected RegulationDispatchWorkflowMetaProcess() {
         super();
-        setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
+        final RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
+        setRegulationDispatchSystem(system);
+        setRegulationDispatchSystemFromActive(system);
         setWorkflowSystem(WorkflowSystem.getInstance());
     }
 
-    protected RegulationDispatchWorkflowMetaProcess(RegulationDispatchQueue queue, String reference, LocalDate emissionDate,
+    protected RegulationDispatchWorkflowMetaProcess(String reference, LocalDate emissionDate,
             Person emissor, String description, String regulationReference) {
         this();
-        init(queue, reference, emissionDate, emissor, description, regulationReference);
+        init(reference, emissionDate, emissor, description, regulationReference);
     }
 
     public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean, final User user) {
@@ -102,170 +88,32 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         LocalDate emissionDate = bean.getEmissionDate();
         Person emissor = bean.getEmissor();
         String regulationReference = bean.getRegulationReference();
-        RegulationDispatchQueue queue = bean.getQueue();
         String description = bean.getDispatchDescription();
 
-        return new RegulationDispatchWorkflowMetaProcess(queue, reference, emissionDate, emissor, description,
+        return new RegulationDispatchWorkflowMetaProcess(reference, emissionDate, emissor, description,
                 regulationReference);
     }
 
     @Atomic
-    public static WorkflowMetaProcess createNewProcess(String subject, String instanceDescription, WorkflowQueue queue, User user) {
+    public static WorkflowProcess createNewProcess(String subject, String instanceDescription, WorkflowQueue queue, User user) {
         throw new RuntimeException("invalid use");
     }
 
-    @Override
-    protected void init(WorkflowMetaType type, String subject, String instanceDescription, WorkflowQueue queue,
-            Requestor requestor) {
-        throw new RuntimeException("use other init()");
-    }
-
-    protected void init(RegulationDispatchQueue queue, String reference, LocalDate emissionDate, Person emissor,
+    protected void init(String reference, LocalDate emissionDate, Person emissor,
             String description, String regulationReference) {
-        WorkflowMetaType type = RegulationDispatchSystem.getInstance().getMetaType();
-
-        Requestor requestor = emissor.getUser().getRequestor();
-        if (requestor == null) {
-            requestor = new UserRequestor(emissor.getUser());
-        }
-
-        super.init(type, reference, description, queue, requestor);
-
+        setRequestorUser(emissor.getUser());
+        setReference(reference);
+        setInstanceDescription(description);
         setRegulationReference(regulationReference);
         setEmissionDate(emissionDate);
     }
 
-    @Override
-    public String getReference() {
-        return getSubject();
-    }
-
-    @Override
-    public void setReference(final String reference) {
-        setSubject(reference);
-    }
-
-    @Override
-    public String getDispatchDescription() {
-        return super.getInstanceDescription();
-    }
-
-    @Override
-    public void setDispatchDescription(String description) {
-        super.setInstanceDescription(description);
-    }
-
-    @Override
-    public LocalDate getEmissionDate() {
-        RegulationDispatchSystem instance = RegulationDispatchSystem.getInstance();
-        LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(instance.getEmissionDateMetaField());
-
-        if (fieldValue == null) {
-            return null;
-        }
-
-        return fieldValue.getLocalDateValue();
-    }
-
-    @Override
-    public void setEmissionDate(final LocalDate emissionDate) {
-        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        LocalDateMetaField emissionDateMetaField = system.getEmissionDateMetaField();
-        LocalDateFieldValue fieldValue = (LocalDateFieldValue) findFieldValueByMetaField(emissionDateMetaField);
-
-        if (fieldValue != null) {
-            fieldValue.setLocalDateValue(emissionDate);
-            return;
-        }
-
-        new LocalDateFieldValue(emissionDateMetaField, getFieldSet(), emissionDate);
-    }
-
-    @Override
-    public Person getEmissor() {
-        return getRequestor().getUser().getPerson();
-    }
-
-    @Override
-    public void setEmissor(Person emissor) {
-        setRequestor(emissor.getUser().getRequestor());
-    }
-
-    @Override
-    public String getRegulationReference() {
-        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        StringMetaField metaField = system.getRegulationReferenceMetaField();
-        StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
-
-        if (fieldValue == null) {
-            return null;
-        }
-
-        return fieldValue.getStringValue();
-    }
-
-    @Override
-    public void setRegulationReference(final String regulationReference) {
-        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        StringMetaField metaField = system.getRegulationReferenceMetaField();
-        StringFieldValue fieldValue = (StringFieldValue) findFieldValueByMetaField(metaField);
-
-        if (fieldValue != null) {
-            fieldValue.setStringValue(regulationReference);
-            return;
-        }
-
-        MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
-        FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
-        new StringFieldValue(regulationReference, parentFieldSet, metaField);
-    }
-
-    @Override
-    public Strings getArticles() {
-        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        StringsMetaField metaField = system.getArticlesMetaField();
-        StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
-
-        if (fieldValue == null) {
-            return null;
-        }
-
-        return fieldValue.getStringsValue();
-    }
-
-    @Override
-    public void setArticles(Strings value) {
-        RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        StringsMetaField metaField = system.getArticlesMetaField();
-        StringsFieldValue fieldValue = (StringsFieldValue) findFieldValueByMetaField(metaField);
-
-        if (fieldValue != null) {
-            fieldValue.setStringsValue(value);
-        }
-
-        MetaFieldSet parentMetaFieldSet = system.getRegulationMetaFieldSet();
-        FieldSetValue parentFieldSet = (FieldSetValue) findFieldValueByMetaField(parentMetaFieldSet);
-
-        new StringsFieldValue(metaField, parentFieldSet, value);
-    }
-
-    @Override
     public DateTime getUpdateDate() {
         if (getDateFromLastActivity() != null) {
             return getDateFromLastActivity();
         }
 
         return getCreationDate();
-    }
-
-    @Override
-    public void activate() {
-        open();
-    }
-
-    @Override
-    public void deactivate() {
-        close();
     }
 
     @Override
@@ -276,43 +124,15 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         return list;
     }
 
-    private FieldValue findFieldValueByMetaField(final MetaField metaField) {
-        return findFieldValueByMetaFieldRec(getFieldSet(), metaField);
-    }
-
-    private FieldValue findFieldValueByMetaFieldRec(final FieldSetValue fieldSetValue, final MetaField metaField) {
-        if (fieldSetValue.getMetaField() == metaField) {
-            return fieldSetValue;
-        }
-
-        for (FieldValue fieldValue : fieldSetValue.getChildFieldValues()) {
-
-            if (fieldValue.isFieldSet()) {
-                FieldValue ret = findFieldValueByMetaFieldRec((FieldSetValue) fieldValue, metaField);
-
-                if (ret != null) {
-                    return ret;
-                }
-            } else {
-                if (fieldValue.getMetaField() == metaField) {
-                    return fieldValue;
-                }
-            }
-        }
-
-        return null;
-    }
-
     public void edit(final RegulationDispatchActivityInformation activityInformation) {
         setReference(activityInformation.getReference());
         setEmissionDate(activityInformation.getEmissionDate());
-        setDispatchDescription(activityInformation.getDispatchDescription());
-        setEmissor(activityInformation.getEmissor());
+        setInstanceDescription(activityInformation.getDispatchDescription());
+        setRequestorUser(activityInformation.getEmissor().getUser());
         setRegulationReference(activityInformation.getRegulationReference());
         setArticles(activityInformation.getArticles());
     }
 
-    @Override
     public RegulationDispatchProcessFile getMainDocument() {
         Collection<ProcessFile> files = getFiles();
 
@@ -340,6 +160,25 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         }
 
         return result;
+    }
+
+    @Override
+    public User getProcessCreator() {
+        return getRequestorUser();
+    }
+
+    @Override
+    public boolean isActive() {
+        return true;
+    }
+
+    @Override
+    public void notifyUserDueToComment(User arg0, String arg1) {
+    }
+
+    public void deactivate() {
+        setRegulationDispatchSystemFromActive(null);
+        setRegulationDispatchSystemFromNotActive(RegulationDispatchSystem.getInstance());
     }
 
 }

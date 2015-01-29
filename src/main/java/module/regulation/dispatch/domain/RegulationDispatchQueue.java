@@ -24,99 +24,29 @@
  */
 package module.regulation.dispatch.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import module.organization.domain.Person;
-import module.regulation.dispatch.domain.exceptions.RegulationDispatchException;
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.util.WorkflowQueueBean;
 
 import org.joda.time.LocalDate;
-
-import pt.ist.bennu.core.domain.User;
-import pt.ist.fenixframework.Atomic;
 
 /**
  * 
  * @author Anil Kassamali
  * 
  */
-public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
+public class RegulationDispatchQueue {
 
-    RegulationDispatchQueue(String name, List<User> baseUsers) {
-        super();
-        init(name, baseUsers);
-        setRegulationDispatchSystem(RegulationDispatchSystem.getInstance());
-        setMetaType(RegulationDispatchSystem.getInstance().getMetaType());
-    }
+    public static Set<RegulationDispatchWorkflowMetaProcess> findEntriesBy(String sSearch) {
+        Set<RegulationDispatchWorkflowMetaProcess> result = new HashSet<RegulationDispatchWorkflowMetaProcess>();
+        Set<RegulationDispatchWorkflowMetaProcess> activeEntries = RegulationDispatchSystem.getInstance().getActiveProcessesSet();
 
-    RegulationDispatchQueue(final RegulationDispatchQueueBean bean) {
-        this(bean.getName(), new ArrayList<User>(bean.getUsers()));
-    }
-
-    public static List<RegulationDispatchQueue> getRegulationDispatchQueuesForUser(final User user) {
-        List<RegulationDispatchQueue> result = new ArrayList<RegulationDispatchQueue>();
-        Collection<RegulationDispatchQueue> queues = RegulationDispatchSystem.getInstance().getQueuesSet();
-
-        for (RegulationDispatchQueue regulationDispatchQueue : queues) {
-            if (regulationDispatchQueue.isUserAbleToAccessQueue(user)) {
-                result.add(regulationDispatchQueue);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    @Atomic
-    public void addUsers(User user) {
-        if (isUserAbleToAccessQueue(user)) {
-            throw new RegulationDispatchException("error.regulation.dispatch.queue.user.already.in.queue");
-        }
-
-        super.addUsers(user);
-    }
-
-    public List<IRegulationDispatchEntry> getActiveEntries() {
-        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-        List<WorkflowProcess> activeProcesses = super.getActiveProcesses();
-
-        for (WorkflowProcess workflowProcess : activeProcesses) {
-            result.add((IRegulationDispatchEntry) workflowProcess);
-        }
-
-        return result;
-    }
-
-    public List<IRegulationDispatchEntry> getNotActiveEntries() {
-        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-        List<WorkflowProcess> notActiveProcesses = super.getNotActiveProcesses();
-
-        for (WorkflowProcess workflowProcess : notActiveProcesses) {
-            result.add((IRegulationDispatchEntry) workflowProcess);
-        }
-
-        return result;
-    }
-
-    public List<IRegulationDispatchEntry> getAllEntries() {
-        List<IRegulationDispatchEntry> result = getActiveEntries();
-        result.addAll(getNotActiveEntries());
-
-        return result;
-    }
-
-    public List<IRegulationDispatchEntry> findEntriesBy(String sSearch) {
-        List<IRegulationDispatchEntry> result = new ArrayList<IRegulationDispatchEntry>();
-        List<IRegulationDispatchEntry> activeEntries = getActiveEntries();
-
-        for (IRegulationDispatchEntry dispatch : activeEntries) {
+        for (RegulationDispatchWorkflowMetaProcess dispatch : activeEntries) {
             String reference = dispatch.getReference();
             LocalDate emissionDate = dispatch.getEmissionDate();
-            String dispatchDescription = dispatch.getDispatchDescription();
-            Person emissor = dispatch.getEmissor();
+            String dispatchDescription = dispatch.getInstanceDescription();
+            Person emissor = dispatch.getRequestorUser().getPerson();
             String regulationReference = dispatch.getRegulationReference() != null ? dispatch.getRegulationReference() : "";
 
             if (reference.toLowerCase().indexOf(sSearch.toLowerCase()) > -1) {
@@ -133,11 +63,6 @@ public class RegulationDispatchQueue extends RegulationDispatchQueue_Base {
         }
 
         return result;
-    }
-
-    @Override
-    public void edit(WorkflowQueueBean bean) {
-        setName(bean.getName());
     }
 
 }

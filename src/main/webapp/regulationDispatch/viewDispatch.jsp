@@ -4,10 +4,8 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
-<bean:define id="queueId" name="queue" property="externalId" />
-
 <p>
-	<html:link action="/regulationDispatch?method=viewQueue" paramId="queueId" paramName="queueId">Voltar</html:link>
+	<html:link action="/regulationDispatch?method=viewQueue">Voltar</html:link>
 </p>
 
 <h2 class="mbottom20px"> 
@@ -15,15 +13,13 @@
 </h2>
 
 <fr:view name="dispatch">
-	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="reference" />
 		<fr:slot name="emissionDate" />
-		<fr:slot name="dispatchDescription" />
-		<fr:slot name="emissor.name" />
+		<fr:slot name="instanceDescription" />
+		<fr:slot name="requestorUser.presentationName" />
 		<fr:slot name="regulationReference" layout="null-as-label"/>
-		<fr:slot name="articles" layout="format">
-			<fr:property name="format" value="${presentationString}" />
-		</fr:slot>
+		<fr:slot name="articles"/>
 	</fr:schema>
 	
 	<fr:layout name="tabular">
@@ -35,7 +31,7 @@
 <h3> <bean:message key="title.observations" /></h3>
 
 <fr:view name="dispatch">
-	<fr:schema type="module.regulation.dispatch.domain.IRegulationDispatchEntry" bundle="REGULATION_DISPATCH_RESOURCES">
+	<fr:schema type="module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess" bundle="REGULATION_DISPATCH_RESOURCES">
 		<fr:slot name="observations" />
 	</fr:schema>
 	
@@ -63,7 +59,7 @@
 			<fr:property name="classes" value="tstyle2 mtop20px mbottom20px" />
 			
 			<fr:link name="download" 
-				link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}&amp;queueId=" + queueId %>"
+				link="<%= "/regulationDispatch.do?method=downloadFile&amp;fileId=${externalId}" %>"
 				label="link.download,REGULATION_DISPATCH_RESOURCES" />
 		
 		</fr:layout>

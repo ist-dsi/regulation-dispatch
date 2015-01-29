@@ -4,75 +4,12 @@ package module.regulation.dispatch.domain;
 class RegulationDispatchSystem {
 }
 
-class RegulationDispatchModuleInitializer implements .pt.ist.bennu.core.domain.ModuleInitializer {
-}
-
-relation RegulationDispatchModuleInitializerMyOrg {
-	RegulationDispatchModuleInitializer playsRole regulationDispatchModuleInitializer {
-		multiplicity 0..1;
-	}
-	
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg {
-		multiplicity 1..1;
-	}
-}
-
 relation RegulationDispatchSystemMyOrg {
 	RegulationDispatchSystem playsRole regulationDispatchSystem {
 		multiplicity 0..1;
 	}
 	
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg {
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu {
 		multiplicity 1..1;
-	}
-} 
-
-relation RegulationDispatchSystemWorkflowMetaType {
-	RegulationDispatchSystem playsRole regulationDispatchSystem {
-		multiplicity 0..1;
-	}
-	
-	.module.metaWorkflow.domain.WorkflowMetaType playsRole metaType {
-		multiplicity 0..1;
-	}
-}
-
-relation RegulationDispatchSystemEmissionDateMetaField {
-	RegulationDispatchSystem playsRole regulationDispatchSystemForEmissionDate {
-		multiplicity 0..1;
-	}
-	
-	.module.metaWorkflow.domain.LocalDateMetaField playsRole emissionDateMetaField {
-		multiplicity 0..1;
-	}
-}
-
-relation RegulationDispatchSystemRegulationMetaFieldSet {
-	RegulationDispatchSystem playsRole regulationDispatchSystemForRegulation {
-		multiplicity 0..1;
-	}
-
-	.module.metaWorkflow.domain.MetaFieldSet playsRole regulationMetaFieldSet {
-		multiplicity 0..1;
-	}
-}
-
-relation RegulationDispatchSystemRegulationReferenceMetaField {
-	RegulationDispatchSystem playsRole regulationDispatchSystemForRegulationReference {
-		multiplicity 0..1;
-	}
-	
-	.module.metaWorkflow.domain.StringMetaField playsRole regulationReferenceMetaField {
-		multiplicity 0..1;
-	}
-}
-
-relation RegulationDispatchSystemArticlesMetaField {
-	RegulationDispatchSystem playsRole regulationDispatchSystemForArticles {
-		multiplicity 0..1;
-	}
-	
-	.module.metaWorkflow.domain.StringsMetaField playsRole articlesMetaField {
-		multiplicity 0..1;
 	}
 }
