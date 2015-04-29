@@ -64,7 +64,7 @@
 			<fr:slot name="reference" />
 			<fr:slot name="emissionDate" layout="null-as-label" />
 			<fr:slot name="instanceDescription" />
-			<fr:slot name="emissor" />
+			<fr:slot name="requestorUser" />
 			<fr:slot name="regulationReference" layout="null-as-label" />
 		</fr:schema>
 		

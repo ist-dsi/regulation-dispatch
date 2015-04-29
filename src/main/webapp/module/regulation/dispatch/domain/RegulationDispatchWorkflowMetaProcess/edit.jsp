@@ -7,9 +7,9 @@
 <bean:define id="dispatchId" name="dispatch" property="externalId" />
 
 <p>
-	<html:link action="/regulationDispatch.do?method=viewQueue"> 
+	<a href="regulation-dispatch">
 		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
-	</html:link>
+	</a>
 </p>
 
 <h2 class="mbottom20px"> <bean:message key="title.regulation.dispatch.edition" bundle="REGULATION_DISPATCH_RESOURCES" /> </h2>

@@ -94,12 +94,7 @@ public class CreateRegulationDispatchAction extends BaseAction {
     }
 
     private ActionForward forwardToViewQueue(final HttpServletRequest request) {
-        String contextPath = request.getContextPath();
-        String realLink = contextPath + "/regulationDispatch.do?method=viewQueue";
-        String checksum =
-                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
-        return new ActionForward("/regulationDispatch.do?method=viewQueue" + checksum, true);
+        return new ActionForward("regulation-dispatch", true);
     }
 
     public ActionForward prepareEdit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

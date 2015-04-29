@@ -5,9 +5,9 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
 <p>
-	<html:link action="/regulationDispatch.do?method=viewQueue"> 
+	<a href="regulation-dispatch">
 		<bean:message key="link.back" bundle="REGULATION_DISPATCH_RESOURCES" />
-	</html:link>
+	</a>
 </p>
 
 <h2 class="mbottom20px"> 
@@ -36,7 +36,7 @@
 		</fr:schema>
 		
 		<fr:destination name="invalid" path="/createRegulationDispatch.do?method=createInvalid"/>
-		<fr:destination name="cancel" path="/regulationDispatch.do?method=viewQueue"/>
+		<fr:destination name="cancel" path="/regulation-dispatch"/>
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />

@@ -5,7 +5,7 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
 <p>
-	<html:link action="/regulationDispatch?method=viewQueue">Voltar</html:link>
+	<a href="regulation-dispatch">Voltar</a>
 </p>
 
 <h2 class="mbottom20px"> 
