@@ -78,15 +78,15 @@
             	</td>
             	<td ng-style="set_color('regulationReference')">{{ r.regulationReference }}</td>
             	<td ng-if="r.hasMainDocument">
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/view"><img src="/dot/images/view.gif" alt="View"></a>
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/edit"><img src="/dot/images/edit.gif" alt="View"></a>
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/delete"><img src="/dot/images/delete.gif" alt="View"></a>
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/document"><img src="/dot/images/document.gif" alt="View"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/view"><img src="<%= request.getContextPath() + "/images/view.gif" %>" alt="View"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/edit"><img src="<%= request.getContextPath() + "/images/edit.gif" %>" alt="Edit"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/delete"><img src="<%= request.getContextPath() + "/images/delete.gif" %>" alt="Delete"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/document"><img src="<%= request.getContextPath() + "/images/document.gif" %>" alt="Document"></a>
             	</td>
             	<td ng-if="!r.hasMainDocument">
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/view"><img src="/dot/images/view.gif" alt="View"></a>
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/edit"><img src="/dot/images/edit.gif" alt="View"></a>
-            		<a href="{{ actionLinkPrefix }}{{r.id}}/delete"><img src="/dot/images/delete.gif" alt="View"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/view"><img src="<%= request.getContextPath() + "/images/view.gif" %>" alt="View"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/edit"><img src="<%= request.getContextPath() + "/images/edit.gif" %>" alt="Edit"></a>
+            		<a href="{{ actionLinkPrefix }}{{r.id}}/delete"><img src="<%= request.getContextPath() + "/images/delete.gif" %>" alt="Delete"></a>
             	</td>
             </tr>
         </tbody>
