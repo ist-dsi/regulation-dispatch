@@ -41,13 +41,8 @@ public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
     }
 
     public static RegulationDispatchSystem getInstance() {
-        Bennu bennu = Bennu.getInstance();
-
-        if (bennu.getRegulationDispatchSystem() == null) {
-            return createRegulationDispatchSystem();
-        }
-
-        return bennu.getRegulationDispatchSystem();
+        final RegulationDispatchSystem system = Bennu.getInstance().getRegulationDispatchSystem();
+        return system == null ? createRegulationDispatchSystem() : system;
     }
 
     private static RegulationDispatchSystem createRegulationDispatchSystem() {

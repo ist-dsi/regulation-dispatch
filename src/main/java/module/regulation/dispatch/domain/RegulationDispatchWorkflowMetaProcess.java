@@ -29,6 +29,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import module.organization.domain.Person;
 import module.regulation.dispatch.domain.activities.AbstractWorkflowActivity;
@@ -77,21 +79,21 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         setWorkflowSystem(WorkflowSystem.getInstance());
     }
 
-    protected RegulationDispatchWorkflowMetaProcess(String reference, LocalDate emissionDate,
-            Person emissor, String description, String regulationReference) {
+    protected RegulationDispatchWorkflowMetaProcess(String reference, LocalDate emissionDate, Person emissor, String description,
+            String regulationReference) {
         this();
         init(reference, emissionDate, emissor, description, regulationReference);
     }
 
-    public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean, final User user) {
+    public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean,
+            final User user) {
         String reference = bean.getReference();
         LocalDate emissionDate = bean.getEmissionDate();
         Person emissor = bean.getEmissor();
         String regulationReference = bean.getRegulationReference();
         String description = bean.getDispatchDescription();
 
-        return new RegulationDispatchWorkflowMetaProcess(reference, emissionDate, emissor, description,
-                regulationReference);
+        return new RegulationDispatchWorkflowMetaProcess(reference, emissionDate, emissor, description, regulationReference);
     }
 
     @Atomic
@@ -99,8 +101,8 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         throw new RuntimeException("invalid use");
     }
 
-    protected void init(String reference, LocalDate emissionDate, Person emissor,
-            String description, String regulationReference) {
+    protected void init(String reference, LocalDate emissionDate, Person emissor, String description,
+            String regulationReference) {
         setRequestorUser(emissor.getUser());
         setReference(reference);
         setInstanceDescription(description);
@@ -124,6 +126,11 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         return list;
     }
 
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        final Collection activities = activityMap.values();
+        return activities.stream();
+    }
+
     public void edit(final RegulationDispatchActivityInformation activityInformation) {
         setReference(activityInformation.getReference());
         setEmissionDate(activityInformation.getEmissionDate());
@@ -134,32 +141,13 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
     }
 
     public RegulationDispatchProcessFile getMainDocument() {
-        Collection<ProcessFile> files = getFiles();
-
-        for (ProcessFile processFile : files) {
-            RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
-
-            if (file.getMainDocument()) {
-                return file;
-            }
-        }
-
-        return null;
+        return getFilesSet().stream().map(f -> (RegulationDispatchProcessFile) f).filter(f -> f.getMainDocument()).findAny()
+                .orElse(null);
     }
 
     public List<RegulationDispatchProcessFile> getActiveFiles() {
-        List<RegulationDispatchProcessFile> result = new ArrayList<RegulationDispatchProcessFile>();
-        Collection<ProcessFile> files = getFiles();
-
-        for (ProcessFile processFile : files) {
-            RegulationDispatchProcessFile file = (RegulationDispatchProcessFile) processFile;
-
-            if (file.getActive()) {
-                result.add(file);
-            }
-        }
-
-        return result;
+        return getFilesSet().stream().map(f -> (RegulationDispatchProcessFile) f).filter(f -> f.getActive())
+                .collect(Collectors.toList());
     }
 
     @Override

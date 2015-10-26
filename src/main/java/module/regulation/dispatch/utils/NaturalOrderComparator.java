@@ -107,10 +107,9 @@ public class NaturalOrderComparator implements Comparator<String> {
             }
 
             // process run of digits
-            if (Character.isDigit(ca) && Character.isDigit(cb)) {
-                if ((result = compareRight(a.substring(ia), b.substring(ib))) != 0) {
-                    return result;
-                }
+            if (Character.isDigit(ca) && Character.isDigit(cb)
+                    && (result = compareRight(a.substring(ia), b.substring(ib))) != 0) {
+                return result;
             }
 
             if (ca == 0 && cb == 0) {
@@ -131,11 +130,7 @@ public class NaturalOrderComparator implements Comparator<String> {
     }
 
     static char charAt(String s, int i) {
-        if (i >= s.length()) {
-            return 0;
-        } else {
-            return s.charAt(i);
-        }
+        return i >= s.length() ? 0 : s.charAt(i);
     }
 
 }

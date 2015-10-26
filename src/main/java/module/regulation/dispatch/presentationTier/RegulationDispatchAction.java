@@ -34,13 +34,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.organization.domain.Person;
-import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
-import module.regulation.dispatch.domain.RegulationDispatchQueue;
-import module.regulation.dispatch.domain.RegulationDispatchSystem;
-import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
-import module.regulation.dispatch.utils.NaturalOrderComparator;
-
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
@@ -55,6 +48,12 @@ import org.fenixedu.bennu.struts.portal.StrutsApplication;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
+import module.organization.domain.Person;
+import module.regulation.dispatch.domain.RegulationDispatchProcessFile;
+import module.regulation.dispatch.domain.RegulationDispatchQueue;
+import module.regulation.dispatch.domain.RegulationDispatchSystem;
+import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
+import module.regulation.dispatch.utils.NaturalOrderComparator;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 
 @StrutsApplication(bundle = "RegulationDispatchResources", path = "regulationDispatch",
@@ -73,11 +72,10 @@ public class RegulationDispatchAction extends BaseAction {
     @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        User user = Authenticate.getUser();
-        if (RegulationDispatchSystem.isRegulationDispatchManager(user)) {
-            return viewQueue(mapping, form, request, response);
-        }
-        return forward("/regulationDispatch/chooseQueue.jsp");
+        final User user = Authenticate.getUser();
+        return RegulationDispatchSystem.isRegulationDispatchManager(user)
+                ? viewQueue(mapping, form, request, response)
+                : forward("/regulationDispatch/chooseQueue.jsp");
     }
 
     public ActionForward viewQueue(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -90,7 +88,6 @@ public class RegulationDispatchAction extends BaseAction {
 
     public static final Comparator<RegulationDispatchWorkflowMetaProcess> SORT_BY_REFERENCE_COMPARATOR =
             new Comparator<RegulationDispatchWorkflowMetaProcess>() {
-
                 @Override
                 public int compare(RegulationDispatchWorkflowMetaProcess left, RegulationDispatchWorkflowMetaProcess right) {
                     return NATURAL_ORDER_COMPARATOR.compare(left.getReference(), right.getReference());
@@ -107,17 +104,13 @@ public class RegulationDispatchAction extends BaseAction {
         @Override
         public int compare(RegulationDispatchWorkflowMetaProcess left, RegulationDispatchWorkflowMetaProcess right) {
             int value = beanComparator.compare(left, right);
-
-            if (value == 0) {
-                return SORT_BY_REFERENCE_COMPARATOR.compare(left, right);
-            }
-
-            return value;
+            return value == 0 ? SORT_BY_REFERENCE_COMPARATOR.compare(left, right) : value;
         }
 
     }
 
     private static final java.util.Map<String, Object> DISPATCH_TABLE_COLUMNS_MAP = new java.util.HashMap<String, Object>();
+
     static {
         DISPATCH_TABLE_COLUMNS_MAP.put("0", SORT_BY_REFERENCE_COMPARATOR);
         DISPATCH_TABLE_COLUMNS_MAP.put("1", new RegulationDispatchEntryFieldComparator("emissionDate"));
@@ -184,51 +177,40 @@ public class RegulationDispatchAction extends BaseAction {
 
     private String generateLinkForView(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
-        String realLink =
-                contextPath
-                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch", entry.getExternalId());
-        realLink +=
-                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
+        String realLink = contextPath
+                + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=viewDispatch", entry.getExternalId());
+        realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+                GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
     private String generateLinkForEdition(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
-        String realLink =
-                contextPath
-                        + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareEdit",
-                                entry.getExternalId());
-        realLink +=
-                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
+        String realLink = contextPath
+                + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareEdit", entry.getExternalId());
+        realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+                GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
     private String generateLinkForRemoval(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
-        String realLink =
-                contextPath
-                        + String.format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemoveDispatch",
-                                entry.getExternalId());
-        realLink +=
-                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
+        String realLink = contextPath + String
+                .format("/createRegulationDispatch.do?dispatchId=%s&amp;method=prepareRemoveDispatch", entry.getExternalId());
+        realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+                GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
 
     private String generateLinkForMainDocument(HttpServletRequest request, RegulationDispatchWorkflowMetaProcess entry) {
         String contextPath = request.getContextPath();
-        String realLink =
-                contextPath
-                        + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument",
-                                entry.getExternalId());
-        realLink +=
-                String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
-                        GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
+        String realLink = contextPath
+                + String.format("/regulationDispatch.do?dispatchId=%s&amp;method=downloadMainDocument", entry.getExternalId());
+        realLink += String.format("&%s=%s", GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME,
+                GenericChecksumRewriter.calculateChecksum(realLink, request.getSession()));
 
         return realLink;
     }
@@ -262,15 +244,15 @@ public class RegulationDispatchAction extends BaseAction {
             stringBuilder.append("\"").append(ableToAccessQueue ? generateLinkForView(request, entry) : "permission_not_granted")
                     .append(",");
 
-            stringBuilder.append(ableToAccessQueue ? generateLinkForEdition(request, entry) : "permission_not_granted").append(
-                    ",");
+            stringBuilder.append(ableToAccessQueue ? generateLinkForEdition(request, entry) : "permission_not_granted")
+                    .append(",");
 
             stringBuilder.append(
                     ableToAccessQueue && entry.isActive() ? generateLinkForRemoval(request, entry) : "permission_not_granted")
                     .append(",");
 
-            stringBuilder
-                    .append(ableToAccessQueue && hasMainDocument ? generateLinkForMainDocument(request, entry) : "permission_not_granted")
+            stringBuilder.append(
+                    ableToAccessQueue && hasMainDocument ? generateLinkForMainDocument(request, entry) : "permission_not_granted")
                     .append("\",");
 
             stringBuilder.append("\"").append(entry.isActive()).append("\" ], ");
