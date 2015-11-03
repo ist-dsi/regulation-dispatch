@@ -22,8 +22,6 @@ import java.time.LocalDate;
 
 import javax.servlet.http.HttpServletRequest;
 
-import module.regulation.dispatch.presentationTier.RegulationDispatchAction;
-
 import org.fenixedu.bennu.spring.portal.SpringApplication;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.springframework.ui.Model;
@@ -34,10 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.google.common.base.Strings;
+
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.regulation.dispatch.view.SearchRegulationDispatchView;
-
-import com.google.common.base.Strings;
 
 @SpringApplication(group = "#RegulationDispatchManagers", path = "regulation-dispatch",
         title = "title.node.configuration.module.regulation.dispatch", hint = "regulation-dispatch")
