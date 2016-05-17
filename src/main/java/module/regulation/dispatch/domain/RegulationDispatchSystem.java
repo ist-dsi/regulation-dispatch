@@ -26,7 +26,7 @@ package module.regulation.dispatch.domain;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.groups.Group;
 
 /**
  * 
@@ -50,7 +50,7 @@ public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
     }
 
     public static boolean isRegulationDispatchManager(final User user) {
-        return DynamicGroup.get("RegulationDispatchManagers").isMember(user);
+        return Group.dynamic("RegulationDispatchManagers").isMember(user);
     }
 
 }
