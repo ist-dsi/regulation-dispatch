@@ -12,7 +12,7 @@
 
 <fr:form action="<%= String.format("/createRegulationDispatch.do?method=removeDispatch&amp;dispatchId=%s", dispatchId) %>">
 	<fr:edit id="bean" name="bean" visible="false">
-		<fr:destination name="cancel" path="<%= "/regulationDispatch.do?method=viewQueue" %>" />
+		<fr:destination name="cancel" path="/regulation-dispatch" redirect="true" />
 	</fr:edit>
 	
 	<html:submit><bean:message key="button.yes" bundle="REGULATION_DISPATCH_RESOURCES" /></html:submit>
