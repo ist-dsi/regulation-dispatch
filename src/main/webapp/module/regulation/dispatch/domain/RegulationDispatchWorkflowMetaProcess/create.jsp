@@ -36,7 +36,7 @@
 		</fr:schema>
 		
 		<fr:destination name="invalid" path="/createRegulationDispatch.do?method=createInvalid"/>
-		<fr:destination name="cancel" path="/regulation-dispatch"/>
+		<fr:destination name="cancel" path="/regulation-dispatch" redirect="true"/>
 
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tstyle1" />

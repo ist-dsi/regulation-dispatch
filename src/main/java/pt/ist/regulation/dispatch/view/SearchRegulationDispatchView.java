@@ -17,7 +17,7 @@ public class SearchRegulationDispatchView {
 
     public static JsonArray search(final String search) {
         final RegulationDispatchSystem system = RegulationDispatchSystem.getInstance();
-        return system.getProcessesSet().stream().filter(p -> matchesSearch(p, search))
+        return system.getActiveProcessesSet().stream().filter(p -> matchesSearch(p, search))
                 .map(SearchRegulationDispatchView::toJsonObject).collect(toJsonArray());
     }
 
