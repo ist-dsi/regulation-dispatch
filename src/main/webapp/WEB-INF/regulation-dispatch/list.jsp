@@ -110,7 +110,7 @@
 	    	}
 	    }
 	    
-	    $scope.sortFunction = $scope.sortNumericValues;
+	    $scope.sortFunction = $scope.sortNumericValues($scope.sortedColumn);
 
 	    $scope.sortFunctionBy = function (column) {
 	    	if(column === $scope.sortedColumn) {
