@@ -28,6 +28,8 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
 
+import pt.ist.fenixframework.Atomic;
+
 /**
  * 
  * @author Anil Kassamali
@@ -45,6 +47,7 @@ public class RegulationDispatchSystem extends RegulationDispatchSystem_Base {
         return system == null ? createRegulationDispatchSystem() : system;
     }
 
+    @Atomic
     private static RegulationDispatchSystem createRegulationDispatchSystem() {
         return new RegulationDispatchSystem();
     }
