@@ -24,11 +24,10 @@
  */
 package module.regulation.dispatch.domain.activities;
 
-import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
-import module.workflow.domain.ActivityLog;
-
 import org.fenixedu.bennu.core.domain.User;
 
+import module.regulation.dispatch.domain.RegulationDispatchWorkflowMetaProcess;
+import module.workflow.domain.ActivityLog;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -39,9 +38,9 @@ import pt.ist.fenixframework.Atomic;
 public class CreateDispatch {
 
     @Atomic
-    public RegulationDispatchWorkflowMetaProcess create(CreateRegulationDispatchBean bean, final User user) {
-        RegulationDispatchWorkflowMetaProcess process = RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
-        new ActivityLog(process, user, "CreateRegulationDispatchEntry", process.getReference());
+    public RegulationDispatchWorkflowMetaProcess create(final CreateRegulationDispatchBean bean, final User user) {
+        final RegulationDispatchWorkflowMetaProcess process = RegulationDispatchWorkflowMetaProcess.createNewProcess(bean, user);
+        new ActivityLog(process, "CreateRegulationDispatchEntry", process.getReference());
         return process;
     }
 
