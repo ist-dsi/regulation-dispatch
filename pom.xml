@@ -10,14 +10,14 @@
     <groupId>pt.ist</groupId>
     <artifactId>regulation-dispatch</artifactId>
     <name>Regulation Dispatch</name>
-    <version>4.0.0</version>
+    <version>4.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <scm>
         <connection>scm:git:git@github.com:ist-dsi/regulation-dispatch.git</connection>
         <developerConnection>scm:git:git@github.com:ist-dsi/regulation-dispatch.git</developerConnection>
         <url>http://ist-dsi.github.io/regulation-dispatch/</url>
-        <tag>v4.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
