@@ -21,6 +21,11 @@
         <tag>HEAD</tag>
     </scm>
 
+    <issueManagement>
+        <system>JIRA</system>
+        <url>https://jira.fenixedu.org/browse/DRD</url>
+    </issueManagement>
+
     <properties>
         <version.org.fenixedu.bennu.core>5.1.1</version.org.fenixedu.bennu.core>
         <version.org.fenixedu.organization>3.2.0</version.org.fenixedu.organization>
