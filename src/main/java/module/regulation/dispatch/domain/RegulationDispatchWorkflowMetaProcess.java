@@ -85,6 +85,7 @@ public class RegulationDispatchWorkflowMetaProcess extends RegulationDispatchWor
         init(reference, emissionDate, emissor, description, regulationReference);
     }
 
+    @Atomic
     public static RegulationDispatchWorkflowMetaProcess createNewProcess(final CreateRegulationDispatchBean bean,
             final User user) {
         String reference = bean.getReference();
