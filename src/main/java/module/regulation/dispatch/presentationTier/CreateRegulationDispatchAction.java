@@ -78,7 +78,7 @@ public class CreateRegulationDispatchAction extends BaseAction {
         return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/create.jsp");
     }
 
-    @Atomic
+    
     public ActionForward create(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         CreateRegulationDispatchBean bean = getRenderedObject("bean");
@@ -115,6 +115,7 @@ public class CreateRegulationDispatchAction extends BaseAction {
             final HttpServletResponse response) {
         RegulationDispatchActivityInformation bean = getRenderedObject("bean");
         request.setAttribute("bean", bean);
+        request.setAttribute("dispatch", bean.getProcess());
 
         return forward("/module/regulation/dispatch/domain/RegulationDispatchWorkflowMetaProcess/edit.jsp");
     }
