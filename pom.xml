@@ -10,7 +10,7 @@
     <groupId>pt.ist</groupId>
     <artifactId>regulation-dispatch</artifactId>
     <name>Regulation Dispatch</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>4.1.0</version>
     <packaging>jar</packaging>
 
     <scm>
