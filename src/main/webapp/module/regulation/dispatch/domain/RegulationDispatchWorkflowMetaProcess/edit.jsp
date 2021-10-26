@@ -21,7 +21,9 @@
 	<fr:edit id="bean-create" name="bean">
 		<fr:schema type="module.regulation.dispatch.domain.activities.RegulationDispatchActivityInformation" bundle="REGULATION_DISPATCH_RESOURCES">
 			<fr:slot name="reference" required="true"/>
-			<fr:slot name="emissionDate" required="true" />
+			<fr:slot name="emissionDate" required="true">
+				<fr:validator name="pt.ist.fenixWebFramework.renderers.validators.DateValidator"/>
+			</fr:slot>
 			<fr:slot name="dispatchDescription" required="true" />
 			<fr:slot name="regulationReference" />
 			<fr:slot name="emissor" layout="autoComplete"
